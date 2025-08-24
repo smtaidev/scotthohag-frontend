@@ -7,7 +7,8 @@ export const baseApi = createApi({
     baseUrl: `${process.env.NEXT_PUBLIC_URL}`,
     credentials: "include",
     prepareHeaders: (headers) => {
-      const token = Cookies?.get("token");
+      const token = Cookies?.get("accessToken");
+      console.log(token)
       if (token) {
         headers.set("Authorization", `${token}`);
       }

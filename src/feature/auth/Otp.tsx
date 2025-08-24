@@ -12,7 +12,7 @@ import type React from "react";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-
+import Cookies from "js-cookie";
 interface OtpFormValues {
   otp: string[];
 }
@@ -142,7 +142,8 @@ export default function OtpVerification() {
       inputRefs.current[5]?.focus();
     }
   };
-
+      const token = Cookies?.get("accessToken");
+      console.log(token)
   return (
     <div className="">
       <div className="w-full max-w-md space-y-8 text-center">
