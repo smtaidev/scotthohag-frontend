@@ -1,17 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import type React from "react";
-import { useState, useRef, useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
+import Logo from "@/components/shared/Logo";
+import PrimaryButton from "@/components/shared/primaryButton/PrimaryButton";
 import {
   useResendCodeMutation,
   useVerifyEmailMutation,
 } from "@/redux/api/auth/authApi";
+import { useRouter } from "next/navigation";
+import type React from "react";
+import { useEffect, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { LuCheck } from "react-icons/lu";
-import PrimaryButton from "@/components/shared/primaryButton/PrimaryButton";
 
 interface OtpFormValues {
   otp: string[];
@@ -146,13 +146,14 @@ export default function OtpVerification() {
   return (
     <div className="">
       <div className="w-full max-w-md space-y-8 text-center">
-        <div className="space-y-4 flex flex-col items-center">
-          <div className="mx-auto flex h-28 w-28 items-center justify-center rounded-full bg-blue-500">
-            <LuCheck className="h-20 w-20 text-white" />
-          </div>
-          <h1 className="text-2xl font-semibold text-gray-900">Success</h1>
-          <p className="text-sm text-gray-600">
-            Please Check Your Email For Verification Code
+        <div className="flex flex-col items-center mb-8">
+          <Logo />
+          <h1 className="text-2xl font-bold mb-2 mt-2">
+            Enter 6-Digit code sent to your email
+          </h1>
+          <p className="text-gray-500 text-sm">
+            Enter the 6-digit verification code sent to you email. This code
+            will expired in
           </p>
         </div>
 

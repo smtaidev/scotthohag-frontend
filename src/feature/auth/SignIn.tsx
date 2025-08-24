@@ -111,12 +111,13 @@ export default function SignInPage() {
             <div className="flex items-center">
               <input
                 id="rememberMe"
+                className="accent-primary"
                 type="checkbox"
                 {...register("rememberMe")}
               />
               <label
                 htmlFor="rememberMe"
-                className="ml-2 text-sm text-gray-600"
+                className="ml-2 text-sm text-gray-600 "
               >
                 Remember Me
               </label>

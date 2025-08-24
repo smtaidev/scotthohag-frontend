@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
+import Logo from "@/components/shared/Logo";
 import PrimaryButton from "@/components/shared/primaryButton/PrimaryButton";
 import { useResetPasswordMutation } from "@/redux/api/auth/authApi";
 import CustomInput from "@/ui/CustomeInput";
@@ -7,7 +8,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { LuEye, LuEyeOff } from "react-icons/lu";
 import { toast } from "sonner";
 import * as z from "zod";
 
@@ -78,11 +78,9 @@ export default function ResetPasswordPage() {
   return (
     <div className="w-full lg:min-w-[500px]">
       <div className="flex flex-col items-center mb-8">
-        <h1 className="text-2xl font-bold mb-2">Change New Password!!</h1>
-        <p className="text-gray-500 text-sm text-center">
-          Welcome to Website Name <br />
-          Enter a different password with the previous!
-        </p>
+        <Logo />
+        <h1 className="text-2xl font-bold mb-2 mt-2">Reset Password</h1>
+        <p className="text-gray-500 text-sm">Set a strong password</p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 w-full">
@@ -92,9 +90,10 @@ export default function ResetPasswordPage() {
           type="password"
           label="Password"
           placeholder="••••••••••"
-          showPasswordToggle={true}
+          showPasswordToggle={showPassword}
           error={errors.password?.message}
           {...register("password")}
+
         />
 
         {/* Confirm Password Input */}
@@ -103,7 +102,7 @@ export default function ResetPasswordPage() {
           type="password"
           label="Confirm Password"
           placeholder="••••••••••"
-          showPasswordToggle={true}
+          showPasswordToggle={showPassword}
           error={
             typeof errors.confirmPassword?.message === "string"
               ? errors.confirmPassword.message

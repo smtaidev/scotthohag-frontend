@@ -55,6 +55,7 @@ export default function ForgetPassPage() {
   return (
     <div className="w-full lg:min-w-[500px] ">
       <div className="flex flex-col items-center mb-8">
+        <Logo />
         <h1 className="text-2xl font-bold mb-2">Forget Password!</h1>
         <p className="text-gray-500 text-sm">
           Enter your registered email below

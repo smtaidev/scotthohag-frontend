@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
+import Logo from "@/components/shared/Logo";
 import PrimaryButton from "@/components/shared/primaryButton/PrimaryButton";
 import { useSignUpMutation } from "@/redux/api/auth/authApi";
 import CustomInput from "@/ui/CustomeInput";
@@ -17,8 +18,8 @@ const formSchema = z
     lastName: z.string().min(1, { message: "Last name is required" }),
     email: z
       .string()
-      .email({ message: "Please enter a valid company email address" })
-      .min(1, { message: "Company email is required" }),
+      .email({ message: "Please enter a valid email address" })
+      .min(1, { message: "Email is required" }),
     password: z
       .string()
       .min(6, { message: "Password should be at least 6 characters long" })
@@ -26,6 +27,20 @@ const formSchema = z
     confirmPassword: z
       .string()
       .min(1, { message: "Confirm Password is required" }),
+    dateOfBirth: z
+      .string()
+      .nonempty({ message: "Date of birth is required" })
+      .refine((val) => !isNaN(Date.parse(val)), {
+        message: "Invalid date format",
+      })
+      .refine((val) => new Date(val) <= new Date(), {
+        message: "Date of birth cannot be in the future",
+      })
+      .refine((val) => new Date(val) >= new Date("1900-01-01"), {
+        message: "Date of birth is too old",
+      }),
+
+    gender: z.string().min(1, { message: "Please Select A Gender" }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
@@ -51,6 +66,8 @@ export default function SignUpPage() {
       email: "",
       password: "",
       confirmPassword: "",
+      dateOfBirth: "",
+      gender: "Select Option",
     },
   });
 
@@ -80,6 +97,12 @@ export default function SignUpPage() {
 
   return (
     <div className="w-full lg:min-w-[500px]">
+      <div className="flex flex-col items-center mb-8">
+        <Logo />
+        <h1 className="text-2xl font-bold mb-2 mt-2 leading-12">
+          Create Your Account
+        </h1>
+      </div>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 w-full">
         <div className="flex items-center gap-4">
           {/* First Name Input */}
@@ -102,6 +125,7 @@ export default function SignUpPage() {
         </div>
 
         {/* Company Email Input */}
+
         <CustomInput
           id="email"
           type="email"
@@ -111,6 +135,29 @@ export default function SignUpPage() {
           {...register("email")}
         />
 
+        <div className="flex items-center gap-4">
+          {/* First Name Input */}
+          <CustomInput
+            inputType="select"
+            label="Select Gender"
+            placeholder="Select Gender"
+            options={[
+              { value: "male", label: "Male" },
+              { value: "female", label: "Female" },
+            ]}
+            error={errors.gender?.message}
+            {...register("gender")}
+          />
+
+          {/* Last Name Input */}
+          <CustomInput
+            inputType="date"
+            label="Select Date"
+            showDatePicker={true}
+            error={errors.dateOfBirth?.message}
+            {...register("dateOfBirth")}
+          />
+        </div>
         {/* Password Input */}
         <CustomInput
           id="password"
@@ -139,9 +186,9 @@ export default function SignUpPage() {
 
       {/* Login Link */}
       <div className="text-center mb-3 mt-3 text-sm text-gray-600">
-        Are you an individual?{" "}
+        If you already have an account please?{" "}
         <Link href="/signIn" className="text-primary hover:underline">
-          Sign In as an Individual!
+           Log in!
         </Link>
       </div>
     </div>

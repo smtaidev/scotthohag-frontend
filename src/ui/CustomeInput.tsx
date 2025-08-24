@@ -1,43 +1,53 @@
 import React, { forwardRef, useState } from "react";
-import { LuEye, LuEyeOff } from "react-icons/lu";
+import { LuEye, LuEyeOff, LuCalendar } from "react-icons/lu";
 
-interface CustomInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface CustomInputProps
+  extends React.InputHTMLAttributes<HTMLInputElement | HTMLSelectElement> {
   label?: string;
   error?: string;
   showPasswordToggle?: boolean;
+  showDatePicker?: boolean;
   containerClassName?: string;
   labelClassName?: string;
   inputClassName?: string;
   errorClassName?: string;
+  options?: Array<{ value: string | number; label: string }>; // For select input
+  inputType?: "text" | "password" | "select" | "date" | "email" | "number"; // Extended input types
 }
 
-const CustomInput = forwardRef<HTMLInputElement, CustomInputProps>(
+const CustomInput = forwardRef<
+  HTMLInputElement | HTMLSelectElement,
+  CustomInputProps
+>(
   (
     {
       label,
       error,
       showPasswordToggle = false,
+      showDatePicker = false,
       containerClassName = "",
       labelClassName = "",
       inputClassName = "",
       errorClassName = "",
       type = "text",
+      inputType = "text",
       id,
+      options = [],
       className,
       ...props
     },
     ref
   ) => {
     const [showPassword, setShowPassword] = useState(false);
-    const [inputType, setInputType] = useState(type);
+    const [inputFieldType, setInputFieldType] = useState(type);
 
     const togglePasswordVisibility = () => {
       if (
         showPasswordToggle &&
-        (type === "password" || inputType === "password")
+        (inputType === "password" || inputFieldType === "password")
       ) {
         setShowPassword(!showPassword);
-        setInputType(showPassword ? "password" : "text");
+        setInputFieldType(showPassword ? "password" : "text");
       }
     };
 
@@ -48,6 +58,73 @@ const CustomInput = forwardRef<HTMLInputElement, CustomInputProps>(
     const finalInputClassName = inputClassName
       ? `${baseInputClassName} ${inputClassName}`
       : baseInputClassName;
+
+    // Determine what type of input to render
+    const renderInput = () => {
+      switch (inputType) {
+        case "select":
+          return (
+            <select
+              ref={ref as React.RefObject<HTMLSelectElement>}
+              id={id}
+              defaultValue={"defaultValue"}
+            
+              className={finalInputClassName}
+              {...(props as React.SelectHTMLAttributes<HTMLSelectElement>)}
+            >
+              <option  value="defaultValue" key={"defaultValue"}  >
+                Please select an option
+              </option>
+              {options.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          );
+
+        case "date":
+          return (
+            <div className="relative">
+              <input
+                ref={ref as React.RefObject<HTMLInputElement>}
+                id={id}
+                type="date"
+                className={finalInputClassName}
+                {...(props as React.InputHTMLAttributes<HTMLInputElement>)}
+              />
+              {showDatePicker && (
+                <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none">
+                  <LuCalendar size={18} />
+                </div>
+              )}
+            </div>
+          );
+
+        default:
+          return (
+            <div className="relative">
+              <input
+                ref={ref as React.RefObject<HTMLInputElement>}
+                id={id}
+                type={showPasswordToggle ? inputFieldType : type}
+                className={finalInputClassName}
+                {...(props as React.InputHTMLAttributes<HTMLInputElement>)}
+              />
+
+              {showPasswordToggle && inputType === "password" && (
+                <button
+                  type="button"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none"
+                  onClick={togglePasswordVisibility}
+                >
+                  {showPassword ? <LuEyeOff size={18} /> : <LuEye size={18} />}
+                </button>
+              )}
+            </div>
+          );
+      }
+    };
 
     return (
       <div className={`space-y-2 w-full ${containerClassName}`}>
@@ -60,28 +137,7 @@ const CustomInput = forwardRef<HTMLInputElement, CustomInputProps>(
           </label>
         )}
 
-        <div className="relative">
-          <input
-            ref={ref}
-            id={id}
-            type={showPasswordToggle ? inputType : type}
-            className={finalInputClassName}
-            {...props}
-          />
-
-          {showPasswordToggle &&
-            (type === "password" ||
-              inputType === "password" ||
-              inputType === "text") && (
-              <button
-                type="button"
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none"
-                onClick={togglePasswordVisibility}
-              >
-                {showPassword ? <LuEyeOff size={18} /> : <LuEye size={18} />}
-              </button>
-            )}
-        </div>
+        {renderInput()}
 
         {error && (
           <p className={`text-red-500 text-xs ${errorClassName}`}>{error}</p>
