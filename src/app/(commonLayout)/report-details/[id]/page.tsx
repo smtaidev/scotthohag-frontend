@@ -1,15 +1,17 @@
 import ReportDetails from '@/components/userProfile/ReportDetails';
 
 interface ReportDetailsPageProps {
-    params: {
+    params: Promise<{
         id: string;
-    };
+    }>;
 }
 
-const ReportDetailsPage: React.FC<ReportDetailsPageProps> = ({ params }) => {
+const ReportDetailsPage: React.FC<ReportDetailsPageProps> = async ({ params }) => {
+    const { id } = await params;
+    
     return (
         <ReportDetails 
-            reportId={params.id}
+            reportId={id}
         />
     );
 };

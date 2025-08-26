@@ -11,15 +11,15 @@ const AboutScott: React.FC = () => {
           <h2 className="text-4xl sm:text-5xl font-bold text-primary-text mb-4">
             About
           </h2>
-          <h3 className="text-xl sm:text-2xl font-semibold text-[#062CC4]">
+          <h3 className="text-xl sm:text-2xl font-semibold text-[#062CC4] ml-0 lg:-ml-5">
             Meet Scott
           </h3>
         </div>
 
         {/* Content Layout */}
-        <div className="flex flex-col lg:flex-row items-center lg:items-start gap-12 lg:gap-20">
+        <div className="flex flex-col lg:flex-row items-center lg:items-start gap-6 lg:gap-14">
           {/* Image Section */}
-          <div className="w-full lg:w-2/5 flex justify-center">
+          <div className="w-full lg:w-2/5 flex justify-center lg:justify-end">
             <div className="relative">
               {/* Background decorative circles */}
               <div className="absolute -top-8 -left-12 w-44 h-44 bg-blue-200  rounded-full opacity-30"></div>
