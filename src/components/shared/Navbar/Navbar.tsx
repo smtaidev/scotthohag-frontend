@@ -82,12 +82,15 @@ export default function Navbar() {
 
         if (link === "/") {
            const res=await logout({});
-           Cookies.remove("accessToken");
+           Cookies.remove("accessToken",{ path: "/" });
             console.log(res)
 
          
             window.location.reload();
-            window.location.href = "/";
+            setTimeout(()=>{
+
+                window.location.href = "/";
+            },1000)
 
         } else {
             router.push(link);
@@ -95,6 +98,19 @@ export default function Navbar() {
 
         console.log("My link here", link);
     };
+
+    const handleLogout=async()=>{
+        const res=await logout({});
+           Cookies.remove("accessToken",{ path: "/" });
+            console.log(res)
+
+         
+            window.location.reload();
+            setTimeout(()=>{
+
+                window.location.href = "/";
+            },1000)
+    }
 
     return (
         <div ref={main} className={`bg-primary py-3 sticky top-0 z-50 transition-all duration-300 ${isScrolled ? 'shadow-md' : ''}`}>
@@ -149,6 +165,7 @@ export default function Navbar() {
                                             {item.name}
                                         </Link>
                                     ))}
+                                    
                                 </div>
                             </div>
                         </div>
