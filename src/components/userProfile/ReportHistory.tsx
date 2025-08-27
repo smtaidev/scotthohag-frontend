@@ -267,7 +267,7 @@ const ReportHistory: React.FC<ReportHistoryProps> = ({
                                             {getStatusBadge(report.status)}
                                         </td>
                                         <td className="px-6 py-4 text-center">
-                                            {report.status === 'pending' ? (
+                                            {report.status === 'PENDING' ? (
                                                 <button
                                                     disabled={true}
                                                     className="inline-flex items-center gap-2 text-sm transition-colors duration-200 text-gray-400 cursor-not-allowed opacity-50"

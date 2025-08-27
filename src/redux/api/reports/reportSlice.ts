@@ -28,10 +28,19 @@ export const getMe = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["User"],
     }),
+
+    reportDetails: builder.query({
+      query: (id) => ({
+        url: `/reports/${id}`,
+        method: "GET",
+      }),
+      
+    }),
   }),
 });
 
 export const {
   useReportSubmitMutation,
-  useGetAllReportsQuery
+  useGetAllReportsQuery,
+  useReportDetailsQuery
 } = getMe;
