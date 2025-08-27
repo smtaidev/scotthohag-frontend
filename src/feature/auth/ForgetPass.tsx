@@ -1,8 +1,8 @@
 "use client";
 
 import Logo from "@/components/shared/Logo";
-import PrimaryButton from "@/components/shared/primaryButton/PrimaryButton";
-import { useForgetPasswordMutation } from "@/redux/api/auth/authApi";
+import PrimaryButton from "@/components/shared/primaryButton/PrimaryButton"
+import { useLazyForgetPasswordQuery } from "@/redux/api/auth/authApi";
 import CustomInput from "@/ui/CustomeInput";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
@@ -14,7 +14,6 @@ import * as z from "zod";
 // Define Zod schema for validation
 const formSchema = z.object({
   email: z
-    .string()
     .email({ message: "Please enter a valid email address" })
     .min(1, { message: "Email is required" }),
 });
@@ -23,7 +22,8 @@ type FormValues = z.infer<typeof formSchema>;
 
 export default function ForgetPassPage() {
   const router = useRouter();
-  const [forgetPassword, { isLoading }] = useForgetPasswordMutation();
+const [triggerForgetPassword, { isLoading }] = useLazyForgetPasswordQuery();
+
   // Use React Hook Form with Zod resolver
   const {
     register,
@@ -39,11 +39,11 @@ export default function ForgetPassPage() {
   const onSubmit = async (data: FormValues) => {
     console.log("Form Data:", data);
     try {
-      const response = await forgetPassword(data).unwrap();
+      const response = await triggerForgetPassword(data.email).unwrap();
       if (response?.success) {
         console.log("OTP sent successfully");
         toast.success("OTP sent successfully to your email");
-        router.push("/signIn");
+        router.push("/reset-otp");
       }
       // router.push("/otp")
     } catch (error) {

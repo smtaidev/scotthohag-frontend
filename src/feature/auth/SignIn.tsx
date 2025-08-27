@@ -55,11 +55,11 @@ export default function SignInPage() {
     try {
       const response = await signIn(data).unwrap();
       if (response?.success) {
-        if (response.data.verify) {
-          Cookies.set("token", response.data.accessToken);
+        if (response.data) {
+          Cookies.set("accessToken", response.data.tokens.access);
           dispatch(
             setUser({
-              token: response.data.accessToken,
+              token: response.data.tokens.access,
             })
           );
           toast.success("Login successful");
@@ -67,10 +67,16 @@ export default function SignInPage() {
         } else {
           router.push("/otp");
         }
+      }else{
+           router.push("/otp");
+           console.log("Otp is here")
       }
     } catch (error: any) {
       console.log("Error during sign-in:", error);
-      return toast.error(error?.data?.message || "Login failed");
+      if(error?.data?.error.message[0]=="User with id: cmetimovh000k0ahseedvaf7d is not verified. Please verify.") {
+        localStorage.setItem('email',data.email)
+        router.push("/otp")};
+      return toast.warning(error?.data?.error.message[0] || "Login failed");
     }
   };
 

@@ -10,7 +10,7 @@ export const baseApi = createApi({
       const token = Cookies?.get("accessToken");
       console.log(token)
       if (token) {
-        headers.set("Authorization", `${token}`);
+        headers.set("Authorization", `Bareer ${token}`);
       }
       return headers;
     },

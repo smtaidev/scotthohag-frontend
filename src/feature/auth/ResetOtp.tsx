@@ -5,6 +5,7 @@ import Logo from "@/components/shared/Logo";
 import PrimaryButton from "@/components/shared/primaryButton/PrimaryButton";
 import {
   useResendCodeMutation,
+  useResetVerifyMutation,
   useVerifyEmailMutation,
 } from "@/redux/api/auth/authApi";
 import { useRouter } from "next/navigation";
@@ -17,7 +18,7 @@ interface OtpFormValues {
   otp: string[];
 }
 
-export default function OtpVerification() {
+export default function ResetOtp() {
   const { register, handleSubmit, setValue, formState } =
     useForm<OtpFormValues>({
       defaultValues: {
@@ -28,7 +29,7 @@ export default function OtpVerification() {
   const router = useRouter();
   const [activeInput, setActiveInput] = useState(0);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
-  const [verifyEmail, { isLoading }] = useVerifyEmailMutation();
+  const [verifyEmail, { isLoading }] = useResetVerifyMutation();
   const [resendCode] = useResendCodeMutation();
 
   // Resend OTP Timer - Initialize from localStorage or default to 300 seconds
@@ -81,11 +82,13 @@ export default function OtpVerification() {
     const otpValue = data.otp.join("");
     console.log("OTP submitted:", otpValue);
     try {
-      const response = await verifyEmail({ email, token: otpValue }).unwrap();
+      const response = await verifyEmail({ email, otp: otpValue }).unwrap();
+      console.log(response)
       if (response?.success) {
         toast.success("Verification successful!");
+        localStorage.setItem("resetToken", response.data.resetToken)
         localStorage.removeItem("otpTimer"); // Clear timer on success
-        router.push("/signIn");
+        router.push("/reset-password");
       }
     } catch (error: any) {
       toast.error(
@@ -142,8 +145,7 @@ export default function OtpVerification() {
       inputRefs.current[5]?.focus();
     }
   };
-      const token = Cookies?.get("accessToken");
-      console.log(token)
+
   return (
     <div className="">
       <div className="w-full max-w-md space-y-8 text-center">
@@ -153,8 +155,7 @@ export default function OtpVerification() {
             Enter 6-Digit code sent to your email
           </h1>
           <p className="text-gray-500 text-sm">
-            Enter the 6-digit verification code sent to you email. This code
-            will expired in
+            Enter the 6-digit verification code sent to you email. 
           </p>
         </div>
 
