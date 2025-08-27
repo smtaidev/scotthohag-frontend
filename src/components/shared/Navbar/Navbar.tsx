@@ -17,7 +17,7 @@ const navItems = [
 ];
 
 const profile = [
-    { name: 'Profile', link: '/' },
+    { name: 'Profile', link: '/edit-profile' },
     { name: 'Log Out', link: '/' },
 
 ];
@@ -108,7 +108,7 @@ export default function Navbar() {
                         <Link href={"/signIn"} className="bg-secondary hover:bg-green-600 text-white px-4 py-2 rounded-md text-xs md:text-lg font-semibold transition-colors cursor-pointer">
                             Sign Up
                         </Link> :
-                        <div className='relative'>
+                        <div ref={prof} className='relative'>
                             <div  onClick={() => setProfileOpen(!profileOpen)} ref={prof} className='cursor-pointer hover:bg-gray-200/20 p-2 transition rounded-full '>
                                 <FaUser className='size-6 ' />
                             </div>
