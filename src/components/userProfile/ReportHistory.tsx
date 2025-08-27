@@ -1,5 +1,6 @@
 'use client';
 
+import { useGetAllReportsQuery } from '@/redux/api/reports/reportSlice';
 import Link from 'next/link';
 import React, { useState, useMemo } from 'react';
 import { LuArrowLeft, LuCalendar, LuEye, LuChevronLeft, LuChevronRight } from 'react-icons/lu';
@@ -26,42 +27,79 @@ const ReportHistory: React.FC<ReportHistoryProps> = ({
     const [itemsPerPage, setItemsPerPage] = useState(10); // Show 10 items per page
 
     // Mock data based on the image description - expanded for pagination demo
-    const reports: Report[] = [
-        { id: '1', reportType: 'Blood Panel', date: '08 Aug 2025', status: 'pending' },
-        { id: '2', reportType: 'Blood Panel', date: '08 Aug 2025', status: 'pending' },
-        { id: '3', reportType: 'Blood Panel', date: '08 Aug 2025', status: 'pending' },
-        { id: '4', reportType: 'Blood Panel', date: '08 Aug 2025', status: 'completed' },
-        { id: '5', reportType: 'Blood Panel', date: '08 Aug 2025', status: 'completed' },
-        { id: '6', reportType: 'Blood Panel', date: '08 Aug 2025', status: 'completed' },
-        { id: '7', reportType: 'Blood Panel', date: '08 Aug 2025', status: 'completed' },
-        { id: '8', reportType: 'Blood Panel', date: '08 Aug 2025', status: 'completed' },
-        { id: '9', reportType: 'Blood Panel', date: '08 Aug 2025', status: 'completed' },
-        { id: '10', reportType: 'Blood Panel', date: '08 Aug 2025', status: 'completed' },
-        { id: '11', reportType: 'Thyroid Panel', date: '08 Aug 2025', status: 'completed' },
-        { id: '12', reportType: 'Lipid Panel', date: '07 Aug 2025', status: 'completed' },
-        { id: '13', reportType: 'Hormone Panel', date: '06 Aug 2025', status: 'pending' },
-        { id: '14', reportType: 'Vitamin Panel', date: '05 Aug 2025', status: 'completed' },
-        { id: '15', reportType: 'Liver Function', date: '04 Aug 2025', status: 'completed' },
-        { id: '16', reportType: 'Kidney Function', date: '03 Aug 2025', status: 'pending' },
-        { id: '17', reportType: 'Blood Sugar', date: '02 Aug 2025', status: 'completed' },
-        { id: '18', reportType: 'Inflammatory Markers', date: '01 Aug 2025', status: 'completed' },
-        { id: '19', reportType: 'Electrolyte Panel', date: '31 Jul 2025', status: 'completed' },
-        { id: '20', reportType: 'Cardiac Risk Markers', date: '30 Jul 2025', status: 'completed' },
-    ];
+    // const reports: Report[] = [
+    //     { id: '1', reportType: 'Blood Panel', date: '08 Aug 2025', status: 'pending' },
+    //     { id: '2', reportType: 'Blood Panel', date: '08 Aug 2025', status: 'pending' },
+    //     { id: '3', reportType: 'Blood Panel', date: '08 Aug 2025', status: 'pending' },
+    //     { id: '4', reportType: 'Blood Panel', date: '08 Aug 2025', status: 'completed' },
+    //     { id: '5', reportType: 'Blood Panel', date: '08 Aug 2025', status: 'completed' },
+    //     { id: '6', reportType: 'Blood Panel', date: '08 Aug 2025', status: 'completed' },
+    //     { id: '7', reportType: 'Blood Panel', date: '08 Aug 2025', status: 'completed' },
+    //     { id: '8', reportType: 'Blood Panel', date: '08 Aug 2025', status: 'completed' },
+    //     { id: '9', reportType: 'Blood Panel', date: '08 Aug 2025', status: 'completed' },
+    //     { id: '10', reportType: 'Blood Panel', date: '08 Aug 2025', status: 'completed' },
+    //     { id: '11', reportType: 'Thyroid Panel', date: '08 Aug 2025', status: 'completed' },
+    //     { id: '12', reportType: 'Lipid Panel', date: '07 Aug 2025', status: 'completed' },
+    //     { id: '13', reportType: 'Hormone Panel', date: '06 Aug 2025', status: 'pending' },
+    //     { id: '14', reportType: 'Vitamin Panel', date: '05 Aug 2025', status: 'completed' },
+    //     { id: '15', reportType: 'Liver Function', date: '04 Aug 2025', status: 'completed' },
+    //     { id: '16', reportType: 'Kidney Function', date: '03 Aug 2025', status: 'pending' },
+    //     { id: '17', reportType: 'Blood Sugar', date: '02 Aug 2025', status: 'completed' },
+    //     { id: '18', reportType: 'Inflammatory Markers', date: '01 Aug 2025', status: 'completed' },
+    //     { id: '19', reportType: 'Electrolyte Panel', date: '31 Jul 2025', status: 'completed' },
+    //     { id: '20', reportType: 'Cardiac Risk Markers', date: '30 Jul 2025', status: 'completed' },
+    // ];
 
     // Filter and sort reports
-    const filteredReports = useMemo(() => {
-        return reports.filter(report =>
-            report.reportType.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            report.date.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-    }, [reports, searchTerm]);
+    const queryParams = useMemo(() => {
+        const params: any = {
+            skip: (currentPage - 1) * itemsPerPage,
+            limit: itemsPerPage,
+            sort: 'asc',
+            count: true
+        }
+
+        if (searchTerm.trim()) {
+            params.name = searchTerm.trim()
+        }
+
+        // if (statusFilter !== "Status") {
+        //   params.status = statusFilter.toLowerCase()
+        // }
+
+        // if (genderFilter !== "Gender") {
+        //   params.gender = genderFilter.toLowerCase()
+        // }
+        // if (skip !==0) {
+        //   params.skip = skip
+        // }
+
+        // if (ageRangeFilter !== "Age Range") {
+        //   const ageRange = ageRangeFilter.split("-")
+        //   if (ageRange[0]) params.minAge = parseInt(ageRange[0])
+        //   if (ageRange[1] && ageRange[1] !== "+") {
+        //     params.maxAge = parseInt(ageRange[1])
+        //   } else if (ageRange[1] === "+") {
+        //     params.maxAge = 100
+        //   }
+        // }
+
+        return params
+    }, [searchTerm, currentPage, itemsPerPage])
+
+
+    const { data: allReports, isLoading } = useGetAllReportsQuery(queryParams)
+
+    const filteredReports = allReports?.data || []
+    const totalItems = allReports?.meta.total
+    console.log("totalItems", totalItems)
+    // const totalPages = Math.ceil(totalItems / itemsPerPage)
 
     // Pagination logic
     const totalPages = Math.ceil(filteredReports.length / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    const currentReports = filteredReports.slice(startIndex, endIndex);
+    const currentReports = filteredReports?.slice(startIndex, endIndex);
 
     // Reset to first page when search term or items per page changes
     React.useEffect(() => {
@@ -107,8 +145,8 @@ const ReportHistory: React.FC<ReportHistoryProps> = ({
         return pages;
     };
 
-    const getStatusBadge = (status: 'pending' | 'completed') => {
-        if (status === 'pending') {
+    const getStatusBadge = (status: 'PENDING' | 'COMPLETED') => {
+        if (status === 'PENDING') {
             return (
                 <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[#FFF3D8] text-[#CF7106]">
                     Pending
@@ -212,47 +250,51 @@ const ReportHistory: React.FC<ReportHistoryProps> = ({
                             </thead>
 
                             {/* Table Body */}
-                                                         <tbody className="divide-y divide-gray-200">
-                                 {currentReports.map((report) => (
-                                     <tr key={report.id} className="hover:bg-gray-50 transition-colors duration-150">
-                                         <td className="px-6 py-4 text-sm text-gray-900 text-center">
-                                             {report.reportType}
-                                         </td>
-                                         <td className="px-6 py-4 text-sm text-gray-900 text-center">
-                                             {report.date}
-                                         </td>
-                                         <td className="px-6 py-4 text-center">
-                                             {getStatusBadge(report.status)}
-                                         </td>
-                                         <td className="px-6 py-4 text-center">
-                                             {report.status === 'pending' ? (
-                                                 <button
-                                                     disabled={true}
-                                                     className="inline-flex items-center gap-2 text-sm transition-colors duration-200 text-gray-400 cursor-not-allowed opacity-50"
-                                                 >
-                                                     <LuEye size={16} />
-                                                     <span>View report</span>
-                                                 </button>
-                                             ) : (
-                                                 <Link href={`/report-details/${report.id}`}>
-                                                     <button
-                                                         className="inline-flex items-center gap-2 text-sm transition-colors duration-200 text-gray-500 hover:text-primary cursor-pointer"
-                                                     >
-                                                         <LuEye size={16} />
-                                                         <span>View report</span>
-                                                     </button>
-                                                 </Link>
-                                             )}
-                                         </td>
-                                     </tr>
-                                 ))}
-                             </tbody>
+                            <tbody className="divide-y divide-gray-200">
+                                {currentReports.map((report:any) => (
+                                    <tr key={report.id} className="hover:bg-gray-50 transition-colors duration-150">
+                                        <td className="px-6 py-4 text-sm text-gray-900 text-center">
+                                            {report.type}
+                                        </td>
+                                        <td className="px-6 py-4 text-sm text-gray-900 text-center">
+                                            {new Date(report.date).toLocaleDateString('en-GB', {
+                            day: 'numeric',
+                            month: 'long',
+                            year: 'numeric'
+                        })}
+                                        </td>
+                                        <td className="px-6 py-4 text-center">
+                                            {getStatusBadge(report.status)}
+                                        </td>
+                                        <td className="px-6 py-4 text-center">
+                                            {report.status === 'PENDING' ? (
+                                                <button
+                                                    disabled={true}
+                                                    className="inline-flex items-center gap-2 text-sm transition-colors duration-200 text-gray-400 cursor-not-allowed opacity-50"
+                                                >
+                                                    <LuEye size={16} />
+                                                    <span>View report</span>
+                                                </button>
+                                            ) : (
+                                                <Link href={`/report-details/${report.id}`}>
+                                                    <button
+                                                        className="inline-flex items-center gap-2 text-sm transition-colors duration-200 text-gray-500 hover:text-primary cursor-pointer"
+                                                    >
+                                                        <LuEye size={16} />
+                                                        <span>View report</span>
+                                                    </button>
+                                                </Link>
+                                            )}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
                         </table>
                     </div>
 
                     {/* Mobile Card View */}
                     <div className="md:hidden space-y-4">
-                        {currentReports.map((report) => (
+                        {currentReports.map((report:any) => (
                             <div key={report.id} className="bg-gray-50 rounded-lg p-4 border border-gray-200">
                                 <div className="flex items-center justify-between mb-3">
                                     <h3 className="text-sm font-medium text-gray-900">{report.reportType}</h3>
@@ -261,24 +303,24 @@ const ReportHistory: React.FC<ReportHistoryProps> = ({
                                 <div className="flex items-center justify-between text-sm text-gray-500 mb-3">
                                     <span>{report.date}</span>
                                 </div>
-                                                                 {report.status === 'pending' ? (
-                                     <button
-                                         disabled={true}
-                                         className="w-full inline-flex items-center justify-center gap-2 text-sm transition-colors duration-200 py-2 border rounded-lg text-gray-400 border-gray-200 cursor-not-allowed opacity-50"
-                                     >
-                                         <LuEye size={16} />
-                                         <span>View report</span>
-                                     </button>
-                                 ) : (
-                                     <Link href={`/report-details/${report.id}`}>
-                                         <button
-                                             className="w-full inline-flex items-center justify-center gap-2 text-sm transition-colors duration-200 py-2 border rounded-lg text-gray-500 border-gray-300 hover:text-primary hover:border-primary cursor-pointer"
-                                         >
-                                             <LuEye size={16} />
-                                             <span>View report</span>
-                                         </button>
-                                     </Link>
-                                 )}
+                                {report.status === 'pending' ? (
+                                    <button
+                                        disabled={true}
+                                        className="w-full inline-flex items-center justify-center gap-2 text-sm transition-colors duration-200 py-2 border rounded-lg text-gray-400 border-gray-200 cursor-not-allowed opacity-50"
+                                    >
+                                        <LuEye size={16} />
+                                        <span>View report</span>
+                                    </button>
+                                ) : (
+                                    <Link href={`/report-details/${report.id}`}>
+                                        <button
+                                            className="w-full inline-flex items-center justify-center gap-2 text-sm transition-colors duration-200 py-2 border rounded-lg text-gray-500 border-gray-300 hover:text-primary hover:border-primary cursor-pointer"
+                                        >
+                                            <LuEye size={16} />
+                                            <span>View report</span>
+                                        </button>
+                                    </Link>
+                                )}
                             </div>
                         ))}
                     </div>

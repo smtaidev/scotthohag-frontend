@@ -7,23 +7,30 @@ import CustomInput from "@/ui/CustomeInput";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { BsEye } from "react-icons/bs";
+import { FaRegEyeSlash } from "react-icons/fa";
 import { toast } from "sonner";
 import * as z from "zod";
 
 // Define Zod schema for validation
+const passwordRegex =
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s]).{6,}$/;
 const formSchema = z
   .object({
     firstName: z.string().min(1, { message: "First name is required" }),
     lastName: z.string().min(1, { message: "Last name is required" }),
     email: z
-      .string()
       .email({ message: "Please enter a valid email address" })
       .min(1, { message: "Email is required" }),
     password: z
       .string()
-      .min(6, { message: "Password should be at least 6 characters long" })
-      .min(1, { message: "Password is required" }),
+      .min(1, { message: "Password is required" })
+      .regex(passwordRegex, {
+        message:
+          "Must be one uppercase, lowercase letter, one number, and one special character.",
+      }),
     confirmPassword: z
       .string()
       .min(1, { message: "Confirm Password is required" }),
@@ -52,6 +59,8 @@ type FormValues = z.infer<typeof formSchema>;
 export default function SignUpPage() {
   const [signUp, { isLoading }] = useSignUpMutation();
   const router = useRouter();
+  const [view, setView] = useState(false);
+  const [view2, setView2] = useState(false);
 
   // Use React Hook Form with Zod resolver
   const {
@@ -85,7 +94,14 @@ export default function SignUpPage() {
     };
 
     try {
-      const response = await signUp(payload).unwrap();
+      const response = await signUp({
+        name: payload.firstName + payload.lastName,
+        email: payload.email,
+        dateOfBirth: payload.dateOfBirth,
+        gender: payload.gender,
+        password: payload.password,
+
+      }).unwrap();
       if (response?.success) {
         router.push("/otp");
       }
@@ -158,28 +174,41 @@ export default function SignUpPage() {
             {...register("dateOfBirth")}
           />
         </div>
+
         {/* Password Input */}
-        <CustomInput
-          id="password"
-          type="password"
-          label="Password"
-          placeholder="••••••••••"
-          showPasswordToggle={true}
-          error={errors.password?.message}
-          {...register("password")}
-        />
+        <div className="relative">
+          <CustomInput
+            id="password"
+            type={view ? "text" : "password"}
+            label="Password"
+            placeholder=""
+            // showPasswordToggle={view}
+            error={errors.password?.message}
+            {...register("password")}
+          />
+
+          <button type="button" className="absolute top-11 right-5 cursor-pointer" onClick={() => setView(!view)}>
+            {view ? <BsEye /> : <FaRegEyeSlash />}
+          </button>
+
+        </div>
 
         {/* Confirm Password Input */}
-        <CustomInput
-          id="confirmPassword"
-          type="password"
-          label="Confirm Password"
-          placeholder="••••••••••"
-          showPasswordToggle={true}
-          error={errors.confirmPassword?.message}
-          {...register("confirmPassword")}
-        />
+        <div className="relative">
 
+
+          <CustomInput
+            id="confirmPassword"
+            type={view2 ? "text" : "password"}
+            label="Confirm Password"
+            placeholder="••••••••••"
+            error={errors.confirmPassword?.message}
+            {...register("confirmPassword")}
+          />
+          <button type="button" className="absolute top-11 right-5 cursor-pointer" onClick={() => setView2(!view2)}>
+            {view2 ? <BsEye /> : <FaRegEyeSlash />}
+          </button>
+        </div>
         {/* Sign Up Button */}
         <PrimaryButton type="submit" loading={isLoading} text="Sign Up" />
       </form>
@@ -188,7 +217,7 @@ export default function SignUpPage() {
       <div className="text-center mb-3 mt-3 text-sm text-gray-600">
         If you already have an account please?{" "}
         <Link href="/signIn" className="text-primary hover:underline">
-           Log in!
+          Log in!
         </Link>
       </div>
     </div>

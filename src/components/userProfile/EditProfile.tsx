@@ -1,7 +1,8 @@
 'use client';
 
+import { useGetMeQuery, useGetSignedUrlQuery, useUpdateProfileMutation } from '@/redux/api/getMe/getMeApi';
 import Link from 'next/link';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { LuArrowLeft, LuCamera, LuLock } from 'react-icons/lu';
 
 interface EditProfileProps {
@@ -25,46 +26,116 @@ const EditProfile: React.FC<EditProfileProps> = ({
     onSave,
     onCancel
 }) => {
+
+    const { data: user } = useGetMeQuery({});
+    console.log(user)
+
+    const[update]=useUpdateProfileMutation()
+
     const [formData, setFormData] = useState<ProfileData>({
-        fullName: 'Sarah Johnson',
-        email: 'sarahjohnson@email.com',
-        dateOfBirth: '1997 / 08 / 28',
-        gender: '',
-        phoneNumber: '+1 (555) 000-0000',
-        address: ''
+        fullName: user?.data.name,
+        email: user?.data.email,
+        dateOfBirth: user?.data.dateOfBirth,
+        gender: user?.data.gender,
+        phoneNumber: user?.data.phone,
+        address: user?.data.address
     });
 
+    console.log("My form data is here", formData)
     const [profileImage, setProfileImage] = useState<string>('/images/profile.png'); // Default profile image
     const fileInputRef = useRef<HTMLInputElement>(null);
+      const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
 
     const handleInputChange = (field: keyof ProfileData, value: string) => {
+      
         setFormData(prev => ({
             ...prev,
             [field]: value
         }));
     };
 
+
+      const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file: any = e.target.files?.[0]; // Get the first selected file
+    if (file) {
+      setSelectedFile(file);
+      // Get mime type (e.g., "image/png")
+
+    }
+  };
+
+  const fileType = selectedFile?.name.split('.').pop();
+  const mimeType = selectedFile?.type;
+
+  // Use the RTK Query hook to get the signed URL
+  const { data: getRes } = useGetSignedUrlQuery({
+    fileType: fileType || '',
+    mimeType: mimeType || '',
+  });
+
+  const signedUrl = getRes?.data.signedUrl;
+  console.log(signedUrl)
+  console.log(selectedFile)
+
+
+  useEffect(() => {
+    if (signedUrl && selectedFile) {
+
+      try {
+        // Upload the file to S3 using the signed URL
+        const uploadResponse: any = fetch(signedUrl, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': mimeType || 'application/octet-stream',
+          },
+          body: selectedFile,
+        });
+        const publicUrl = signedUrl.split('?')[0];
+        update({
+          avatar: publicUrl
+        })
+
+
+        if (uploadResponse.ok) {
+          console.log('File uploaded successfully!');
+        } else {
+          console.error('File upload failed');
+        }
+      } catch (error) {
+        console.error('Upload error:', error);
+      }
+
+    }
+  }, [signedUrl])
+
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
-        if (file) {
-            // Check file size (5MB limit)
-            if (file.size > 5 * 1024 * 1024) {
-                alert('File size must be less than 5MB');
-                return;
-            }
+          if (file) {
+      setSelectedFile(file);
+      console.log("My selected file",selectedFile)
+      // Get mime type (e.g., "image/png")
 
-            // Create preview URL
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                setProfileImage(e.target?.result as string);
-            };
-            reader.readAsDataURL(file);
+    }
+        // if (file) {
+        //     // Check file size (5MB limit)
+        //     if (file.size > 5 * 1024 * 1024) {
+        //         alert('File size must be less than 5MB');
+        //         return;
+        //     }
 
-            setFormData(prev => ({
-                ...prev,
-                profileImage: file
-            }));
-        }
+        //     // Create preview URL
+        //     const reader = new FileReader();
+        //     reader.onload = (e) => {
+        //         setProfileImage(e.target?.result as string);
+        //     };
+        //     reader.readAsDataURL(file);
+
+        //     setFormData(prev => ({
+        //         ...prev,
+        //         profileImage: file
+        //     }));
+        // }
     };
 
     const handleSave = () => {
@@ -74,6 +145,16 @@ const EditProfile: React.FC<EditProfileProps> = ({
     const handleCancel = () => {
         onCancel?.();
     };
+    useEffect(() => {
+        setFormData({
+            fullName: user?.data.name,
+            email: user?.data.email,
+            dateOfBirth: user?.data.dateOfBirth,
+            gender: user?.data.gender,
+            phoneNumber: user?.data.phone,
+            address: user?.data.address
+        })
+    }, [user?.data])
 
     return (
         <div className="min-h-screen bg-gray-50">
@@ -92,7 +173,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
                             {/* Profile Picture */}
                             <div className="relative w-32 h-32 mx-auto mb-4 mt-10">
                                 <img
-                                    src={profileImage}
+                                    src={user?.data.avatar}
                                     alt="Profile"
                                     className="w-full h-full rounded-full object-cover border-4 border-gray-200"
                                 />
@@ -109,7 +190,6 @@ const EditProfile: React.FC<EditProfileProps> = ({
                             <input
                                 ref={fileInputRef}
                                 type="file"
-                                accept="image/*"
                                 onChange={handleImageChange}
                                 className="hidden"
                             />
@@ -140,7 +220,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
                                 </label>
                                 <input
                                     type="text"
-                                    
+                                    value={formData.fullName}
                                     placeholder='Enter your full name'
                                     onChange={(e) => handleInputChange('fullName', e.target.value)}
                                     className="w-full px-4 py-3  rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-[#F7F7F7]"
@@ -155,6 +235,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
                                 <div className="relative">
                                     <input
                                         type="email"
+                                        value={formData.email}
                                         placeholder='e.g., sarah.johnson@email.com'
                                         onChange={(e) => handleInputChange('email', e.target.value)}
                                         className="w-full px-4 py-3 pr-12  rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-[#F7F7F7]"
@@ -178,13 +259,20 @@ const EditProfile: React.FC<EditProfileProps> = ({
                                         </label>
                                         <div className="relative">
                                             <input
-                                                type="text"
+                                                type="date"
                                                 placeholder=' 1997 / 08 / 28'
-                                                onChange={(e) => handleInputChange('dateOfBirth', e.target.value)}
+                                                onChange={(e) => {
+                                                    const isoDate = new Date(e.target.value).toISOString();
+                                                    handleInputChange("dateOfBirth", isoDate);
+                                                }}
                                                 className="w-full px-4 py-3 pr-12  rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-[#F7F7F7]"
-                                                disabled
+                                                value={
+                                                    formData.dateOfBirth && !isNaN(new Date(formData.dateOfBirth).getTime())
+                                                        ? new Date(formData.dateOfBirth).toISOString().split("T")[0]
+                                                        : ""
+                                                }
                                             />
-                                            <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                                            <div className="absolute right-3 top-1/2 transform -translate-y-1/2 hidden">
                                                 <LuLock size={20} className="text-gray-400" />
                                             </div>
                                         </div>
@@ -197,9 +285,10 @@ const EditProfile: React.FC<EditProfileProps> = ({
                                         </label>
                                         <div className="relative">
                                             <select
+                                                value={formData.gender?.toLowerCase()}
                                                 onChange={(e) => handleInputChange('gender', e.target.value)}
                                                 className="w-full px-4 py-3 pr-12 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-[#F7F7F7] appearance-none"
-                                                disabled
+
                                             >
                                                 <option value="">Select Gender</option>
                                                 <option value="male">Male</option>
@@ -222,6 +311,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
                                         </label>
                                         <input
                                             type="tel"
+                                            value={formData.phoneNumber}
                                             placeholder='+1 (555) 000-0000'
                                             onChange={(e) => handleInputChange('phoneNumber', e.target.value)}
                                             className="w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-[#F7F7F7]"
@@ -256,7 +346,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
                                 <button
                                     type="button"
                                     onClick={handleSave}
-                                    className="px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors duration-200 font-medium"
+                                    className="px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors duration-200 font-medium "
                                 >
                                     Save Change
                                 </button>

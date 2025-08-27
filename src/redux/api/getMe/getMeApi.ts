@@ -8,7 +8,27 @@ export const getMe = baseApi.injectEndpoints({
       query: () => "/auth/me",
       providesTags: ["User"],
     }),
+
+       getSignedUrl: builder.query({
+      query: ({ fileType, mimeType }) => ({
+        url: `/uploads?fileType=${fileType}&mimeType=${mimeType}`,
+        method: 'GET',
+      }),
+    }),
+
+       updateProfile: builder.mutation({
+      query: (body) => ({
+        url: "/auth/me",
+        method: "PUT",
+        body,
+      }),
+      invalidatesTags: ["User"],
+    }),
   }),
 });
 
-export const { useGetMeQuery } = getMe;
+export const { 
+  useGetMeQuery,
+  useUpdateProfileMutation,
+  useGetSignedUrlQuery
+ } = getMe;

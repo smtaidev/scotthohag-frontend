@@ -1,7 +1,9 @@
 'use client';
 
 import EditProfile from '@/components/userProfile/EditProfile';
+import { useUpdateProfileMutation } from '@/redux/api/getMe/getMeApi';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
 interface ProfileData {
     fullName: string;
@@ -16,12 +18,28 @@ interface ProfileData {
 const EditProfilePage = () => {
     const router = useRouter();
 
-    const handleSave = (data: ProfileData) => {
-        console.log('Profile data to save:', data);
-        // Here you would typically make an API call to save the data
-        alert('Profile updated successfully!');
-        router.push('/health-report');
-    };
+    const [updateProfile]=useUpdateProfileMutation()
+
+const handleSave = async (data: ProfileData) => {
+  try {
+    // Build only fields that are not null/undefined/empty
+    const filteredData: Record<string, string> = {};
+    if (data.fullName) filteredData.name = data.fullName;
+    if (data.address) filteredData.address = data.address;
+    if (data.dateOfBirth) filteredData.dateOfBirth = data.dateOfBirth;
+    if (data.phoneNumber) filteredData.phone = data.phoneNumber;
+
+    const res = await updateProfile(filteredData);
+
+    if (res.data) {
+      toast.success("Profile Updated Successfully!");
+      router.push("/health-report")
+    }
+  } catch (error) {
+    toast.error("Profile Update Failed!");
+  }
+};
+
 
     const handleCancel = () => {
         router.push('/health-report');

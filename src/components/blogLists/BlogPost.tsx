@@ -14,22 +14,22 @@ const BlogPost: React.FC<BlogPostProps> = ({ id }) => {
     {
       id: 1,
       image: "/images/blog1.png",
-      title: "Understanding Your Blood Test Results",
+      title: "Understanding Your Health Through Your Blood Data",
       date: "25 Aug 2025",
       category: "Blood",
       description: "The health of every cell in our body depends on the quality of our blood. Smart Blood Insights is an advanced technology that analyzes key markers in your blood and provides personalized information based on your age, gender, and health goals. This helps you easily identify the most important factors affecting your health and understand where to focus your attention.",
       alt: "Person wearing light blue medical gloves writing on clipboard with blood sample tubes in background",
       content: `
         <p class="mb-6 text-base leading-relaxed text-[#4B4B4B]">
-          Smart Blood Insights is an advanced technology that provides personalized health information based on your blood markers. This innovative approach helps you understand your health status and make informed decisions about your wellness journey.
+          Smart Blood Insights is an advanced technology that analyzes key markers in your blood and provides personalized information based on your age, gender, and health goals. This helps you easily identify the most important factors affecting your health and understand where to focus your attention.
         </p>
         
         <h3 class="text-[32px] font-bold text-black mb-4">Why Are Smart Blood Insights Important?</h3>
         <ul class="list-disc list-inside space-y-2 mb-8 text-[#4B4B4B]">
-          <li>Personalized Analysis: Your results are analyzed based on your unique health profile and medical history.</li>
-          <li>Easy-to-Understand Reports: Complex medical data is translated into clear, actionable insights.</li>
-          <li>Proactive Health Management: Early detection of potential health issues before they become serious problems.</li>
-          <li>Time and Cost Efficiency: Reduce unnecessary doctor visits and medical expenses through better understanding.</li>
+          <li><strong>Personalized Analysis:</strong> Your results are analyzed based on your unique health profile and medical history.</li>
+          <li><strong>Easy-to-Understand Reports:</strong> Complex medical data is translated into clear, actionable insights.</li>
+          <li><strong>Proactive Health Management:</strong> Early detection of potential health issues before they become serious problems.</li>
+          <li><strong>Time and Cost Efficiency:</strong> Reduce unnecessary doctor visits and medical expenses through better understanding.</li>
         </ul>
         
         <h3 class="text-[32px] font-bold text-black mb-4">What Information Does Smart Blood Insights Provide?</h3>
@@ -175,10 +175,10 @@ const BlogPost: React.FC<BlogPostProps> = ({ id }) => {
   }
 
   return (
-    <section className="pt-20 px-4 sm:px-6 lg:px-8 bg-white">
-      <div className="max-w-10/12 mx-auto">
+    <section className=" bg-white">
+      <div className="max-w-none">
         {/* Back Button */}
-        <div className="mb-8">
+        {/* <div className="mb-6 lg:mb-8 px-4 lg:px-0">
           <Link 
             href="/blog-lists" 
             className="inline-flex items-center space-x-2 text-secondary hover:text-secondary/80 transition-colors duration-300"
@@ -186,19 +186,14 @@ const BlogPost: React.FC<BlogPostProps> = ({ id }) => {
             <FaArrowLeft className="w-4 h-4" />
             <span>Back to Blog List</span>
           </Link>
-        </div>
+        </div> */}
 
-        {/* Blog Header */}
-        <div className="mb-12">
-          <h1 className="text-[32px] sm:text-5xl font-bold text-primary-text mb-4">
-            Blog
-          </h1>
-        </div>
+        
 
         {/* Blog Post */}
-        <article className="bg-white rounded-xl overflow-hidden">
+        <article className="bg-white overflow-hidden">
           {/* Blog Post Image */}
-          <div className="w-full h-96 md:h-[900px] overflow-hidden mb-8">
+          <div className="w-full h-80 sm:h-96 md:h-[500px] overflow-hidden mt-6 mb-6 lg:mb-8 -mx-4 lg:mx-0 rounded-xl">
             <img
               src={post.image}
               alt={post.alt}
@@ -208,16 +203,16 @@ const BlogPost: React.FC<BlogPostProps> = ({ id }) => {
           </div>
 
           {/* Blog Post Content */}
-          <div className="space-y-8">
+          <div className="space-y-6 lg:space-y-8 px-4 lg:px-0">
             {/* Title and Metadata */}
-            <div className="flex flex-col lg:flex-row justify-between items-start gap-6">
+            <div className="flex flex-col lg:flex-row justify-between items-start gap-4 lg:gap-6">
               <div className="w-full lg:w-3/4">
-                <h2 className="text-4xl sm:text-4xl font-bold text-primary-text leading-tight ">
+                <h2 className="text-3xl sm:text-4xl font-bold text-primary-text leading-tight">
                   {post.title}
                 </h2>
               </div>
               {/* Metadata */}
-              <div className="flex items-center space-x-6 text-sm text-primary-text">
+              <div className="flex items-center space-x-4 lg:space-x-6 text-sm text-primary-text">
                 <div className="flex items-center space-x-2">
                   <FaCalendar className="w-4 h-4" />
                   <span className="text-primary-text text-base">{post.date}</span>

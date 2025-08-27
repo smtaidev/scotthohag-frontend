@@ -12,6 +12,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { BsEye } from "react-icons/bs";
+import { FaRegEyeSlash } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { toast } from "sonner";
 import * as z from "zod";
@@ -47,6 +49,7 @@ export default function SignInPage() {
   });
 
   const [signIn, { isLoading }] = useSignInMutation();
+  const [view, setView] = useState(false);
 
   const router = useRouter();
   const dispatch = useDispatch();
@@ -67,15 +70,16 @@ export default function SignInPage() {
         } else {
           router.push("/otp");
         }
-      }else{
-           router.push("/otp");
-           console.log("Otp is here")
+      } else {
+        router.push("/otp");
+        console.log("Otp is here")
       }
     } catch (error: any) {
       console.log("Error during sign-in:", error);
-      if(error?.data?.error.message[0]=="User with id: cmetimovh000k0ahseedvaf7d is not verified. Please verify.") {
-        localStorage.setItem('email',data.email)
-        router.push("/otp")};
+      if (error?.data?.error.message[0] == "User with id: cmetimovh000k0ahseedvaf7d is not verified. Please verify.") {
+        localStorage.setItem('email', data.email)
+        router.push("/otp")
+      };
       return toast.warning(error?.data?.error.message[0] || "Login failed");
     }
   };
@@ -102,15 +106,21 @@ export default function SignInPage() {
           />
 
           {/* Password Input */}
-          <CustomInput
-            id="password"
-            type="password"
-            label="Password"
-            placeholder="••••••••••"
-            showPasswordToggle={true}
-            error={errors.password?.message}
-            {...register("password")}
-          />
+          <div className="relative">
+
+            <CustomInput
+              id="password"
+              type={view ? "text" : "password"}
+               label="Password"
+              placeholder="••••••••••"
+              error={errors.password?.message}
+              {...register("password")}
+            />
+            <button type="button" className="absolute top-11 right-5 cursor-pointer" onClick={() => setView(!view)}>
+              {view ? <BsEye /> : <FaRegEyeSlash />}
+            </button>
+
+          </div>
 
           {/* Remember Me and Forgot Password */}
           <div className="flex items-center justify-between">

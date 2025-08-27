@@ -12,7 +12,7 @@ export const authApi = baseApi.injectEndpoints({
     }),
     signUp: builder.mutation({
       query: (body) => ({
-        url: "/auth/register",
+        url: "/auth/signup",
         method: "POST",
         body,
       }),
@@ -51,8 +51,9 @@ export const authApi = baseApi.injectEndpoints({
     logout: builder.mutation({
       query: () => ({
         url: "/auth/logout",
-        method: "POST",
+        method: "DELETE",
       }),
+      invalidatesTags:['User']
     }),
 
     resetPassword: builder.mutation({

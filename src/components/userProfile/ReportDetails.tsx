@@ -1,6 +1,8 @@
 'use client';
 
+import { useReportDetailsQuery } from '@/redux/api/reports/reportSlice';
 import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import React from 'react';
 import { LuArrowLeft, LuClock, LuCalendar, LuDownload } from 'react-icons/lu';
 
@@ -22,6 +24,13 @@ const ReportDetails: React.FC<ReportDetailsProps> = ({
         previewTitle: 'Blood Panel Results',
         recommendationsTitle: 'Supplement Recommendations'
     };
+
+    const {id}=useParams()
+
+    const {data:reports}=useReportDetailsQuery(id);
+
+    const report=reports?.data
+
 
     return (
         <div className="min-h-screen bg-gray-50">
@@ -51,7 +60,7 @@ const ReportDetails: React.FC<ReportDetailsProps> = ({
                     <div className=" px-6 pt-6 pb-16 bg-white rounded-xl">
                         <div className='flex justify-between items-center mb-2'>
                             <h2 className="text-xl font-bold text-primary-text ">
-                                {reportData.title}
+                                {report?.title}
                             </h2>
 
                             <div className="flex items-center gap-3">
@@ -72,7 +81,7 @@ const ReportDetails: React.FC<ReportDetailsProps> = ({
                                         <LuClock size={20} className="text-gray-600" />
                                         <div>
                                             <p className="text-sm text-[#4B4B4B] font-medium">Report Type</p>
-                                            <p className="text-base text-black font-medium">{reportData.reportType}</p>
+                                            <p className="text-base text-black font-medium">{report?.type}</p>
                                         </div>
                                     </div>
 
@@ -98,10 +107,10 @@ const ReportDetails: React.FC<ReportDetailsProps> = ({
                         </h3>
                         <div className='bg-gray-50 rounded-xl p-6 mt-4'>
                             <h4 className="text-base font-medium text-primary-text mb-4">
-                                {reportData.previewTitle}
+                                {report?.title}
                             </h4>
                             <div className="bg-white rounded-xl p-4 text-[#4B4B4B] text-base font-normal text-justify leading-relaxed space-y-4">
-                                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+                             {report?.result}
                             </div>
                         </div>
                     </div>
@@ -114,7 +123,8 @@ const ReportDetails: React.FC<ReportDetailsProps> = ({
                                 {reportData.recommendationsTitle}
                             </h4>
                             <div className="bg-white rounded-xl p-4 text-[#4B4B4B] text-base font-normal text-justify leading-relaxed space-y-4">
-                            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+
+                              {report?.recomendation}
                             </div>
                         </div>
                     </div>
