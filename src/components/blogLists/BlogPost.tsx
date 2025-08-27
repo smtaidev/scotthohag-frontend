@@ -193,7 +193,7 @@ const BlogPost: React.FC<BlogPostProps> = ({ id }) => {
         {/* Blog Post */}
         <article className="bg-white overflow-hidden">
           {/* Blog Post Image */}
-          <div className="w-full h-80 sm:h-96 md:h-[500px] overflow-hidden mt-6 mb-6 lg:mb-8 -mx-4 lg:mx-0 rounded-xl">
+          <div className="w-full h-80 sm:h-96 md:h-[500px] overflow-hidden mt-6 mb-6 lg:mb-8  rounded-xl">
             <img
               src={post.image}
               alt={post.alt}
@@ -203,7 +203,7 @@ const BlogPost: React.FC<BlogPostProps> = ({ id }) => {
           </div>
 
           {/* Blog Post Content */}
-          <div className="space-y-6 lg:space-y-8 px-4 lg:px-0">
+          <div className="space-y-6 lg:space-y-8 px-0 lg:px-0">
             {/* Title and Metadata */}
             <div className="flex flex-col lg:flex-row justify-between items-start gap-4 lg:gap-6">
               <div className="w-full lg:w-3/4">

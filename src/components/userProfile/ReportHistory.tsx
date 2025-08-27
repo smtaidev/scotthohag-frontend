@@ -136,7 +136,7 @@ const ReportHistory: React.FC<ReportHistoryProps> = ({
                                 <LuArrowLeft size={20} />
                             </button>
                         </Link>
-                        <h1 className="text-[32px] text-white font-bold absolute left-1/2 transform -translate-x-1/2">Report History</h1>
+                        <h1 className="md:text-[32px] text-2xl text-white font-bold absolute left-1/2 transform -translate-x-1/2">Report History</h1>
                         <div className="w-10"></div> {/* Spacer to balance the layout */}
                     </div>
                 </div>

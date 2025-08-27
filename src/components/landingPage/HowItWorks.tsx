@@ -34,7 +34,7 @@ const HowItWorks: React.FC = () => {
   ];
 
   return (
-    <section className="py-10 md:py-20 px-4 sm:px-6 lg:px-8 bg-[#F9FAFB]">
+    <section className="py-10 md:py-20 px-0 sm:px-6 lg:px-8 bg-[#F9FAFB]">
       <div className="max-w-10/12 mx-auto">
         {/* Title */}
         <h2 className="text-4xl sm:text-5xl font-bold text-primary-text text-center mb-20">

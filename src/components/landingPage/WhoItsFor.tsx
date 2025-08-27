@@ -33,7 +33,7 @@ const WhoItsFor: React.FC = () => {
 
   return (
     <section className=" bg-white">
-      <div className="max-w-10/12 mx-auto py-36 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-10/12 mx-auto md:py-36 py-16 px-0 md:px-16">
         {/* Title */}
         <h2 className="text-4xl sm:text-5xl font-bold text-primary-text text-center mb-16">
           Who It's For

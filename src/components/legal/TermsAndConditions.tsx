@@ -14,7 +14,7 @@ const TermsAndConditions: React.FC<TermsAndConditionsProps> = ({
     return (
         <div className="min-h-screen bg-gray-50">
             {/* Header Bar */}
-            <div className="bg-primary text-white px-4 py-4 shadow-sm">
+            <div className="bg-primary text-white px-0 py-4 shadow-sm">
                 <div className="max-w-10/12 mx-auto">
                     <div className="flex items-center justify-between py-6">
                         {/* <Link href={'/health-report'}>
@@ -24,7 +24,7 @@ const TermsAndConditions: React.FC<TermsAndConditionsProps> = ({
                                 <LuArrowLeft size={20} />
                             </button>
                         </Link> */}
-                        <h1 className="text-[32px] text-white font-bold absolute left-1/2 transform -translate-x-1/2">
+                        <h1 className="md:text-[32px] text-2xl text-white font-bold absolute text-center  md:left-1/2 md:transform md:-translate-x-1/2">
                             TERMS AND CONDITIONS
                         </h1>
                         <div className="w-10"></div> {/* Spacer to balance the layout */}
@@ -33,9 +33,9 @@ const TermsAndConditions: React.FC<TermsAndConditionsProps> = ({
             </div>
 
             {/* Main Content */}
-            <div className="max-w-10/12 mx-auto px-4 py-6 sm:px-6 lg:px-8">
+            <div className="max-w-10/12 mx-auto px-0 py-6 sm:px-6 lg:px-8">
                 <div className="">
-                    <div className="px-6 py-8">
+                    <div className="md:px-6 px-0 py-8">
                         {/* Main Title */}
                         <h2 className="text-[32px] font-bold text-black mb-2">
                             Terms of Service

@@ -81,7 +81,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
 
 
             {/* Main Content */}
-            <div className="max-w-10/12 mx-auto px-4 py-8 sm:px-6 lg:px-8">
+            <div className="max-w-10/12 mx-auto px-0 py-8 sm:px-6 lg:px-8">
                 <h1 className="text-[32px] text-black font-bold absolute left-1/2 transform -translate-x-1/2">
                     Edit Profile
                 </h1>
@@ -130,7 +130,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
                     </div>
 
                     {/* Profile Details Form */}
-                    <div className="px-6 py-6">
+                    <div className="py-6">
                         <form className="space-y-6 bg-white rounded-xl p-6">
 
                             {/* Full Name */}

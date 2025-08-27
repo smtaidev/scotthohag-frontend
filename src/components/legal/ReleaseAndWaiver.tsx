@@ -26,9 +26,9 @@ const ReleaseAndWaiver: React.FC<ReleaseAndWaiverProps> = ({
             {/* Header Bar */}
             <div className="bg-primary text-white px-4 py-4 shadow-sm">
                 <div className="max-w-10/12 mx-auto">
-                    <div className="flex items-center justify-between py-12">
+                    <div className="flex items-center justify-between py-14 md:py-12">
 
-                        <h1 className="text-[32px] text-white font-bold absolute left-1/2 transform -translate-x-1/2">
+                        <h1 className="md:text-[32px] text-2xl text-white font-bold absolute  md:left-1/2 md:transform md:-translate-x-1/2">
                             RELEASE AND WAIVER OF LIABILITY, DISCLAIMER, AND ASSUMPTION OF RISK AGREEMENT
                         </h1>
                         <div className="w-10"></div> {/* Spacer to balance the layout */}
@@ -37,9 +37,9 @@ const ReleaseAndWaiver: React.FC<ReleaseAndWaiverProps> = ({
             </div>
 
             {/* Main Content */}
-            <div className="max-w-10/12 mx-auto px-4 py-6 sm:px-6 lg:px-8">
+            <div className="max-w-10/12 mx-auto px-0 py-6 sm:px-6 lg:px-8">
                 <div className="">
-                    <div className="px-6 py-8">
+                    <div className="md:px-6 px-0 py-8">
                         {/* Introductory Paragraph */}
                         <div className="text-base font-normal text-black mb-8">
                             <p>

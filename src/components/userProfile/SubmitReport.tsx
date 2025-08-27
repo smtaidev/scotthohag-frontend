@@ -82,7 +82,7 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
   };
 
   return (
-    <div className="max-w-10/12 mx-auto px-4 sm:px-6 lg:px-8 pb-8">
+    <div className="max-w-10/12 mx-auto px-0 sm:px-6 lg:px-8 pb-8">
       <div className="bg-white rounded-xl p-8 mb-8">
         {/* Header Section */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">

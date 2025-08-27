@@ -28,7 +28,7 @@ const Features: React.FC = () => {
   ];
 
   return (
-    <section className="py-20 px-4 sm:px-6 lg:px-8 bg-[#F9FAFB]">
+    <section className="py-20 px-o sm:px-6 lg:px-8 bg-[#F9FAFB]">
       <div className="max-w-10/12 mx-auto space-y-24">
         {features.map((feature, index) => (
           <div key={index} className={`flex flex-col ${feature.imagePosition === 'right' ? 'lg:flex-row-reverse' : 'lg:flex-row'} items-center gap-16`}>
