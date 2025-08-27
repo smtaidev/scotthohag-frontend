@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+:root {
+  /* Color Styles */
+  --color-main-background: #FFFFFF;
+}
+
 body {
   font-family: var(--font-open-sans);
   background: white;
@@ -8,23 +13,30 @@ body {
 @theme {
   --color-primary: #003160;
   --color-secondary: #00A14B;
-  --color-accent: #E5E5FF;
+  --color-stroke: #E0E0E0;
   --color-surface: #FFEDE2;
-  --color-card: #E5E5FF;
+  --color-card: #F5FBF8;
   --color-warning: #EB3C13;
   --color-success: #10B981;
   --color-info: #3B82F6;
-}
-
-input[type="date"]::-webkit-calendar-picker-indicator {
-    opacity: 0;
-}
-
-select, input {
-  transition: 0.4s;
+  --color-primary-text: #003160;
+  --color-secondary-text: #6B7280;
 }
 
 
+@layer components {
+  .title {
+    @apply text-primary-text text-3xl md:text-[2.5rem] font-bold mb-4;
+  }
+  .heading {
+    @apply text-primary-text text-3xl md:text-4xl font-medium mb-4;
+  }
 
+  .text-title {
+    @apply text-black text-xl md:text-base leading-relaxed font-bold mb-4;
+  }
 
-
+  .info {
+    @apply text-black text-sm md:text-base leading-relaxed;
+  }
+}
