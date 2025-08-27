@@ -119,8 +119,8 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
             </label>
             <div className="relative">
               <select
-                value={selectedReportTitle}
-                onChange={(e) => setSelectedReportTitle(e.target.value)}
+                value={selectedReportType}
+                onChange={(e) => setSelectedReportType(e.target.value)}
                 className="w-full px-3 py-2 bg-gray-100 rounded-md focus:outline-none focus:ring-1 focus:ring-primary"
               >
                 <option value="" className="text-gray-400">Select report type</option>
@@ -142,8 +142,8 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
             <div className="relative">
               <input
                 type="text"
-                
-                
+                value={selectedReportTitle}
+                onChange={(e) => setSelectedReportTitle(e.target.value)}
                 className="w-full px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-primary bg-gray-100 placeholder-gray-400 "
                 placeholder="Write your report title here"
               />
