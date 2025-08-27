@@ -4,9 +4,13 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import SubmitReport from '@/components/userProfile/SubmitReport';
 import Profile from '@/components/userProfile/Profile';
+import { useReportSubmitMutation } from '@/redux/api/reports/reportSlice';
+import { toast } from 'sonner';
 
 const HealthReportPage: React.FC = () => {
   const router = useRouter();
+
+  const [reportSubmit] = useReportSubmitMutation()
 
   // Mock user data - in a real app, this would come from your state management or API
   const userData = {
@@ -18,9 +22,18 @@ const HealthReportPage: React.FC = () => {
     address: "" // Empty to simulate incomplete profile
   };
 
-  const handleReportSubmit = (data: any) => {
+  const handleReportSubmit =async (data: any,onSuccess?: () => void) => {
     console.log('Report submitted:', data);
-    // Handle report submission logic here
+    try {
+      const response =await reportSubmit(data);
+      console.log(response)
+      if (response?.data) {
+        toast.success("Report Submited!");
+          onSuccess?.();
+      }
+    } catch (error) {
+      toast.error("Report Submit Fail!")
+    }
   };
 
   const handleViewHistory = () => {
@@ -38,7 +51,7 @@ const HealthReportPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Profile 
+      <Profile
         userName={userData.userName}
         userEmail={userData.userEmail}
         userAge={userData.userAge}
@@ -48,7 +61,7 @@ const HealthReportPage: React.FC = () => {
         onEditProfile={handleEditProfile}
         onCompleteProfile={handleCompleteProfile}
       />
-      <SubmitReport 
+      <SubmitReport
         onReportSubmit={handleReportSubmit}
         onViewHistory={handleViewHistory}
       />

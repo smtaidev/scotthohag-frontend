@@ -17,7 +17,7 @@ const navItems = [
 ];
 
 const profile = [
-    { name: 'Profile', link: '/edit-profile' },
+    { name: 'Profile', link: '/health-report' },
     { name: 'Log Out', link: '/' },
 
 ];

@@ -5,9 +5,17 @@ import { LuFileText, LuFiles, LuCalendar, LuUpload, LuChevronDown, LuX } from 'r
 import CustomInput from '@/ui/CustomeInput';
 import { MdCloudUpload } from 'react-icons/md';
 import Link from 'next/link';
+import Cookies from 'js-cookie';
+
+interface ReportFormData {
+  type: string;
+  title: string;
+  date: string;
+  reportUrls: string[];
+}
 
 interface SubmitReportProps {
-  onReportSubmit?: (data: any) => void;
+  onReportSubmit?: (data: ReportFormData, onSuccess?: () => void) => void;
   onViewHistory?: () => void;
 }
 
@@ -70,15 +78,80 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
     setUploadedFiles(prev => prev.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const token = Cookies.get("accessToken")
+
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    const formData = {
-      reportType: selectedReportType,
-      reportTitle: selectedReportTitle,
-      reportDate,
-      files: uploadedFiles
+
+    const getSignedUrl = async (fileType: any, mimeType: any) => {
+      const response: any = await fetch(
+        `${process.env.NEXT_PUBLIC_URL}/uploads?fileType=${encodeURIComponent(fileType)}&mimeType=${encodeURIComponent(mimeType)}`,
+        {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      if (!response.ok) {
+        throw new Error('Failed to get signed URL');
+      }
+
+      const data = await response.json();
+      return data.data.signedUrl;
     };
-    onReportSubmit?.(formData);
+
+    const resultUrls: string[] = [];
+
+    if (uploadedFiles?.length > 0) {
+      await Promise.all(
+        uploadedFiles.map(async (file: any) => {
+          const fileType = file.name.split('.').pop();
+          const mimeType = file.type;
+
+          try {
+            const signedUrl = await getSignedUrl(fileType, mimeType);
+
+            const uploadResponse = await fetch(signedUrl, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': mimeType,
+              },
+              body: file,
+            });
+
+            if (!uploadResponse.ok) {
+              throw new Error(`Upload failed for ${file.name}`);
+            }
+
+            const fileUrl = signedUrl.split('?')[0];
+            resultUrls.push(fileUrl);
+          } catch (error) {
+            console.error('Error uploading', file.name, error);
+
+          }
+        })
+      );
+    }
+
+    const resetForm = () => {
+      setSelectedReportType('');
+      setSelectedReportTitle('');
+      setReportDate('');
+      setUploadedFiles([]);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    };
+
+
+
+    const formData = {
+      type: selectedReportType,
+      title: selectedReportTitle,
+      date: reportDate,
+      reportUrls: resultUrls
+    };
+    onReportSubmit?.(formData, resetForm);
   };
 
   return (
@@ -147,7 +220,7 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
                 className="w-full px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-primary bg-gray-100 placeholder-gray-400 "
                 placeholder="Write your report title here"
               />
-              
+
             </div>
           </div>
 
