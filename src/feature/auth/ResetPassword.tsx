@@ -16,8 +16,8 @@ const formSchema = z
   .object({
     password: z
       .string()
-      .min(6, { message: "Password should be at least 6 characters long" })
-      .min(1, { message: "Password is required" }),
+      .min(1, { message: "Password is required" })
+      .min(6, { message: "Password should be at least 6 characters long" }),
     confirmPassword: z
       .string()
       .min(1, { message: "Confirm Password is required" }),
@@ -31,39 +31,47 @@ type FormValues = z.infer<typeof formSchema>;
 
 export default function ResetPasswordPage() {
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const searchParams = useSearchParams();
   const [resetPassword, { isLoading }] = useResetPasswordMutation();
   const router = useRouter();
   const userId = searchParams.get("userId") || "";
-  const token = searchParams.get("token") || "";
+  const token = localStorage.getItem("resetToken");
 
   // Use React Hook Form with Zod resolver
   const {
     register,
     handleSubmit,
     formState: { errors },
+    watch,
   } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       password: "",
       confirmPassword: "",
     },
+    mode: "onChange", // This enables real-time validation
   });
-  console.log(userId, token);
+
+  // Watch password field to enable real-time comparison
+  const password = watch("password");
+
   const onSubmit = async (data: FormValues) => {
     try {
       const response = await resetPassword({
-        userId,
-        password: data.password,
+        newPassword: data.password,
         token,
       }).unwrap();
 
       if (response?.success) {
         console.log("Password reset successfully");
         toast.success("Password reset successfully");
+        // Clear the reset token from localStorage
+        localStorage.removeItem("resetToken");
         router.push("/signIn");
       } else {
         console.error("Failed to reset password");
+        toast.error("Failed to reset password");
       }
     } catch (error: any) {
       console.error("Error:", error);
@@ -73,6 +81,10 @@ export default function ResetPasswordPage() {
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
   };
 
   return (
@@ -87,34 +99,46 @@ export default function ResetPasswordPage() {
         {/* Password Input */}
         <CustomInput
           id="password"
-          type="password"
+          type={showPassword ? "text" : "password"}
           label="Password"
           placeholder="••••••••••"
-          showPasswordToggle={showPassword}
+          showPasswordToggle={true}
+          // onTogglePassword={togglePasswordVisibility}
+          // isPasswordVisible={showPassword}
           error={errors.password?.message}
           {...register("password")}
-
         />
 
         {/* Confirm Password Input */}
         <CustomInput
           id="confirmPassword"
-          type="password"
+          type={showConfirmPassword ? "text" : "password"}
           label="Confirm Password"
           placeholder="••••••••••"
-          showPasswordToggle={showPassword}
-          error={
-            typeof errors.confirmPassword?.message === "string"
-              ? errors.confirmPassword.message
-              : "Password confirmation does not match the password."
-          }
+          showPasswordToggle={true}
+          // onTogglePassword={toggleConfirmPasswordVisibility}
+          // isPasswordVisible={showConfirmPassword}
+          error={errors.confirmPassword?.message}
           {...register("confirmPassword")}
         />
 
-        {/* Sign Up Button */}
-        <PrimaryButton type="submit" loading={isLoading}>
-          Reset
-        </PrimaryButton>
+        {/* Password Strength Indicator */}
+        {password && (
+          <div className="text-sm text-gray-600">
+            <p className="font-medium mb-1">Password requirements:</p>
+            <ul className="space-y-1">
+              <li className={password.length >= 6 ? "text-green-600" : "text-red-500"}>
+                {password.length >= 6 ? "✓" : "✗"} At least 6 characters
+              </li>
+            </ul>
+          </div>
+        )}
+       <button className="px-3 py-2 w-full text-center rounded-lg bg-primary transition-all duration-300 text-white hover:bg-primary shadow cursor-pointer">Submit</button>
+
+        {/* Reset Button */}
+        {/* <PrimaryButton type="submit" loading={isLoading} >
+          Reset Password
+        </PrimaryButton> */}
       </form>
     </div>
   );
