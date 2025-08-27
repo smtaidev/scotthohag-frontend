@@ -20,21 +20,26 @@ const EditProfilePage = () => {
 
     const [updateProfile]=useUpdateProfileMutation()
 
-    const handleSave = async(data: ProfileData) => {
-       try {
-         const res = await updateProfile({
-            name:data.fullName,
-            address:data.address,
-            dateOfBirth:data.dateOfBirth,
-            phone:data.phoneNumber
-         });
-         if(res.data){
-            toast.success("Profile Updated Successfully!")
-         }
-       } catch (error) {
-        toast.error("Profile Update Fail!")
-       }
-    };
+const handleSave = async (data: ProfileData) => {
+  try {
+    // Build only fields that are not null/undefined/empty
+    const filteredData: Record<string, string> = {};
+    if (data.fullName) filteredData.name = data.fullName;
+    if (data.address) filteredData.address = data.address;
+    if (data.dateOfBirth) filteredData.dateOfBirth = data.dateOfBirth;
+    if (data.phoneNumber) filteredData.phone = data.phoneNumber;
+
+    const res = await updateProfile(filteredData);
+
+    if (res.data) {
+      toast.success("Profile Updated Successfully!");
+      router.push("/health-report")
+    }
+  } catch (error) {
+    toast.error("Profile Update Failed!");
+  }
+};
+
 
     const handleCancel = () => {
         router.push('/health-report');

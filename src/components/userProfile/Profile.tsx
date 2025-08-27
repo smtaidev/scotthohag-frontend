@@ -1,5 +1,6 @@
 'use client';
 
+import { useGetMeQuery } from '@/redux/api/getMe/getMeApi';
 import React from 'react';
 import { LuPencil } from 'react-icons/lu';
 
@@ -31,6 +32,17 @@ const Profile: React.FC<ProfileProps> = ({
            phoneNumber.trim() !== "" && address.trim() !== "";
   };
 
+  const {data:userInfo}=useGetMeQuery({});
+  const user=userInfo?.data;
+
+
+     const calculateAge = (dob: string) => {
+    const birthDate = new Date(dob);
+    const ageDiff = Date.now() - birthDate.getTime();
+    const ageDate = new Date(ageDiff);
+    return Math.abs(ageDate.getUTCFullYear() - 1970);
+  };
+
   const profileComplete = isProfileComplete();
 
   return (
@@ -38,7 +50,7 @@ const Profile: React.FC<ProfileProps> = ({
       {/* Welcome Section */}
       <div className="mb-8">
         <h1 className="text-3xl md:text-4xl font-bold text-black mb-4">
-          Welcome, {userName}
+          Welcome, {user?.name}
         </h1>
       </div>
 
@@ -50,7 +62,7 @@ const Profile: React.FC<ProfileProps> = ({
             <div className="flex-shrink-0">
               <div className="w-30 h-30 rounded-full overflow-hidden border-4 border-gray-100">
                 <img
-                  src={profileImage}
+                  src={user?.avatar}
                   alt={`${userName}'s profile`}
                   className="w-full h-full object-cover"
                 />
@@ -61,10 +73,10 @@ const Profile: React.FC<ProfileProps> = ({
             <div className="flex-1 min-w-0">
               <div className="space-y-2">
                 <h2 className="text-xl font-bold text-black text-center md:text-left">
-                  {userName}
+                  {user?.name}
                 </h2>
                 <p className="text-gray-600 text-sm md:text-base text-center md:text-left">
-                  {userEmail}
+                  {user?.email}
                 </p>
 
                 <div className="text-center md:text-left space-y-2">
@@ -95,7 +107,7 @@ const Profile: React.FC<ProfileProps> = ({
           <div className="flex-shrink-0">
             <div className="text-right">
               <p className="text-gray-600 text-base md:text-lg font-normal">
-                Age: {userAge} years
+                Age:  {calculateAge(user?.dateOfBirth)}  years
               </p>
             </div>
           </div>

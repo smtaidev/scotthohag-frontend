@@ -6,6 +6,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Logo from '../Logo';
 import { useGetMeQuery } from '@/redux/api/getMe/getMeApi';
 import { div } from 'framer-motion/client';
+import Cookies from 'js-cookie';
+import { useLogoutMutation } from '@/redux/api/auth/authApi';
+import { useRouter } from 'next/navigation';
 
 const navItems = [
     { name: 'Home', link: '/' },
@@ -28,11 +31,11 @@ export default function Navbar() {
     const [activeItem, setActiveItem] = useState("/");
     const [isScrolled, setIsScrolled] = useState(false);
     const main = useRef<HTMLDivElement>(null);
-    const prof=useRef<HTMLDivElement>(null);
-
+    const prof = useRef<HTMLDivElement>(null);
+    const router = useRouter();
 
     const { data: userInfo } = useGetMeQuery({});
-    console.log(userInfo?.data)
+    const [logout] = useLogoutMutation()
 
     // Set active item based on current path
     useEffect(() => {
@@ -51,7 +54,7 @@ export default function Navbar() {
 
         const handleClickOutside2 = (event: MouseEvent) => {
             if (prof.current && !prof.current.contains(event.target as Node)) {
-           
+
                 setProfileOpen(false);
             }
         };
@@ -73,9 +76,24 @@ export default function Navbar() {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    const handleItemClick = (link: string) => {
+    const handleItemClick =async (link: string) => {
         setActiveItem(link);
-        setMenuOpen(false);
+        setProfileOpen(false);
+
+        if (link === "/") {
+           const res=await logout({});
+           Cookies.remove("accessToken");
+            console.log(res)
+
+         
+            window.location.reload();
+            window.location.href = "/";
+
+        } else {
+            router.push(link);
+        }
+
+        console.log("My link here", link);
     };
 
     return (
@@ -109,8 +127,8 @@ export default function Navbar() {
                             Sign Up
                         </Link> :
                         <div ref={prof} className='relative'>
-                            <div  onClick={() => setProfileOpen(!profileOpen)} ref={prof} className='cursor-pointer hover:bg-gray-200/20 p-2 transition rounded-full '>
-                                <FaUser className='size-6 ' />
+                            <div onClick={() => setProfileOpen(!profileOpen)} ref={prof} className='cursor-pointer hover:bg-gray-200/20 p-2 transition rounded-full flex items-center gap-2'>
+                                <FaUser className='size-6 ' /> <p>{userInfo?.data.name}</p>
                             </div>
                             <div
                                 className={`absolute right-0 top-12 min-w-[160px] bg-white/50 backdrop-blur-2xl text-black shadow-lg rounded-md transition-all duration-300 transform z-50 ${profileOpen ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"
