@@ -10,7 +10,8 @@ import {
   FaLeaf, 
   FaHeart, 
   FaBed, 
-  FaChartLine 
+  FaChartLine, 
+  FaHeartbeat
 } from 'react-icons/fa';
 
 const AreasOfSpecialty: React.FC = () => {
@@ -18,13 +19,13 @@ const AreasOfSpecialty: React.FC = () => {
     {
       icon: FaWeight,
       title: "Weight Loss",
-      color: "text-purple-600",
+      color: "text-[#4F46E5]",
       bgColor: "bg-purple-100"
     },
     {
       icon: FaBrain,
       title: "Energy, Focus & Mood",
-      color: "text-purple-600",
+      color: "text-[#DB2777]",
       bgColor: "bg-purple-100"
     },
     {
@@ -36,13 +37,13 @@ const AreasOfSpecialty: React.FC = () => {
     {
       icon: FaSyringe,
       title: "Peptide Therapy",
-      color: "text-blue-600",
+      color: "text-[#2563EB]",
       bgColor: "bg-blue-100"
     },
     {
       icon: FaRocket,
       title: "Performance",
-      color: "text-orange-600",
+      color: "text-[#EA580C]",
       bgColor: "bg-orange-100"
     },
     {
@@ -52,7 +53,7 @@ const AreasOfSpecialty: React.FC = () => {
       bgColor: "bg-green-100"
     },
     {
-      icon: FaHeart,
+      icon: FaHeartbeat ,
       title: "Heart Health",
       color: "text-red-600",
       bgColor: "bg-red-100"
@@ -60,7 +61,7 @@ const AreasOfSpecialty: React.FC = () => {
     {
       icon: FaBed,
       title: "Sleep",
-      color: "text-blue-600",
+      color: "text-[#4F46E5]",
       bgColor: "bg-blue-100"
     },
     {
@@ -85,7 +86,7 @@ const AreasOfSpecialty: React.FC = () => {
             <div key={index} className="bg-white rounded-xl px-6 py-12  duration-300">
               <div className="flex flex-col items-center text-center space-y-3">
                 {/* Icon */}
-                <div className={`w-14 h-14 ${specialty.bgColor} rounded-full flex items-center justify-center`}>
+                <div className={`w-14 h-14  rounded-full flex items-center justify-center`}>
                   <specialty.icon className={`w-7 h-7 ${specialty.color}`} />
                 </div>
                 

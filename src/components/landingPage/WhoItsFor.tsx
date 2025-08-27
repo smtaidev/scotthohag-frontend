@@ -8,26 +8,26 @@ const WhoItsFor: React.FC = () => {
     {
       icon: FaHeart,
       title: "Health-conscious individuals",
-      bgColor: "bg-blue-100",
-      iconColor: "text-blue-600"
+      bgColor: "bg-[#DBEAFE]",
+      iconColor: "text-[#2563EB]"
     },
     {
       icon: FaStethoscope,
       title: "People managing chronic conditions",
-      bgColor: "bg-red-100",
-      iconColor: "text-red-600"
+      bgColor: "bg-[#FEE2E2]",
+      iconColor: "text-[#DC2626]"
     },
     {
       icon: FaDumbbell,
       title: "Fitness/performance enthusiasts",
-      bgColor: "bg-green-100",
-      iconColor: "text-green-600"
+      bgColor: "bg-[#DCFCE7]",
+      iconColor: "text-[#16A34A]"
     },
     {
       icon: FaQuestion,
       title: "Anyone confused by lab reports",
-      bgColor: "bg-yellow-100",
-      iconColor: "text-yellow-600"
+      bgColor: "bg-[#FEF9C3]",
+      iconColor: "text-[#CA8A04]"
     }
   ];
 
