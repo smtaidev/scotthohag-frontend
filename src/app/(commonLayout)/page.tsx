@@ -14,7 +14,7 @@ const page = () => {
     <div>
       <SubscriptionPlan />
       <HowItWorks />
-      {/* <DemoCurve /> */}
+      <DemoCurve />
       <Features />
       <WhoItsFor />
       <AreasOfSpecialty />
