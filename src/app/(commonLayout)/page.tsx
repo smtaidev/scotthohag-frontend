@@ -7,12 +7,14 @@ import AreasOfSpecialty from '@/components/landingPage/AreasOfSpecialty';
 import AboutScott from '@/components/landingPage/AboutScott';
 import LatestNews from '@/components/landingPage/LatestNews';
 import ContactUs from '@/components/landingPage/ContactUs';
+import DemoCurve from '@/components/landingPage/DemoCurve';
 
 const page = () => {
   return (
     <div>
       <SubscriptionPlan />
       <HowItWorks />
+      {/* <DemoCurve /> */}
       <Features />
       <WhoItsFor />
       <AreasOfSpecialty />

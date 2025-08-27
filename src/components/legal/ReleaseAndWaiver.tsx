@@ -143,7 +143,11 @@ const ReleaseAndWaiver: React.FC<ReleaseAndWaiverProps> = ({
                         </div>
 
                         {/* Agreement Checkbox */}
-                        <div className="mt-12 pt-8 border-t border-gray-200">
+
+                        <div className='text-center mt-12 pt-8 border-t border-gray-200'>
+                            <p className='text-base font-normal text-black'>By clicking this box, you acknowledge that you have read, understood, and agree to the above.</p>
+                        </div>
+                        {/* <div className="mt-12 pt-8 border-t border-gray-200">
                             <div className="flex items-start space-x-3">
                                 <input
                                     type="checkbox"
@@ -157,7 +161,7 @@ const ReleaseAndWaiver: React.FC<ReleaseAndWaiverProps> = ({
                                 </label>
                             </div>
 
-                            {/* Agree Button */}
+                            
                             <div className="mt-6 text-center">
                                 <button
                                     onClick={handleAgree}
@@ -170,7 +174,7 @@ const ReleaseAndWaiver: React.FC<ReleaseAndWaiverProps> = ({
                                     I Agree
                                 </button>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>

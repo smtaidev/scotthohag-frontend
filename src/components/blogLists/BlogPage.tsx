@@ -3,24 +3,33 @@
 import React from 'react';
 import BlogList from './BlogList';
 import BlogSidebar from './BlogSidebar';
+import BlogPost from './BlogPost';
 
-const BlogPage: React.FC = () => {
+interface BlogPageProps {
+  id: string;
+}
+
+const BlogPage: React.FC<BlogPageProps> = ({ id }) => {
   return (
-    <div className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
-      <div className="max-w-10/12 mx-auto">
-       
-
+    <div className="bg-white min-h-screen">
+      <div className="max-w-10/12 mx-auto px-4 lg:px-0 pt-16">
+        {/* Blog Header */}
+        <div className="mb-8  px-4 lg:px-0">
+          <h1 className="text-[32px] sm:text-5xl font-bold text-primary-text mb-4">
+            Blog
+          </h1>
+        </div>
         {/* Blog Layout */}
-        <div className="flex flex-col lg:flex-row gap-12">
+        <div className="flex flex-col lg:flex-row w-full">
           {/* Main Blog Content */}
-          <div className="flex-1">
-            <BlogList />
+          <div className="lg:w-3/4  lg:pr-8">
+            <BlogPost id={id} />
           </div>
 
           {/* Sidebar */}
-          {/* <div className="lg:w-80">
+          <div className="lg:w-1/4 lg:pt-0 pt-10">
             <BlogSidebar />
-          </div> */}
+          </div>
         </div>
       </div>
     </div>

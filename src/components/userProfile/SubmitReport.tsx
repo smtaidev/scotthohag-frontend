@@ -140,18 +140,14 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
               Report Title <span className="text-red-500">*</span>
             </label>
             <div className="relative">
-              <select
-                value={selectedReportTitle}
-                onChange={(e) => setSelectedReportTitle(e.target.value)}
-                className="w-full px-3 py-2 bg-gray-100 rounded-md focus:outline-none focus:ring-1 focus:ring-primary"
-              >
-                <option value="" className="text-gray-400">Select report title</option>
-                {reportTitles.map((type) => (
-                  <option key={type} value={type}>
-                    {type}
-                  </option>
-                ))}
-              </select>
+              <input
+                type="text"
+                
+                
+                className="w-full px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-primary bg-gray-100 placeholder-gray-400 "
+                placeholder="Write your report title here"
+              />
+              
             </div>
           </div>
 
@@ -165,7 +161,7 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
                 type="date"
                 value={reportDate}
                 onChange={(e) => setReportDate(e.target.value)}
-                className="w-full px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-primary bg-gray-100 placeholder-gray-400"
+                className="w-full px-3 py-2 rounded-md placeholder:text-gray-400 text-black focus:outline-none focus:ring-1 focus:ring-primary bg-gray-100 "
                 placeholder="yyyy / mm / dd"
               />
               <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
@@ -241,7 +237,7 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
           <div className="pt-4">
             <button
               type="submit"
-              className="w-full px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors duration-200 font-medium cursor-pointer"
+              className="w-full px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 font-medium cursor-pointer transition-all duration-300 transform hover:scale-101"
             >
               Submit Report
             </button>

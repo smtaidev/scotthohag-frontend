@@ -79,12 +79,12 @@ const SubscriptionPlan: React.FC = () => {
       <div className="max-w-10/12 mx-auto">
         {/* Header Section */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl sm:text-5xl lg:text-[56px] font-extrabold mb-4">
+          <h1 className="text-4xl md:text-5xl lg:text-[56px] font-extrabold mb-4">
             <span className="text-primary-text">Premium</span>{' '}
             <span className="text-secondary">Wellness</span>{' '}
             <span className="text-primary-text">Subscription Plan</span>
           </h1>
-          <p className="text-[#4B4B4B] text-xl md:text-base leading-relaxed font-bold max-w-3xl mx-auto">
+          <p className="text-[#4B4B4B] md:text-xl text-base leading-relaxed font-bold max-w-3xl mx-auto">
             Comprehensive Health & Wellness Support for Your Journey to Optimal Health
           </p>
         </div>
@@ -112,7 +112,7 @@ const SubscriptionPlan: React.FC = () => {
           <h2 className="text-2xl sm:text-3xl font-bold text-center text-gray-800 mb-8">
             What's Included in Your Plan
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-6">
             {benefits.map((benefit, index) => (
               <div key={index} className=" rounded-xl p-6 hover:shadow-lg transition-shadow duration-300">
                 <div className="flex items-start space-x-3">
