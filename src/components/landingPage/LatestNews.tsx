@@ -31,7 +31,7 @@ const LatestNews: React.FC = () => {
 
   return (
     <section className=" bg-white">
-      <div className="max-w-10/12 mx-auto py-20 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-10/12 mx-auto py-10 md:py-20 px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-12">
           <div className="mb-6 sm:mb-0">
@@ -43,7 +43,7 @@ const LatestNews: React.FC = () => {
             </h2>
           </div>
           <Link href="/blog-lists">
-          <button className="bg-secondary text-white px-12 py-3 rounded-lg font-medium hover:bg-secondary/90 transition-colors duration-300 self-start sm:self-auto">
+          <button className="bg-secondary text-white px-12 py-3 rounded-lg font-medium hover:bg-secondary/90 self-start sm:self-auto transition-all duration-300 transform hover:scale-105">
             View all
           </button>
           </Link>
@@ -83,7 +83,7 @@ const LatestNews: React.FC = () => {
                 </h3>
 
                 {/* Learn More Button */}
-                <button className="bg-primary hover:bg-secondary text-white px-6 py-2 rounded-lg font-medium transition-colors duration-300 w-full sm:w-auto">
+                <button className="bg-primary hover:bg-secondary text-white px-6 py-2 rounded-lg font-medium transition-colors duration-300 w-full sm:w-auto ">
                   Learn More
                 </button>
               </div>

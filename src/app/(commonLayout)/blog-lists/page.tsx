@@ -1,5 +1,4 @@
 import BlogList from "@/components/blogLists/BlogList";
-import BlogPage from "@/components/blogLists/BlogPage";
 
 
 

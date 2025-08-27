@@ -1,5 +1,5 @@
 import React from 'react';
-import BlogPost from '../../../../components/blogLists/BlogPost';
+import BlogPage from '../../../../components/blogLists/BlogPage';
 import LatestNews from '@/components/landingPage/LatestNews';
 
 interface BlogPageProps {
@@ -8,14 +8,14 @@ interface BlogPageProps {
   }>;
 }
 
-const BlogPage: React.FC<BlogPageProps> = async ({ params }) => {
+const BlogPageRoute: React.FC<BlogPageProps> = async ({ params }) => {
   const { id } = await params;
   
   return <>
-  <BlogPost id={id} />
+  <BlogPage id={id} />
   <LatestNews />
   </>;
 };
 
-export default BlogPage;
+export default BlogPageRoute;
 

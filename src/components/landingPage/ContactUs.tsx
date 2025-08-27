@@ -26,7 +26,7 @@ const ContactUs: React.FC = () => {
 
   return (
     <section className=" bg-gray-50">
-      <div className="max-w-10/12 mx-auto py-20 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-10/12 mx-auto py-10 md:py-20 px-4 sm:px-6 lg:px-8">
         {/* Title */}
         <h2 className="text-4xl sm:text-5xl font-bold text-primary-text text-center mb-16">
           Contact Us
@@ -35,7 +35,7 @@ const ContactUs: React.FC = () => {
         {/* Contact Content */}
         <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
           {/* Contact Form - Left Side */}
-          <div className="w-full lg:w-1/2">
+          <div className="w-full lg:w-2/3">
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Name Field */}
               <div>
@@ -49,7 +49,7 @@ const ContactUs: React.FC = () => {
                   value={formData.name}
                   onChange={handleInputChange}
                   placeholder="Your Name"
-                  className="w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition-colors duration-300"
+                  className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition-colors duration-300"
                   required
                 />
               </div>
@@ -66,7 +66,7 @@ const ContactUs: React.FC = () => {
                   value={formData.email}
                   onChange={handleInputChange}
                   placeholder="Your Email"
-                  className="w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition-colors duration-300"
+                  className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition-colors duration-300"
                   required
                 />
               </div>
@@ -83,7 +83,7 @@ const ContactUs: React.FC = () => {
                   onChange={handleInputChange}
                   placeholder="Your Message"
                   rows={6}
-                  className="w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition-colors duration-300 resize-none"
+                  className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition-colors duration-300 resize-none"
                   required
                 />
               </div>
@@ -91,7 +91,7 @@ const ContactUs: React.FC = () => {
               {/* Submit Button */}
               <button
                 type="submit"
-                className="w-full bg-secondary text-white py-3 px-6 rounded-lg font-medium hover:bg-secondary/90 transition-colors duration-300"
+                className="w-full bg-secondary text-white py-3 px-6 rounded-lg font-medium hover:bg-secondary/90 transition-all duration-300 transform hover:scale-105"
               >
                 Send Message
               </button>
@@ -99,7 +99,7 @@ const ContactUs: React.FC = () => {
           </div>
 
           {/* Contact Information - Right Side */}
-          <div className="w-full lg:w-1/2 flex flex-col items-center space-y-8">
+          <div className="w-full lg:w-1/3 flex flex-col items-center space-y-8">
             {/* Email Information */}
             <div className="flex flex-col items-center text-center">
               <div className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center mb-4">
