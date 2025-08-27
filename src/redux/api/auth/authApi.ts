@@ -4,7 +4,7 @@ export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     signIn: builder.mutation({
       query: (body) => ({
-        url: "/auth/signin",
+        url: "/auth/signin?device=mobile",
         method: "POST",
         body,
       }),
@@ -21,7 +21,7 @@ export const authApi = baseApi.injectEndpoints({
 
     verifyEmail: builder.mutation({
       query: (body) => ({
-        url: "/auth/verify-otp",
+        url: "/auth/verify",
         method: "POST",
         body,
       }),

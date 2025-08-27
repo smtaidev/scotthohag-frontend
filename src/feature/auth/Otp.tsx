@@ -81,7 +81,7 @@ export default function OtpVerification() {
     const otpValue = data.otp.join("");
     console.log("OTP submitted:", otpValue);
     try {
-      const response = await verifyEmail({ email, otp: otpValue }).unwrap();
+      const response = await verifyEmail({ email, token: otpValue }).unwrap();
       if (response?.success) {
         toast.success("Verification successful!");
         localStorage.removeItem("otpTimer"); // Clear timer on success
