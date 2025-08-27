@@ -43,9 +43,9 @@ const LatestNews: React.FC = () => {
             </h2>
           </div>
           <Link href="/blog-lists">
-          <button className="bg-secondary text-white px-12 py-3 rounded-lg font-medium hover:bg-secondary/90 self-start sm:self-auto transition-all duration-300 transform hover:scale-105">
-            View all
-          </button>
+            <button className="bg-secondary text-white px-12 py-3 rounded-lg font-medium hover:bg-secondary/90 self-start sm:self-auto transition-all duration-300 transform hover:scale-105">
+              View all
+            </button>
           </Link>
         </div>
 
@@ -57,7 +57,7 @@ const LatestNews: React.FC = () => {
               <div className="w-full h-48 overflow-hidden p-6 ">
                 <img
                   src={article.image}
-                  alt={article.alt} 
+                  alt={article.alt}
                   className="w-full h-full object-cover rounded-xl hover:scale-105 transition-transform duration-300"
                   loading="lazy"
                 />
@@ -83,9 +83,11 @@ const LatestNews: React.FC = () => {
                 </h3>
 
                 {/* Learn More Button */}
-                <button className="bg-primary hover:bg-secondary text-white px-6 py-2 rounded-lg font-medium transition-colors duration-300 w-full sm:w-auto ">
-                  Learn More
-                </button>
+                <Link href={`/blog-lists/${index}`}>
+                  <button className="bg-primary hover:bg-secondary text-white px-6 py-2 rounded-lg font-medium transition-colors duration-300 w-full sm:w-auto cursor-pointer">
+                    Learn More
+                  </button>
+                </Link>
               </div>
             </div>
           ))}
