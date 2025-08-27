@@ -144,9 +144,9 @@ const ReportHistory: React.FC<ReportHistoryProps> = ({
 
             {/* Main Content */}
             <div className="max-w-10/12 mx-auto px-4 py-6 sm:px-6 lg:px-8">
-                <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+                <div className="bg-white rounded-xl ">
                     {/* Panel Header */}
-                    <div className="px-6 py-6 border-b border-gray-200">
+                    <div className="px-6 py-6">
                         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                             <h2 className="text-2xl font-medium text-gray-900">Report History</h2>
                             <div className="flex flex-col sm:flex-row gap-4">
@@ -191,10 +191,10 @@ const ReportHistory: React.FC<ReportHistoryProps> = ({
                     </div>
 
                     {/* Desktop Table View */}
-                    <div className="hidden md:block overflow-x-auto">
-                        <table className="w-full">
+                    <div className="hidden md:block overflow-x-auto p-8">
+                        <table className="w-full border border-gray-200 rounded-xl">
                             {/* Table Header */}
-                            <thead className="bg-gray-50">
+                            <thead className="border-b border-gray-200 rounded-xl">
                                 <tr>
                                     <th className="px-6 py-4 text-center text-sm font-medium text-gray-900">
                                         Report Type
@@ -212,41 +212,41 @@ const ReportHistory: React.FC<ReportHistoryProps> = ({
                             </thead>
 
                             {/* Table Body */}
-                                                         <tbody className="divide-y divide-gray-200">
-                                 {currentReports.map((report) => (
-                                     <tr key={report.id} className="hover:bg-gray-50 transition-colors duration-150">
-                                         <td className="px-6 py-4 text-sm text-gray-900 text-center">
-                                             {report.reportType}
-                                         </td>
-                                         <td className="px-6 py-4 text-sm text-gray-900 text-center">
-                                             {report.date}
-                                         </td>
-                                         <td className="px-6 py-4 text-center">
-                                             {getStatusBadge(report.status)}
-                                         </td>
-                                         <td className="px-6 py-4 text-center">
-                                             {report.status === 'pending' ? (
-                                                 <button
-                                                     disabled={true}
-                                                     className="inline-flex items-center gap-2 text-sm transition-colors duration-200 text-gray-400 cursor-not-allowed opacity-50"
-                                                 >
-                                                     <LuEye size={16} />
-                                                     <span>View report</span>
-                                                 </button>
-                                             ) : (
-                                                 <Link href={`/report-details/${report.id}`}>
-                                                     <button
-                                                         className="inline-flex items-center gap-2 text-sm transition-colors duration-200 text-gray-500 hover:text-primary cursor-pointer"
-                                                     >
-                                                         <LuEye size={16} />
-                                                         <span>View report</span>
-                                                     </button>
-                                                 </Link>
-                                             )}
-                                         </td>
-                                     </tr>
-                                 ))}
-                             </tbody>
+                            <tbody className="divide-y divide-gray-200">
+                                {currentReports.map((report) => (
+                                    <tr key={report.id} className="hover:bg-gray-50 transition-colors duration-150">
+                                        <td className="px-6 py-4 text-sm text-gray-900 text-center">
+                                            {report.reportType}
+                                        </td>
+                                        <td className="px-6 py-4 text-sm text-gray-900 text-center">
+                                            {report.date}
+                                        </td>
+                                        <td className="px-6 py-4 text-center">
+                                            {getStatusBadge(report.status)}
+                                        </td>
+                                        <td className="px-6 py-4 text-center">
+                                            {report.status === 'pending' ? (
+                                                <button
+                                                    disabled={true}
+                                                    className="inline-flex items-center gap-2 text-sm transition-colors duration-200 text-gray-400 cursor-not-allowed opacity-50"
+                                                >
+                                                    <LuEye size={16} />
+                                                    <span>View report</span>
+                                                </button>
+                                            ) : (
+                                                <Link href={`/report-details/${report.id}`}>
+                                                    <button
+                                                        className="inline-flex items-center gap-2 text-sm transition-colors duration-200 text-gray-500 hover:text-primary cursor-pointer"
+                                                    >
+                                                        <LuEye size={16} />
+                                                        <span>View report</span>
+                                                    </button>
+                                                </Link>
+                                            )}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
                         </table>
                     </div>
 
@@ -261,24 +261,24 @@ const ReportHistory: React.FC<ReportHistoryProps> = ({
                                 <div className="flex items-center justify-between text-sm text-gray-500 mb-3">
                                     <span>{report.date}</span>
                                 </div>
-                                                                 {report.status === 'pending' ? (
-                                     <button
-                                         disabled={true}
-                                         className="w-full inline-flex items-center justify-center gap-2 text-sm transition-colors duration-200 py-2 border rounded-lg text-gray-400 border-gray-200 cursor-not-allowed opacity-50"
-                                     >
-                                         <LuEye size={16} />
-                                         <span>View report</span>
-                                     </button>
-                                 ) : (
-                                     <Link href={`/report-details/${report.id}`}>
-                                         <button
-                                             className="w-full inline-flex items-center justify-center gap-2 text-sm transition-colors duration-200 py-2 border rounded-lg text-gray-500 border-gray-300 hover:text-primary hover:border-primary cursor-pointer"
-                                         >
-                                             <LuEye size={16} />
-                                             <span>View report</span>
-                                         </button>
-                                     </Link>
-                                 )}
+                                {report.status === 'pending' ? (
+                                    <button
+                                        disabled={true}
+                                        className="w-full inline-flex items-center justify-center gap-2 text-sm transition-colors duration-200 py-2 border rounded-lg text-gray-400 border-gray-200 cursor-not-allowed opacity-50"
+                                    >
+                                        <LuEye size={16} />
+                                        <span>View report</span>
+                                    </button>
+                                ) : (
+                                    <Link href={`/report-details/${report.id}`}>
+                                        <button
+                                            className="w-full inline-flex items-center justify-center gap-2 text-sm transition-colors duration-200 py-2 border rounded-lg text-gray-500 border-gray-300 hover:text-primary hover:border-primary cursor-pointer"
+                                        >
+                                            <LuEye size={16} />
+                                            <span>View report</span>
+                                        </button>
+                                    </Link>
+                                )}
                             </div>
                         ))}
                     </div>
