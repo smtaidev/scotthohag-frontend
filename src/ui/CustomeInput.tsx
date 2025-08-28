@@ -68,7 +68,7 @@ const CustomInput = forwardRef<
               ref={ref as React.RefObject<HTMLSelectElement>}
               id={id}
               defaultValue={"defaultValue"}
-            
+            value={(props as any).value || ""}
               className={finalInputClassName}
               {...(props as React.SelectHTMLAttributes<HTMLSelectElement>)}
             >
@@ -95,7 +95,7 @@ const CustomInput = forwardRef<
               />
               {showDatePicker && (
                 <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none">
-                  <LuCalendar size={18} />
+                  {/* <LuCalendar size={18} /> */}
                 </div>
               )}
             </div>
