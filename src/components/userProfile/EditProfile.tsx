@@ -1,6 +1,7 @@
 'use client';
 
 import { useGetMeQuery, useGetSignedUrlQuery, useUpdateProfileMutation } from '@/redux/api/getMe/getMeApi';
+import { useCancelSubscriptionMutation } from '@/redux/api/plan/planSlice';
 import Link from 'next/link';
 import React, { useState, useRef, useEffect } from 'react';
 import { LuArrowLeft, LuCamera, LuLock } from 'react-icons/lu';
@@ -111,8 +112,8 @@ const EditProfile: React.FC<EditProfileProps> = ({
     }, [signedUrl])
 
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file:any = event.target.files?.[0];
-        if( file.fileType !=="image"){
+        const file: any = event.target.files?.[0];
+        if (file.fileType !== "image") {
             return toast.error("Only image can be uploaded!");
 
         }
@@ -168,6 +169,28 @@ const EditProfile: React.FC<EditProfileProps> = ({
         })
     }, [user?.data])
 
+     const [showCancelModal, setShowCancelModal] = useState(false);
+  const [isCancelling, setIsCancelling] = useState(false);
+  const [cancel]=useCancelSubscriptionMutation()
+
+  const handleCancelSubscription = async () => {
+    try {
+      setIsCancelling(true);
+      // Call the RTK Query mutation
+      const result = await cancel({}).unwrap();
+      
+      // Handle successful cancellation
+      console.log('Subscription cancelled successfully:', result);
+      
+    } catch (err) {
+      // Handle error (already captured by RTK Query)
+      console.error('Failed to cancel subscription:', err);
+    } finally {
+      setIsCancelling(false);
+      setShowCancelModal(false);
+    }
+  };
+
     return (
         <div className="min-h-screen bg-gray-50">
             {/* Header Bar */}
@@ -219,6 +242,8 @@ const EditProfile: React.FC<EditProfileProps> = ({
                                 Upload a new photo (max 5MB)
                             </p>
                         </div>
+
+
                     </div>
 
                     {/* Profile Details Form */}
@@ -365,6 +390,64 @@ const EditProfile: React.FC<EditProfileProps> = ({
                             </div>
                         </form>
                     </div>
+
+                    {
+                      user?.data.isPremium &&  <div className="bg-white rounded-lg shadow-md p-4 mb-6">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                            <div className="mb-3 sm:mb-0">
+                                <h3 className="text-lg font-medium text-gray-900">Your Subscription</h3>
+                                <p className="text-sm text-gray-600">Active until June 15, 2023</p>
+                            </div>
+
+                            <button
+                                onClick={() => setShowCancelModal(true)}
+                                className="px-4 py-2 cursor-pointer bg-red-100 text-red-700 hover:bg-red-200 rounded-md text-sm font-medium transition-colors"
+                            >
+                                Cancel Subscription
+                            </button>
+                        </div>
+
+                        {/* Cancel Confirmation Modal */}
+                        {showCancelModal && (
+                            <div className="fixed inset-0 bg-black/40 bg-opacity-50 flex items-center justify-center z-50 p-4">
+                                <div className="bg-white rounded-lg max-w-md w-full p-6">
+                                    <h3 className="text-lg font-medium text-gray-900 mb-2">Cancel Subscription?</h3>
+                                    <p className="text-gray-600 mb-4">
+                                        Are you sure you want to cancel your subscription? You'll lose access to premium features at the end of your billing period.
+                                    </p>
+
+                                    <div className="flex justify-end space-x-3">
+                                        <button
+                                            onClick={() => setShowCancelModal(false)}
+                                            className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md text-sm font-medium cursor-pointer"
+                                            disabled={isCancelling}
+                                        >
+                                            Keep Subscription
+                                        </button>
+                                        <button
+                                            onClick={handleCancelSubscription}
+                                            className="px-4 py-2 bg-red-600  text-white hover:bg-red-700 rounded-md text-sm font-medium flex items-center cursor-pointer"
+                                            disabled={isCancelling}
+                                        >
+                                            {isCancelling ? (
+                                                <>
+                                                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                                    </svg>
+                                                    Cancelling...
+                                                </>
+                                            ) : (
+                                                "Yes, Cancel"
+                                            )}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                    }
+                    
                 </div>
             </div>
         </div>
