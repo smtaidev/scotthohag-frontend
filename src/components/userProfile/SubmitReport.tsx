@@ -6,6 +6,20 @@ import CustomInput from '@/ui/CustomeInput';
 import { MdCloudUpload } from 'react-icons/md';
 import Link from 'next/link';
 import Cookies from 'js-cookie';
+import { z } from 'zod';
+
+// Zod validation schema
+const reportFormSchema = z.object({
+  type: z.string().min(1, 'Report type is required'),
+  title: z.string().min(1, 'Report title is required').min(3, 'Report title must be at least 3 characters'),
+  date: z.string().min(1, 'Report date is required').refine((date) => {
+    const selectedDate = new Date(date);
+    const today = new Date();
+    today.setHours(23, 59, 59, 999); // Set to end of today
+    return selectedDate <= today;
+  }, 'Report date cannot be in the future'),
+  files: z.array(z.any()).min(1, 'At least one PDF file is required')
+});
 
 interface ReportFormData {
   type: string;
@@ -14,10 +28,17 @@ interface ReportFormData {
   reportUrls: string[];
 }
 
+interface ValidationErrors {
+  type?: string;
+  title?: string;
+  date?: string;
+  files?: string;
+}
+
 interface SubmitReportProps {
   onReportSubmit?: (data: ReportFormData, onSuccess?: () => void) => void;
   onViewHistory?: () => void;
-  isLoading:boolean
+  isLoading: boolean;
 }
 
 const SubmitReport: React.FC<SubmitReportProps> = ({
@@ -30,6 +51,7 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
   const [selectedReportTitle, setSelectedReportTitle] = useState('');
   const [reportDate, setReportDate] = useState('');
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [validationErrors, setValidationErrors] = useState<ValidationErrors>({});
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const reportTypes = [
@@ -61,9 +83,36 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
     'Specialty Tests'
   ];
 
+  // Validate if file is PDF
+  const isPDFFile = (file: File): boolean => {
+    return file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+  };
+
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || []);
-    setUploadedFiles(prev => [...prev, ...files]);
+    
+    // Filter only PDF files
+    const pdfFiles = files.filter(file => isPDFFile(file));
+    const nonPdfFiles = files.filter(file => !isPDFFile(file));
+    
+    // Show error if non-PDF files were selected
+    if (nonPdfFiles.length > 0) {
+      setValidationErrors(prev => ({
+        ...prev,
+        files: `Only PDF files are allowed. Rejected: ${nonPdfFiles.map(f => f.name).join(', ')}`
+      }));
+    } else {
+      // Clear file validation error if only PDFs
+      setValidationErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors.files;
+        return newErrors;
+      });
+    }
+    
+    if (pdfFiles.length > 0) {
+      setUploadedFiles(prev => [...prev, ...pdfFiles]);
+    }
   };
 
   const handleDragOver = (event: React.DragEvent) => {
@@ -73,17 +122,84 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
   const handleDrop = (event: React.DragEvent) => {
     event.preventDefault();
     const files = Array.from(event.dataTransfer.files);
-    setUploadedFiles(prev => [...prev, ...files]);
+    
+    // Filter only PDF files
+    const pdfFiles = files.filter(file => isPDFFile(file));
+    const nonPdfFiles = files.filter(file => !isPDFFile(file));
+    
+    // Show error if non-PDF files were dropped
+    if (nonPdfFiles.length > 0) {
+      setValidationErrors(prev => ({
+        ...prev,
+        files: `Only PDF files are allowed. Rejected: ${nonPdfFiles.map(f => f.name).join(', ')}`
+      }));
+    } else {
+      // Clear file validation error if only PDFs
+      setValidationErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors.files;
+        return newErrors;
+      });
+    }
+    
+    if (pdfFiles.length > 0) {
+      setUploadedFiles(prev => [...prev, ...pdfFiles]);
+    }
   };
 
   const removeFile = (index: number) => {
     setUploadedFiles(prev => prev.filter((_, i) => i !== index));
+    
+    // Clear file validation error if no files remain
+    if (uploadedFiles.length === 1) {
+      setValidationErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors.files;
+        return newErrors;
+      });
+    }
   };
 
-  const token = Cookies.get("accessToken")
+  // Clear individual field errors when user starts typing/selecting
+  const clearFieldError = (field: keyof ValidationErrors) => {
+    setValidationErrors(prev => {
+      const newErrors = { ...prev };
+      delete newErrors[field];
+      return newErrors;
+    });
+  };
+
+  const token = Cookies.get("accessToken");
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+
+    // Prepare data for validation
+    const formData = {
+      type: selectedReportType,
+      title: selectedReportTitle,
+      date: reportDate,
+      files: uploadedFiles
+    };
+
+    // Validate using Zod schema
+    const validation = reportFormSchema.safeParse(formData);
+    
+    if (!validation.success) {
+      // Extract and set validation errors
+      const errors: ValidationErrors = {};
+      validation.error.issues.forEach((error: any) => {
+        if (error.path.length > 0) {
+          const field = error.path[0] as keyof ValidationErrors;
+          errors[field] = error.message;
+        }
+      });
+      setValidationErrors(errors);
+      return; // Stop form submission
+    }
+
+    // Clear validation errors if validation passes
+    setValidationErrors({});
 
     const getSignedUrl = async (fileType: any, mimeType: any) => {
       const response: any = await fetch(
@@ -131,7 +247,6 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
             resultUrls.push(fileUrl);
           } catch (error) {
             console.error('Error uploading', file.name, error);
-
           }
         })
       );
@@ -142,18 +257,17 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
       setSelectedReportTitle('');
       setReportDate('');
       setUploadedFiles([]);
+      setValidationErrors({});
       if (fileInputRef.current) fileInputRef.current.value = '';
     };
 
-
-
-    const formData = {
+    const submissionData = {
       type: selectedReportType,
       title: selectedReportTitle,
       date: reportDate,
       reportUrls: resultUrls
     };
-    onReportSubmit?.(formData, resetForm);
+    onReportSubmit?.(submissionData, resetForm);
   };
 
   return (
@@ -181,7 +295,6 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
                 View History
               </button>
             </Link>
-
           </div>
         </div>
 
@@ -195,8 +308,13 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
             <div className="relative">
               <select
                 value={selectedReportType}
-                onChange={(e) => setSelectedReportType(e.target.value)}
-                className="w-full px-3 py-2 bg-gray-50 rounded-md focus:outline-none focus:ring-1 focus:ring-primary"
+                onChange={(e) => {
+                  setSelectedReportType(e.target.value);
+                  clearFieldError('type');
+                }}
+                className={`w-full px-3 py-2 bg-gray-50 rounded-md focus:outline-none focus:ring-1 focus:ring-primary ${
+                  validationErrors.type ? 'border border-red-500' : ''
+                }`}
               >
                 <option value="" className="text-gray-400">Select report type</option>
                 {reportTypes.map((type) => (
@@ -205,8 +323,10 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
                   </option>
                 ))}
               </select>
-
             </div>
+            {validationErrors.type && (
+              <p className="text-red-500 text-sm mt-1">{validationErrors.type}</p>
+            )}
           </div>
 
           {/* Report Title */}
@@ -218,12 +338,19 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
               <input
                 type="text"
                 value={selectedReportTitle}
-                onChange={(e) => setSelectedReportTitle(e.target.value)}
-                className="w-full px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-primary bg-gray-50 placeholder-gray-400 "
+                onChange={(e) => {
+                  setSelectedReportTitle(e.target.value);
+                  clearFieldError('title');
+                }}
+                className={`w-full px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-primary bg-gray-50 placeholder-gray-400 ${
+                  validationErrors.title ? 'border border-red-500' : ''
+                }`}
                 placeholder="Write your report title here"
               />
-
             </div>
+            {validationErrors.title && (
+              <p className="text-red-500 text-sm mt-1">{validationErrors.title}</p>
+            )}
           </div>
 
           {/* Report Date */}
@@ -235,14 +362,23 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
               <input
                 type="date"
                 value={reportDate}
-                onChange={(e) => setReportDate(e.target.value)}
-                className="w-full px-3 py-2 rounded-md placeholder:text-gray-400 text-black focus:outline-none focus:ring-1 focus:ring-primary bg-gray-50 "
+                onChange={(e) => {
+                  setReportDate(e.target.value);
+                  clearFieldError('date');
+                }}
+                max={new Date().toISOString().split('T')[0]} // Prevent future dates
+                className={`w-full px-3 py-2 rounded-md placeholder:text-gray-400 text-black focus:outline-none focus:ring-1 focus:ring-primary bg-gray-50 ${
+                  validationErrors.date ? 'border border-red-500' : ''
+                }`}
                 placeholder="yyyy / mm / dd"
               />
               <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
                 <LuCalendar size={16} className="text-gray-400" />
               </div>
             </div>
+            {validationErrors.date && (
+              <p className="text-red-500 text-sm mt-1">{validationErrors.date}</p>
+            )}
           </div>
 
           {/* File Upload */}
@@ -254,7 +390,9 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
               onDragOver={handleDragOver}
               onDrop={handleDrop}
               onClick={() => fileInputRef.current?.click()}
-              className="border-2 border-gray-300 bg-gray-50 rounded-lg p-8 text-center cursor-pointer hover:border-primary transition-colors duration-200"
+              className={`border-2 border-gray-300 bg-gray-50 rounded-lg p-8 text-center cursor-pointer hover:border-primary transition-colors duration-200 ${
+                validationErrors.files ? 'border-red-500' : ''
+              }`}
             >
               <div className="space-y-4">
                 <div className="flex justify-center">
@@ -264,10 +402,10 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
                 </div>
                 <div className="space-y-2">
                   <p className="text-black text-lg font-medium">
-                    Drag & drop files or click to browse
+                    Drag & drop PDF files or click to browse
                   </p>
                   <p className="text-sm text-gray-500">
-                    Supported formats: PDF, JPG, PNG, DOC
+                    Supported format: PDF only
                   </p>
                   <p className="text-sm text-gray-500">
                     Maximum size per file: 10MB
@@ -278,11 +416,14 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
                 ref={fileInputRef}
                 type="file"
                 multiple
-                accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+                accept=".pdf,application/pdf"
                 onChange={handleFileUpload}
                 className="hidden"
               />
             </div>
+            {validationErrors.files && (
+              <p className="text-red-500 text-sm mt-1">{validationErrors.files}</p>
+            )}
           </div>
 
           {/* Uploaded Files */}
@@ -298,7 +439,7 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
                     <button
                       type="button"
                       onClick={() => removeFile(index)}
-                      className="text-red-500 hover:text-red-700"
+                      className="text-red-500 hover:text-red-700 cursor-pointer"
                     >
                       <LuX size={16} />
                     </button>
@@ -312,9 +453,12 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
           <div className="pt-4">
             <button
               type="submit"
-              className="w-full px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 font-medium cursor-pointer transition-all duration-300 transform hover:scale-101"
+              disabled={isLoading}
+              className={`w-full px-6 py-3 bg-primary text-white rounded-lg font-medium transition-all duration-300 transform hover:scale-101 ${
+                isLoading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-primary/90 cursor-pointer'
+              }`}
             >
-            {isLoading?"Loading...":"Submit Report"}  
+              {isLoading ? "Loading..." : "Submit Report"}
             </button>
           </div>
         </form>
@@ -344,6 +488,7 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
                       onClick={() => {
                         setSelectedReportType(type);
                         setShowReportTypeModal(false);
+                        clearFieldError('type');
                       }}
                       className="w-full text-left p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200 text-gray-900 cursor-pointer"
                     >

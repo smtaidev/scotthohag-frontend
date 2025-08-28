@@ -4,6 +4,7 @@ import { useGetMeQuery, useGetSignedUrlQuery, useUpdateProfileMutation } from '@
 import Link from 'next/link';
 import React, { useState, useRef, useEffect } from 'react';
 import { LuArrowLeft, LuCamera, LuLock } from 'react-icons/lu';
+import { toast } from 'sonner';
 
 interface EditProfileProps {
     onBack?: () => void;
@@ -30,7 +31,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
     const { data: user } = useGetMeQuery({});
     console.log(user)
 
-    const[update,{isLoading}]=useUpdateProfileMutation()
+    const [update, { isLoading }] = useUpdateProfileMutation()
 
     const [formData, setFormData] = useState<ProfileData>({
         fullName: user?.data.name,
@@ -44,11 +45,11 @@ const EditProfile: React.FC<EditProfileProps> = ({
     console.log("My form data is here", formData)
     const [profileImage, setProfileImage] = useState<string>('/images/profile.png'); // Default profile image
     const fileInputRef = useRef<HTMLInputElement>(null);
-      const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
 
     const handleInputChange = (field: keyof ProfileData, value: string) => {
-      
+
         setFormData(prev => ({
             ...prev,
             [field]: value
@@ -56,67 +57,67 @@ const EditProfile: React.FC<EditProfileProps> = ({
     };
 
 
-      const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file: any = e.target.files?.[0]; // Get the first selected file
-    if (file) {
-      setSelectedFile(file);
-      // Get mime type (e.g., "image/png")
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file: any = e.target.files?.[0]; // Get the first selected file
+        if (file) {
+            setSelectedFile(file);
+            // Get mime type (e.g., "image/png")
 
-    }
-  };
-
-  const fileType = selectedFile?.name.split('.').pop();
-  const mimeType = selectedFile?.type;
-
-  // Use the RTK Query hook to get the signed URL
-  const { data: getRes } = useGetSignedUrlQuery({
-    fileType: fileType || '',
-    mimeType: mimeType || '',
-  });
-
-  const signedUrl = getRes?.data.signedUrl;
-  console.log(signedUrl)
-  console.log(selectedFile)
-
-
-  useEffect(() => {
-    if (signedUrl && selectedFile) {
-
-      try {
-        // Upload the file to S3 using the signed URL
-        const uploadResponse: any = fetch(signedUrl, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': mimeType || 'application/octet-stream',
-          },
-          body: selectedFile,
-        });
-        const publicUrl = signedUrl.split('?')[0];
-        update({
-          avatar: publicUrl
-        })
-
-
-        if (uploadResponse.ok) {
-          console.log('File uploaded successfully!');
-        } else {
-          console.error('File upload failed');
         }
-      } catch (error) {
-        console.error('Upload error:', error);
-      }
+    };
 
-    }
-  }, [signedUrl])
+    const fileType = selectedFile?.name.split('.').pop();
+    const mimeType = selectedFile?.type;
+
+    // Use the RTK Query hook to get the signed URL
+    const { data: getRes } = useGetSignedUrlQuery({
+        fileType: fileType || '',
+        mimeType: mimeType || '',
+    });
+
+    const signedUrl = getRes?.data.signedUrl;
+    console.log(signedUrl)
+    console.log(selectedFile)
+
+
+    useEffect(() => {
+        if (signedUrl && selectedFile) {
+
+            try {
+                // Upload the file to S3 using the signed URL
+                const uploadResponse: any = fetch(signedUrl, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': mimeType || 'application/octet-stream',
+                    },
+                    body: selectedFile,
+                });
+                const publicUrl = signedUrl.split('?')[0];
+                update({
+                    avatar: publicUrl
+                })
+
+
+                if (uploadResponse.ok) {
+                    console.log('File uploaded successfully!');
+                } else {
+                    console.error('File upload failed');
+                }
+            } catch (error) {
+                console.error('Upload error:', error);
+            }
+
+        }
+    }, [signedUrl])
 
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
-          if (file) {
-      setSelectedFile(file);
-      console.log("My selected file",selectedFile)
-      // Get mime type (e.g., "image/png")
+        if (file) {
+            setSelectedFile(file);
+            console.log("My selected file", selectedFile)
+            // Get mime type (e.g., "image/png")
 
-    }
+        }
         // if (file) {
         //     // Check file size (5MB limit)
         //     if (file.size > 5 * 1024 * 1024) {
@@ -139,6 +140,13 @@ const EditProfile: React.FC<EditProfileProps> = ({
     };
 
     const handleSave = () => {
+        const dob = new Date(formData?.dateOfBirth);
+        const today = new Date();
+
+        // 1. Check if DOB is in the future
+        if (dob > today) {
+            return toast.error("Date of birth cannot be in the future");
+        }
         onSave?.(formData);
     };
 
@@ -348,7 +356,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
                                     onClick={handleSave}
                                     className="px-6 py-3 bg-primary cursor-pointer text-white rounded-lg hover:bg-primary/90 transition-colors duration-200 font-medium "
                                 >
-                                   {isLoading?"Loading..":" Save Change"}
+                                    {isLoading ? "Loading.." : " Save Change"}
                                 </button>
                             </div>
                         </form>
