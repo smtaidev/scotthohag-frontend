@@ -75,7 +75,7 @@ const SubscriptionPlan: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#F0FDF4] to-[#EFF6FF] py-16 ">
+    <div id='service' className="min-h-screen bg-gradient-to-br from-[#F0FDF4] to-[#EFF6FF] py-16 ">
       <div className="max-w-10/12 mx-auto">
         {/* Header Section */}
         <div className="text-center mb-12">
@@ -108,7 +108,7 @@ const SubscriptionPlan: React.FC = () => {
         </div>
 
         {/* Benefits Section */}
-        <div className="mb-12">
+        <div id='subscription' className="mb-12">
           <h2 className="text-2xl sm:text-3xl font-bold text-center text-gray-800 mb-8">
             What's Included in Your Plan
           </h2>
