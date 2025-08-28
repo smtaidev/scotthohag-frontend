@@ -28,7 +28,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="scroll-smooth">
       <body suppressHydrationWarning={true} className={openSans.variable}>
         <ReduxProvider>
           <Toaster position="top-center" expand={true} richColors />

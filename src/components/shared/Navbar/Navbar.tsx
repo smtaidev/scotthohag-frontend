@@ -12,11 +12,11 @@ import { useRouter } from 'next/navigation';
 
 const navItems = [
     { name: 'Home', link: '/' },
-    { name: 'About', link: '/about' },
-    { name: 'Services', link: '/services' },
-    { name: 'Specialty', link: '/specialty' },
-    { name: 'Subscription', link: '/subscription' },
-    { name: 'Contact', link: '/contact' },
+    { name: 'About', link: '/#about' },
+    { name: 'Services', link: '/#services' },
+    { name: 'Specialty', link: '/#specialty' },
+    { name: 'Subscription', link: '/#subscription' },
+    { name: 'Contact', link: '/#contact' },
 ];
 
 const profile = [
