@@ -1,11 +1,8 @@
 'use client';
 
+import { useGetMyPlanQuery } from '@/redux/api/plan/planSlice';
 import React, { useState } from 'react';
 import { FaCheck } from 'react-icons/fa';
-
-const SubscriptionPlan: React.FC = () => {
-  const [disclaimerAgreed, setDisclaimerAgreed] = useState(false);
-  const [termsAgreed, setTermsAgreed] = useState(false);
 
   const benefits = [
     {
@@ -64,6 +61,16 @@ const SubscriptionPlan: React.FC = () => {
       alt: "Healthy food items including fruits and green juice"
     }
   ];
+
+
+
+const SubscriptionPlan: React.FC = () => {
+  const [disclaimerAgreed, setDisclaimerAgreed] = useState(false);
+  const [termsAgreed, setTermsAgreed] = useState(false);
+
+  const {data:planInfo}=useGetMyPlanQuery({});
+  console.log(planInfo)
+
 
   const handlePayment = () => {
     if (!disclaimerAgreed || !termsAgreed) {
@@ -182,7 +189,7 @@ const SubscriptionPlan: React.FC = () => {
               }
             `}
           >
-            <span className="mr-2">$250</span>
+            <span className="mr-2">${planInfo?.data.price}</span>
             Pay with PayPal
           </button>
           {/* {(!disclaimerAgreed || !termsAgreed) && (

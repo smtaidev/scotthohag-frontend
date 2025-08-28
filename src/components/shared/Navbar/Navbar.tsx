@@ -140,7 +140,7 @@ export default function Navbar() {
                 <div className="flex items-center gap-4">
                     {!userInfo?.data ?
                         <Link href={"/signIn"} className="bg-secondary hover:bg-green-600 text-white px-4 py-2 rounded-md text-xs md:text-lg font-semibold transition-colors cursor-pointer">
-                            Sign Up
+                            Sign In
                         </Link> :
                         <div ref={prof} className='relative'>
                             <div onClick={() => setProfileOpen(!profileOpen)} ref={prof} className='cursor-pointer hover:bg-gray-200/20 p-2 transition rounded-full flex items-center gap-2'>
