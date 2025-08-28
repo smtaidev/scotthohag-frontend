@@ -56,7 +56,7 @@ const formSchema = z
 
 type FormValues = z.infer<typeof formSchema>;
 
-export default function SignUpPage() {
+export default function   SignUpPage() {
   const [signUp, { isLoading }] = useSignUpMutation();
   const router = useRouter();
   const [view, setView] = useState(false);
@@ -154,6 +154,7 @@ export default function SignUpPage() {
         <div className="flex items-center gap-4">
           {/* First Name Input */}
           <CustomInput
+         
             inputType="select"
             label="Select Gender"
             placeholder="Select Gender"
@@ -168,7 +169,7 @@ export default function SignUpPage() {
           {/* Last Name Input */}
           <CustomInput
             inputType="date"
-            label="Select Date"
+            label="Select Date of Birth"
             showDatePicker={true}
             error={errors.dateOfBirth?.message}
             {...register("dateOfBirth")}
