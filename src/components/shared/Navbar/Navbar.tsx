@@ -11,7 +11,7 @@ import { useLogoutMutation } from '@/redux/api/auth/authApi';
 import { useRouter } from 'next/navigation';
 
 const navItems = [
-    { name: 'Home', link: '/' },
+    { name: 'Home', link: '/#' },
     { name: 'About', link: '/#about' },
     { name: 'Services', link: '/#services' },
     { name: 'Specialty', link: '/#specialty' },
@@ -21,7 +21,7 @@ const navItems = [
 
 const profile = [
     { name: 'Profile', link: '/health-report' },
-    { name: 'Log Out', link: '/logout' },
+    { name: 'Log Out', link: '/' },
 
 ];
 
@@ -80,9 +80,9 @@ export default function Navbar() {
         setActiveItem(link);
         setProfileOpen(false);
 
-        if (link === "/logout") {
+        if (link === "/") {
            const res=await logout({});
-           Cookies.remove("accessToken",{ path: "/logout" });
+           Cookies.remove("accessToken",{ path: "/" });
             console.log(res)
 
          
