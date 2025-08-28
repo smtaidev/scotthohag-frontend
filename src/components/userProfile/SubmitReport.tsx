@@ -155,7 +155,7 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
   };
 
   return (
-    <div className="max-w-10/12 mx-auto px-4 sm:px-6 lg:px-8 pb-8">
+    <div className="max-w-10/12 mx-auto px-0 sm:px-6 lg:px-8 pb-8">
       <div className="bg-white rounded-xl p-8 mb-8">
         {/* Header Section */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
@@ -194,7 +194,7 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
               <select
                 value={selectedReportType}
                 onChange={(e) => setSelectedReportType(e.target.value)}
-                className="w-full px-3 py-2 bg-gray-100 rounded-md focus:outline-none focus:ring-1 focus:ring-primary"
+                className="w-full px-3 py-2 bg-gray-50 rounded-md focus:outline-none focus:ring-1 focus:ring-primary"
               >
                 <option value="" className="text-gray-400">Select report type</option>
                 {reportTypes.map((type) => (
@@ -217,7 +217,7 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
                 type="text"
                 value={selectedReportTitle}
                 onChange={(e) => setSelectedReportTitle(e.target.value)}
-                className="w-full px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-primary bg-gray-100 placeholder-gray-400 "
+                className="w-full px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-primary bg-gray-50 placeholder-gray-400 "
                 placeholder="Write your report title here"
               />
 
@@ -234,7 +234,7 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
                 type="date"
                 value={reportDate}
                 onChange={(e) => setReportDate(e.target.value)}
-                className="w-full px-3 py-2 rounded-md placeholder:text-gray-400 text-black focus:outline-none focus:ring-1 focus:ring-primary bg-gray-100 "
+                className="w-full px-3 py-2 rounded-md placeholder:text-gray-400 text-black focus:outline-none focus:ring-1 focus:ring-primary bg-gray-50 "
                 placeholder="yyyy / mm / dd"
               />
               <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
@@ -252,11 +252,11 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
               onDragOver={handleDragOver}
               onDrop={handleDrop}
               onClick={() => fileInputRef.current?.click()}
-              className="border-2 border-gray-300 bg-gray-100 rounded-lg p-8 text-center cursor-pointer hover:border-primary transition-colors duration-200"
+              className="border-2 border-gray-300 bg-gray-50 rounded-lg p-8 text-center cursor-pointer hover:border-primary transition-colors duration-200"
             >
               <div className="space-y-4">
                 <div className="flex justify-center">
-                  <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center">
+                  <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center">
                     <MdCloudUpload size={40} className="text-black" />
                   </div>
                 </div>

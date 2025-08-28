@@ -5,7 +5,7 @@ import React from 'react';
 const AboutScott: React.FC = () => {
   return (
     <section className=" bg-white">
-      <div className="max-w-10/12 mx-auto py-10 md:py-20 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-10/12 mx-auto py-10 md:py-20 px-0 sm:px-6 lg:px-8">
         {/* Title and Subtitle */}
         <div className='flex flex-col lg:flex-row items-center lg:items-start gap-6 lg:gap-14'>
           <div className='w-full lg:w-2/5'>

@@ -31,7 +31,7 @@ const LatestNews: React.FC = () => {
 
   return (
     <section className=" bg-white">
-      <div className="max-w-10/12 mx-auto py-10 md:py-20 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-10/12 mx-auto py-10 md:py-20 px-0 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-12">
           <div className="mb-6 sm:mb-0">

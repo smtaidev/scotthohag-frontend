@@ -54,7 +54,7 @@ const BlogList: React.FC = () => {
   ];
 
   return (
-    <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+    <section className="py-20 px-0 sm:px-6 lg:px-8 bg-white">
       <div className="max-w-10/12 mx-auto">
         {/* Page Title */}
         <h1 className="text-4xl sm:text-5xl font-bold text-primary-text text-start mb-12">
