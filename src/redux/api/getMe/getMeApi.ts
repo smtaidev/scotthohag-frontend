@@ -6,7 +6,7 @@ export const getMe = baseApi.injectEndpoints({
     // need to add types
     getMe: builder.query({
       query: () => "/auth/me",
-      providesTags: ["User"],
+      providesTags: ["User","Plan"],
     }),
 
        getSignedUrl: builder.query({
