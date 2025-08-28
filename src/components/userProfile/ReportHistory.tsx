@@ -60,7 +60,7 @@ const ReportHistory: React.FC<ReportHistoryProps> = ({
         }
 
         if (searchTerm.trim()) {
-            params.name = searchTerm.trim()
+            params.type = searchTerm.trim()
         }
 
         // if (statusFilter !== "Status") {
@@ -163,7 +163,7 @@ const ReportHistory: React.FC<ReportHistoryProps> = ({
     return (
         <div className="min-h-screen bg-gray-50">
             {/* Header Bar */}
-            <div className="bg-primary text-white px-4 py-4 shadow-sm">
+            {/* <div className="bg-primary text-white px-4 py-4 shadow-sm">
                 <div className="max-w-10/12 mx-auto">
                     <div className="flex items-center justify-between">
                         <Link href={'/health-report'}>
@@ -175,10 +175,10 @@ const ReportHistory: React.FC<ReportHistoryProps> = ({
                             </button>
                         </Link>
                         <h1 className="md:text-[32px] text-2xl text-white font-bold absolute left-1/2 transform -translate-x-1/2">Report History</h1>
-                        <div className="w-10"></div> {/* Spacer to balance the layout */}
+                        <div className="w-10"></div> 
                     </div>
                 </div>
-            </div>
+            </div> */}
 
             {/* Main Content */}
             <div className="max-w-10/12 mx-auto px-4 py-6 sm:px-6 lg:px-8">
@@ -186,44 +186,19 @@ const ReportHistory: React.FC<ReportHistoryProps> = ({
                     {/* Panel Header */}
                     <div className="px-6 py-6">
                         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                            <h2 className="text-2xl font-medium text-gray-900">Report History</h2>
-                            <div className="flex flex-col sm:flex-row gap-4">
-                                {/* Search Input */}
-                                <div className="relative">
-                                    <input
-                                        type="text"
-                                        placeholder="Search reports..."
-                                        value={searchTerm}
-                                        onChange={(e) => setSearchTerm(e.target.value)}
-                                        className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
-                                    />
-                                    <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-                                        <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                                        </svg>
-                                    </div>
-                                </div>
+                            <div className='flex items-center'>
+                                <Link href={'/health-report'}>
+                                    <button
 
-                                {/* Page Size Selector */}
-                                <div className="flex items-center gap-2">
-                                    <label className="text-sm text-gray-500">Show:</label>
-                                    <select
-                                        value={itemsPerPage}
-                                        onChange={(e) => setItemsPerPage(Number(e.target.value))}
-                                        className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm bg-white"
+                                        className="p-2 hover:bg-primary/10 cursor-pointer rounded-lg transition-colors duration-200"
                                     >
-                                        <option value={5}>5</option>
-                                        <option value={10}>10</option>
-                                        <option value={20}>20</option>
-                                        <option value={50}>50</option>
-                                    </select>
-                                    <span className="text-sm text-gray-500">per page</span>
-                                </div>
-
-                                <div className="flex items-center gap-2 text-sm text-gray-500">
-                                    <LuCalendar size={16} />
-                                    <span>Date Submitted</span>
-                                </div>
+                                        <LuArrowLeft size={20} />
+                                    </button>
+                                </Link>
+                                <h2 className="text-2xl font-medium text-gray-900">Report History</h2>
+                            </div>
+                            <div className="flex flex-col sm:flex-row gap-4">
+                               
                             </div>
                         </div>
                     </div>
@@ -251,17 +226,17 @@ const ReportHistory: React.FC<ReportHistoryProps> = ({
 
                             {/* Table Body */}
                             <tbody className="divide-y divide-gray-200">
-                                {currentReports.map((report:any) => (
+                                {currentReports.map((report: any) => (
                                     <tr key={report.id} className="hover:bg-gray-50 transition-colors duration-150">
                                         <td className="px-6 py-4 text-sm text-gray-900 text-center">
                                             {report.type}
                                         </td>
                                         <td className="px-6 py-4 text-sm text-gray-900 text-center">
                                             {new Date(report.date).toLocaleDateString('en-GB', {
-                            day: 'numeric',
-                            month: 'long',
-                            year: 'numeric'
-                        })}
+                                                day: 'numeric',
+                                                month: 'long',
+                                                year: 'numeric'
+                                            })}
                                         </td>
                                         <td className="px-6 py-4 text-center">
                                             {getStatusBadge(report.status)}
@@ -294,16 +269,21 @@ const ReportHistory: React.FC<ReportHistoryProps> = ({
 
                     {/* Mobile Card View */}
                     <div className="md:hidden space-y-4">
-                        {currentReports.map((report:any) => (
+                        {currentReports.map((report: any) => (
                             <div key={report.id} className="bg-gray-50 rounded-lg p-4 border border-gray-200">
                                 <div className="flex items-center justify-between mb-3">
-                                    <h3 className="text-sm font-medium text-gray-900">{report.reportType}</h3>
+                                    <h3 className="text-sm font-medium text-gray-900">{report.type}</h3>
                                     {getStatusBadge(report.status)}
                                 </div>
                                 <div className="flex items-center justify-between text-sm text-gray-500 mb-3">
-                                    <span>{report.date}</span>
+                                    <span> {new Date(report.date).toLocaleDateString('en-GB', {
+                                                day: 'numeric',
+                                                month: 'long',
+                                                year: 'numeric'
+                                            })}</span>
                                 </div>
-                                {report.status === 'pending' ? (
+                                
+                                {report.status === 'PENDING' ? (
                                     <button
                                         disabled={true}
                                         className="w-full inline-flex items-center justify-center gap-2 text-sm transition-colors duration-200 py-2 border rounded-lg text-gray-400 border-gray-200 cursor-not-allowed opacity-50"
@@ -314,25 +294,7 @@ const ReportHistory: React.FC<ReportHistoryProps> = ({
                                 ) : (
                                     <Link href={`/report-details/${report.id}`}>
                                         <button
-                                            className="w-full inline-flex items-center justify-center gap-2 text-sm transition-colors duration-200 py-2 border rounded-lg text-gray-500 border-gray-300 hover:text-primary hover:border-primary cursor-pointer"
-                                        >
-                                            <LuEye size={16} />
-                                            <span>View report</span>
-                                        </button>
-                                    </Link>
-                                )}
-                                {report.status === 'pending' ? (
-                                    <button
-                                        disabled={true}
-                                        className="w-full inline-flex items-center justify-center gap-2 text-sm transition-colors duration-200 py-2 border rounded-lg text-gray-400 border-gray-200 cursor-not-allowed opacity-50"
-                                    >
-                                        <LuEye size={16} />
-                                        <span>View report</span>
-                                    </button>
-                                ) : (
-                                    <Link href={`/report-details/${report.id}`}>
-                                        <button
-                                            className="w-full inline-flex items-center justify-center gap-2 text-sm transition-colors duration-200 py-2 border rounded-lg text-gray-500 border-gray-300 hover:text-primary hover:border-primary cursor-pointer"
+                                            className="w-full inline-flex items-center justify-center gap-2 text-sm transition-colors duration-200 py-2 border rounded-lg text-gray-7  00 border-gray-300 hover:text-primary hover:border-primary cursor-pointer"
                                         >
                                             <LuEye size={16} />
                                             <span>View report</span>

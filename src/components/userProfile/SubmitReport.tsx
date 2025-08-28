@@ -17,11 +17,13 @@ interface ReportFormData {
 interface SubmitReportProps {
   onReportSubmit?: (data: ReportFormData, onSuccess?: () => void) => void;
   onViewHistory?: () => void;
+  isLoading:boolean
 }
 
 const SubmitReport: React.FC<SubmitReportProps> = ({
   onReportSubmit,
-  onViewHistory
+  onViewHistory,
+  isLoading
 }) => {
   const [showReportTypeModal, setShowReportTypeModal] = useState(false);
   const [selectedReportType, setSelectedReportType] = useState('');
@@ -312,7 +314,7 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
               type="submit"
               className="w-full px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 font-medium cursor-pointer transition-all duration-300 transform hover:scale-101"
             >
-              Submit Report
+            {isLoading?"Loading...":"Submit Report"}  
             </button>
           </div>
         </form>
