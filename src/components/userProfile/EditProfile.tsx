@@ -111,7 +111,11 @@ const EditProfile: React.FC<EditProfileProps> = ({
     }, [signedUrl])
 
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
+        const file:any = event.target.files?.[0];
+        if( file.fileType !=="image"){
+            return toast.error("Only image can be uploaded!");
+
+        }
         if (file) {
             setSelectedFile(file);
             console.log("My selected file", selectedFile)
