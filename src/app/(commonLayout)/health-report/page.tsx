@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, {  useState } from 'react';
 import { useRouter } from 'next/navigation';
 import SubmitReport from '@/components/userProfile/SubmitReport';
 import Profile from '@/components/userProfile/Profile';
@@ -9,6 +9,7 @@ import { toast } from 'sonner';
 
 const HealthReportPage: React.FC = () => {
   const router = useRouter();
+  const [isLoading,setIsLoading]=useState(false)
 
   const [reportSubmit] = useReportSubmitMutation()
 
@@ -24,16 +25,20 @@ const HealthReportPage: React.FC = () => {
 
   const handleReportSubmit =async (data: any,onSuccess?: () => void) => {
     console.log('Report submitted:', data);
+    setIsLoading(true)
     try {
       const response =await reportSubmit(data);
       console.log(response)
       if (response?.data) {
         toast.success("Report Submited!");
           onSuccess?.();
+          setIsLoading(false)
       }
     } catch (error) {
-      toast.error("Report Submit Fail!")
+      toast.error("Report Submit Fail!");
+        setIsLoading(false)
     }
+    setIsLoading(false)
   };
 
   const handleViewHistory = () => {
@@ -64,7 +69,8 @@ const HealthReportPage: React.FC = () => {
       <SubmitReport
         onReportSubmit={handleReportSubmit}
         onViewHistory={handleViewHistory}
-      />
+        isLoading={isLoading}    
+          />
     </div>
   );
 };

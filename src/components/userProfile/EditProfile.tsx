@@ -30,7 +30,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
     const { data: user } = useGetMeQuery({});
     console.log(user)
 
-    const[update]=useUpdateProfileMutation()
+    const[update,{isLoading}]=useUpdateProfileMutation()
 
     const [formData, setFormData] = useState<ProfileData>({
         fullName: user?.data.name,
@@ -339,16 +339,16 @@ const EditProfile: React.FC<EditProfileProps> = ({
                                 <button
                                     type="button"
                                     onClick={handleCancel}
-                                    className=" px-6 py-3 border border-gray-300 rounded-lg text-gray-700 bg-white hover:bg-[#F7F7F7] transition-colors duration-200 font-medium"
+                                    className=" px-6 py-3 border cursor-pointer border-gray-300 rounded-lg text-gray-700 bg-white hover:bg-[#F7F7F7] transition-colors duration-200 font-medium"
                                 >
                                     Cancel
                                 </button>
                                 <button
                                     type="button"
                                     onClick={handleSave}
-                                    className="px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors duration-200 font-medium "
+                                    className="px-6 py-3 bg-primary cursor-pointer text-white rounded-lg hover:bg-primary/90 transition-colors duration-200 font-medium "
                                 >
-                                    Save Change
+                                   {isLoading?"Loading..":" Save Change"}
                                 </button>
                             </div>
                         </form>

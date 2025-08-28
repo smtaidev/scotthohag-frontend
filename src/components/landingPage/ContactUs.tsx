@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { FaEnvelope, FaClock } from 'react-icons/fa';
+import emailjs from '@emailjs/browser';
 
 const ContactUs: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -9,6 +10,7 @@ const ContactUs: React.FC = () => {
     email: '',
     message: ''
   });
+  const form = useRef<HTMLFormElement>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -22,6 +24,28 @@ const ContactUs: React.FC = () => {
     e.preventDefault();
     // Handle form submission logic here
     console.log('Form submitted:', formData);
+
+    if (form.current) {
+      emailjs
+        .sendForm(`${process.env.NEXT_PUBLIC_YOUR_SERVICE_ID}`, `${process.env.NEXT_PUBLIC_YOUR_TEMPLETE_ID}`, form.current, {
+          publicKey: `${process.env.NEXT_PUBLIC_YOUR_EJSKEY_ID}`,
+        })
+        .then(
+          () => {
+            console.log('SUCCESS!');
+            setFormData({
+              name: '',
+              email: '',
+              message: ''
+            })
+          },
+          (error) => {
+            console.log('FAILED...', error.text);
+          },
+        );
+    } else {
+      console.log('Form reference is null.');
+    }
   };
 
   return (
@@ -36,7 +60,7 @@ const ContactUs: React.FC = () => {
         <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
           {/* Contact Form - Left Side */}
           <div className="w-full lg:w-2/3">
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form ref={form} onSubmit={handleSubmit} className="space-y-6">
               {/* Name Field */}
               <div>
                 <label htmlFor="name" className="block text-gray-700 font-medium mb-2">

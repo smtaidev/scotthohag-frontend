@@ -26,14 +26,26 @@ const Profile: React.FC<ProfileProps> = ({
   onCompleteProfile
 }) => {
   // Check if profile is complete
-  const isProfileComplete = () => {
-    return userName && userEmail && userAge && phoneNumber && address && 
-           userName.trim() !== "" && userEmail.trim() !== "" && 
-           phoneNumber.trim() !== "" && address.trim() !== "";
-  };
 
   const {data:userInfo}=useGetMeQuery({});
   const user=userInfo?.data;
+
+const isProfileComplete = () => {
+  if (!user) return false;
+
+  const requiredFields = [
+    user.name,
+    user.email,
+    user.dateOfBirth,
+    user.phone,
+    user.address
+  ];
+
+  return requiredFields.every(field =>
+    typeof field === 'string' ? field.trim() !== '' : field !== null && field !== undefined
+  );
+};
+
 
 
      const calculateAge = (dob: string) => {
@@ -82,7 +94,7 @@ const Profile: React.FC<ProfileProps> = ({
                 <div className="text-center md:text-left space-y-2">
                   <button 
                     onClick={onEditProfile}
-                    className="inline-flex items-center gap-2 mt-1 px-4 py-2 border border-primary text-black hover:text-white rounded-lg hover:bg-primary/90 transition-colors duration-200 text-sm font-medium"
+                    className="inline-flex items-center gap-2 cursor-pointer mt-1 px-4 py-2 border border-primary text-black hover:text-white rounded-lg hover:bg-primary/90 transition-colors duration-200 text-sm font-medium"
                   >
                     <LuPencil size={16} />
                     Edit Profile
@@ -92,7 +104,7 @@ const Profile: React.FC<ProfileProps> = ({
                   {!profileComplete && (
                     <button 
                       onClick={onCompleteProfile}
-                      className="inline-flex items-center ml-4 gap-2 px-4 py-2 bg-orange-100 text-orange-800 hover:bg-orange-200 rounded-lg transition-colors duration-200 text-sm font-medium"
+                      className="inline-flex items-center cursor-pointer ml-4 gap-2 px-4 py-2 bg-orange-100 text-orange-800 hover:bg-orange-200 rounded-lg transition-colors duration-200 text-sm font-medium"
                     >
                       Please Complete your Profile
                     </button>
