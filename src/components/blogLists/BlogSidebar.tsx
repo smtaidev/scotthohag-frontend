@@ -16,7 +16,7 @@ const BlogSidebar: React.FC = () => {
   ];
 
   return (
-    <aside className="w-full  space-y-6 lg:space-y-8  px-4 lg:px-0">
+    <aside className="w-full  space-y-6 lg:space-y-8  px-0 lg:px-0">
       {/* Promotional Box */}
       <div className="bg-[#F5FAFF] rounded-xl p-4 lg:p-8 ">
         <h3 className="text-lg lg:text-xl font-bold text-primary-text mb-3 leading-tight">

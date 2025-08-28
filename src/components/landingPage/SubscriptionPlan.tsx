@@ -75,11 +75,11 @@ const SubscriptionPlan: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#F0FDF4] to-[#EFF6FF] py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-[#F0FDF4] to-[#EFF6FF] py-16 ">
       <div className="max-w-10/12 mx-auto">
         {/* Header Section */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl lg:text-[56px] font-extrabold mb-4">
+          <h1 className="text-3xl md:text-5xl lg:text-[56px] font-extrabold mb-4">
             <span className="text-primary-text">Premium</span>{' '}
             <span className="text-secondary">Wellness</span>{' '}
             <span className="text-primary-text">Subscription Plan</span>
@@ -115,8 +115,8 @@ const SubscriptionPlan: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-6">
             {benefits.map((benefit, index) => (
               <div key={index} className=" rounded-xl p-6 hover:shadow-lg transition-shadow duration-300">
-                <div className="flex items-start space-x-3">
-                  <div className="flex-shrink-0 bg-secondary rounded-full p-1">
+                <div className="flex items-start  space-x-3">
+                  <div className="flex-shrink-0 bg-secondary rounded-full p-1 mt-1.5 md:mt-1">
                     <FaCheck className="h-3 w-3 text-white" />
                   </div>
                   <div>
@@ -185,11 +185,11 @@ const SubscriptionPlan: React.FC = () => {
             <span className="mr-2">$250</span>
             Pay with PayPal
           </button>
-          {(!disclaimerAgreed || !termsAgreed) && (
+          {/* {(!disclaimerAgreed || !termsAgreed) && (
             <p className="text-red-500 text-sm mt-2">
               Please agree to both terms before proceeding
             </p>
-          )}
+          )} */}
         </div>
       </div>
     </div>

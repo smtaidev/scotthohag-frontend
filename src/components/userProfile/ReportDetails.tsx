@@ -35,7 +35,7 @@ const ReportDetails: React.FC<ReportDetailsProps> = ({
     return (
         <div className="min-h-screen bg-gray-50">
             {/* Header Bar */}
-            <div className="bg-primary text-white px-4 py-4 shadow-sm">
+            <div className="bg-primary text-white px-0 py-4 shadow-sm">
                 <div className="max-w-10/12 mx-auto">
                     <div className="flex items-center justify-between">
                         <Link href={'/report-history'}>
@@ -45,7 +45,7 @@ const ReportDetails: React.FC<ReportDetailsProps> = ({
                                 <LuArrowLeft size={20} />
                             </button>
                         </Link>
-                        <h1 className="text-[32px] text-white font-bold absolute left-1/2 transform -translate-x-1/2">
+                        <h1 className="md:text-[32px] text-2xl text-white font-bold absolute left-1/2 transform -translate-x-1/2">
                             Report Details
                         </h1>
                         <div className="w-10"></div> {/* Spacer to balance the layout */}
@@ -54,7 +54,7 @@ const ReportDetails: React.FC<ReportDetailsProps> = ({
             </div>
 
             {/* Main Content */}
-            <div className="max-w-10/12 mx-auto px-4 py-6 sm:px-6 lg:px-8">
+            <div className="max-w-10/12 mx-auto px-0 py-6 sm:px-6 lg:px-8">
                 <div className=" ">
                     {/* Report Information Section */}
                     <div className=" px-6 pt-6 pb-16 bg-white rounded-xl">
