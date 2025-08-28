@@ -14,7 +14,7 @@ const AboutScott: React.FC = () => {
             <h2 className="text-4xl sm:text-5xl font-bold text-primary-text mb-4">
               About
             </h2>
-            <h3 className="text-xl sm:text-2xl font-semibold text-[#062CC4] ">
+            <h3 className="text-xl sm:text-2xl font-bold text-[#062CC4] ">
               Meet Scott
             </h3>
           </div>

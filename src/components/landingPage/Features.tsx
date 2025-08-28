@@ -21,7 +21,7 @@ const Features: React.FC = () => {
     {
       title: "Track Trends Over Time",
       description: "See how your levels change across tests. Spot early warning signs or celebrate health improvements.",
-      image: "/images/feature3.jpg",
+      image: "/images/feature4.png",
       imageAlt: "Doctor holding red heart and stethoscope",
       imagePosition: "left"
     }

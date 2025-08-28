@@ -28,7 +28,7 @@ const ReleaseAndWaiver: React.FC<ReleaseAndWaiverProps> = ({
                 <div className="max-w-10/12 mx-auto">
                     <div className="flex items-center justify-between py-14 md:py-12">
 
-                        <h1 className="md:text-[32px] text-2xl text-white font-bold absolute  md:left-1/2 md:transform md:-translate-x-1/2">
+                        <h1 className="md:text-[32px] text-2xl text-white text-center font-bold absolute  md:left-1/2 md:transform md:-translate-x-1/2">
                             RELEASE AND WAIVER OF LIABILITY, DISCLAIMER, AND ASSUMPTION OF RISK AGREEMENT
                         </h1>
                         <div className="w-10"></div> {/* Spacer to balance the layout */}
@@ -144,7 +144,7 @@ const ReleaseAndWaiver: React.FC<ReleaseAndWaiverProps> = ({
 
                         {/* Agreement Checkbox */}
 
-                        <div className='text-center mt-12 pt-8 border-t border-gray-200'>
+                        <div className='text-center mt-15 pt-8 '>
                             <p className='text-base font-normal text-black'>By clicking this box, you acknowledge that you have read, understood, and agree to the above.</p>
                         </div>
                         {/* <div className="mt-12 pt-8 border-t border-gray-200">
