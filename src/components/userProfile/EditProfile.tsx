@@ -396,7 +396,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
                         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
                             <div className="mb-3 sm:mb-0">
                                 <h3 className="text-lg font-medium text-gray-900">Your Subscription</h3>
-                                <p className="text-sm text-gray-600">Active until June 15, 2023</p>
+                                <p className="text-sm text-gray-600"></p>
                             </div>
 
                             <button
