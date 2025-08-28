@@ -1,5 +1,6 @@
 'use client';
 
+import { useGetMeQuery } from '@/redux/api/getMe/getMeApi';
 import { useCreateSubscriptionMutation, useGetMyPlanQuery } from '@/redux/api/plan/planSlice';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
@@ -72,11 +73,17 @@ const SubscriptionPlan: React.FC = () => {
   const router = useRouter()
 
   const { data: planInfo } = useGetMyPlanQuery({});
+  const {data:user}=useGetMeQuery({})
   console.log(planInfo)
   const [createSubs] = useCreateSubscriptionMutation()
 
 
   const handlePayment = async () => {
+
+    if(user?.data.isPremium){
+       return toast.warning("You have already subscribed!")
+    }
+
     if (!disclaimerAgreed || !termsAgreed) {
       toast.warning('Please agree to both the disclaimer and terms & conditions');
       return;

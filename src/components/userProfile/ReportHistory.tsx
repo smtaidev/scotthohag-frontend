@@ -55,7 +55,7 @@ const ReportHistory: React.FC<ReportHistoryProps> = ({
         const params: any = {
             skip: (currentPage - 1) * itemsPerPage,
             limit: itemsPerPage,
-            sort: 'asc',
+            sort: 'desc',
             count: true
         }
 
