@@ -16,6 +16,14 @@ export const allPlans = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Plan"],
     }),
+  createSubscription: builder.mutation({
+      query: (body) => ({
+        url: "/subscriptions",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Plan"],
+    }),
 
 
    
@@ -24,5 +32,6 @@ export const allPlans = baseApi.injectEndpoints({
 
 export const { 
   useGetMyPlanQuery,
- useUpdatePlanMutation
+ useUpdatePlanMutation,
+ useCreateSubscriptionMutation
  } = allPlans;

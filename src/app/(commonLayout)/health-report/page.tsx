@@ -38,6 +38,7 @@ const HealthReportPage: React.FC = () => {
       toast.error("Report Submit Fail!");
         setIsLoading(false)
     }
+    setIsLoading(false)
   };
 
   const handleViewHistory = () => {
@@ -68,7 +69,8 @@ const HealthReportPage: React.FC = () => {
       <SubmitReport
         onReportSubmit={handleReportSubmit}
         onViewHistory={handleViewHistory}
-        isLoading={isLoading}      />
+        isLoading={isLoading}    
+          />
     </div>
   );
 };

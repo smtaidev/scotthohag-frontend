@@ -1,82 +1,101 @@
 'use client';
 
-import { useGetMyPlanQuery } from '@/redux/api/plan/planSlice';
+import { useCreateSubscriptionMutation, useGetMyPlanQuery } from '@/redux/api/plan/planSlice';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { FaCheck } from 'react-icons/fa';
+import { toast } from 'sonner';
 
-  const benefits = [
-    {
-      title: "Monthly Check-Ins",
-      description: "Regular follow-up to ensure progress and adjust plans accordingly."
-    },
-    {
-      title: "Gut Healing Protocols",
-      description: "Comprehensive plans to improve digestive health and restore balance."
-    },
-    {
-      title: "Exclusive Discounts",
-      description: "Access to special offers and discounts on wellness products."
-    },
-    {
-      title: "Bloodwork Review",
-      description: "Regular follow-up to ensure progress and adjust plans accordingly."
-    },
-    {
-      title: "Peptide Therapy Guidance",
-      description: "Expert advice on peptide therapy to enhance healing and overall well-being."
-    },
-    {
-      title: "Personalized Reports",
-      description: "Get detailed, easy-to-understand reports of your blood markers."
-    },
-    {
-      title: "Supplement Recommendations",
-      description: "Regular follow-up to ensure progress and adjust plans accordingly."
-    },
-    {
-      title: "Sourcing Recommendations",
-      description: "High-quality supplement and peptide recommendations to support your health."
-    },
-    {
-      title: "Expert Recommendations",
-      description: "Receive personalized advice from wellness experts."
-    }
-  ];
+const benefits = [
+  {
+    title: "Monthly Check-Ins",
+    description: "Regular follow-up to ensure progress and adjust plans accordingly."
+  },
+  {
+    title: "Gut Healing Protocols",
+    description: "Comprehensive plans to improve digestive health and restore balance."
+  },
+  {
+    title: "Exclusive Discounts",
+    description: "Access to special offers and discounts on wellness products."
+  },
+  {
+    title: "Bloodwork Review",
+    description: "Regular follow-up to ensure progress and adjust plans accordingly."
+  },
+  {
+    title: "Peptide Therapy Guidance",
+    description: "Expert advice on peptide therapy to enhance healing and overall well-being."
+  },
+  {
+    title: "Personalized Reports",
+    description: "Get detailed, easy-to-understand reports of your blood markers."
+  },
+  {
+    title: "Supplement Recommendations",
+    description: "Regular follow-up to ensure progress and adjust plans accordingly."
+  },
+  {
+    title: "Sourcing Recommendations",
+    description: "High-quality supplement and peptide recommendations to support your health."
+  },
+  {
+    title: "Expert Recommendations",
+    description: "Receive personalized advice from wellness experts."
+  }
+];
 
-  const images = [
-    {
-      src: "/images/hero1.png",
-      alt: "Man and woman performing plank exercises in gym"
-    },
-    {
-      src: "/images/hero2.png",
-      alt: "Men doing squats with barbell in gym"
-    },
-    {
-      src: "/images/hero3.png",
-      alt: "Woman doing seated yoga twist outdoors"
-    },
-    {
-      src: "/images/hero4.png",
-      alt: "Healthy food items including fruits and green juice"
-    }
-  ];
+const images = [
+  {
+    src: "/images/hero1.png",
+    alt: "Man and woman performing plank exercises in gym"
+  },
+  {
+    src: "/images/hero2.png",
+    alt: "Men doing squats with barbell in gym"
+  },
+  {
+    src: "/images/hero3.png",
+    alt: "Woman doing seated yoga twist outdoors"
+  },
+  {
+    src: "/images/hero4.png",
+    alt: "Healthy food items including fruits and green juice"
+  }
+];
 
 
 
 const SubscriptionPlan: React.FC = () => {
   const [disclaimerAgreed, setDisclaimerAgreed] = useState(false);
   const [termsAgreed, setTermsAgreed] = useState(false);
+  const router = useRouter()
 
-  const {data:planInfo}=useGetMyPlanQuery({});
+  const { data: planInfo } = useGetMyPlanQuery({});
   console.log(planInfo)
+  const [createSubs] = useCreateSubscriptionMutation()
 
 
-  const handlePayment = () => {
+  const handlePayment = async () => {
     if (!disclaimerAgreed || !termsAgreed) {
-      alert('Please agree to both the disclaimer and terms & conditions');
+      toast.warning('Please agree to both the disclaimer and terms & conditions');
       return;
     }
+
+    try {
+      const res = await createSubs({
+        successCallbackUrl: "https://scoothag.code-commando.com/payment-success",
+        cancelCallbackUrl: "http://facebook.com/payment-cancel"
+      })
+      if (res?.data) {
+        console.log('Redirecting to:', res.data.data.approveUrl);
+           window.open(res.data.data.approveUrl, '_blank'); 
+      }
+    } catch (error) {
+
+    }
+
+
     // Handle PayPal payment logic here
     console.log('Processing payment...');
   };
@@ -183,8 +202,8 @@ const SubscriptionPlan: React.FC = () => {
             disabled={!disclaimerAgreed || !termsAgreed}
             className={`
               inline-flex items-center px-8 py-4 text-xl font-semibold text-white rounded-xl shadow-lg transition-all duration-300 transform hover:scale-105
-              ${disclaimerAgreed && termsAgreed 
-                ? 'bg-secondary hover:bg-secondary/80 cursor-pointer' 
+              ${disclaimerAgreed && termsAgreed
+                ? 'bg-secondary hover:bg-secondary/80 cursor-pointer'
                 : 'bg-secondary cursor-not-allowed'
               }
             `}
