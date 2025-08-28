@@ -21,7 +21,7 @@ const navItems = [
 
 const profile = [
     { name: 'Profile', link: '/health-report' },
-    { name: 'Log Out', link: '/' },
+    { name: 'Log Out', link: '/logout' },
 
 ];
 
@@ -80,9 +80,9 @@ export default function Navbar() {
         setActiveItem(link);
         setProfileOpen(false);
 
-        if (link === "/") {
+        if (link === "/logout") {
            const res=await logout({});
-           Cookies.remove("accessToken",{ path: "/" });
+           Cookies.remove("accessToken",{ path: "/logout" });
             console.log(res)
 
          
