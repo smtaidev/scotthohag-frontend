@@ -2,6 +2,7 @@
 
 import { useGetMeQuery } from '@/redux/api/getMe/getMeApi';
 import { useCreateSubscriptionMutation, useGetMyPlanQuery } from '@/redux/api/plan/planSlice';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { FaCheck } from 'react-icons/fa';
@@ -180,7 +181,9 @@ const SubscriptionPlan: React.FC = () => {
               <label htmlFor="disclaimer" className="text-primary-text text-sm md:text-base cursor-pointer">
                 I agree to the{' '}
                 <span className="underline font-medium">
+                  <Link href="/release-and-waiver">
                   disclaimer
+                  </Link>
                 </span>
               </label>
             </div>
@@ -195,7 +198,9 @@ const SubscriptionPlan: React.FC = () => {
               <label htmlFor="terms" className="text-primary-text cursor-pointer">
                 I agree to the{' '}
                 <span className="underline font-medium">
+                  <Link href={"/terms-and-conditions"}>
                   Terms and Conditions
+                  </Link>
                 </span>
               </label>
             </div>

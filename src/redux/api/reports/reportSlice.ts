@@ -18,6 +18,7 @@ export const getMe = baseApi.injectEndpoints({
         const queryString = searchParams.toString();
         return `/reports${queryString ? `?${queryString}` : ""}`;
       },
+      providesTags:["Reports"]
     }),
 
     reportSubmit: builder.mutation({
@@ -26,7 +27,7 @@ export const getMe = baseApi.injectEndpoints({
         method: "POST",
         body,
       }),
-      invalidatesTags: ["User"],
+      invalidatesTags: ["User","Reports"],
     }),
 
     reportDetails: builder.query({
