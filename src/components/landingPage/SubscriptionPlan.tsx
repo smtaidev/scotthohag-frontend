@@ -77,7 +77,8 @@ const SubscriptionPlan: React.FC = () => {
   const {data:user}=useGetMeQuery({})
   console.log(planInfo)
   const [createSubs] = useCreateSubscriptionMutation()
-
+  const admin= user?.data.role ==="ADMIN"
+  console.log(admin,"Here is admin")
 
   const handlePayment = async () => {
 
@@ -127,7 +128,7 @@ const SubscriptionPlan: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12">
           {images.map((image, index) => (
             <div key={index} className="relative group">
-              <div className=" w-full h-80 rounded-2xl overflow-hidden shadow-lg transition-transform duration-300 group-hover:scale-101">
+              <div className=" w-full h-full  rounded-2xl overflow-hidden shadow-lg transition-transform duration-300 group-hover:scale-101">
                 <img
                   src={image.src}
                   alt={image.alt}
@@ -211,11 +212,11 @@ const SubscriptionPlan: React.FC = () => {
         <div className="text-center">
           <button
             onClick={handlePayment}
-            disabled={!disclaimerAgreed || !termsAgreed}
+            disabled={ admin|| !disclaimerAgreed || !termsAgreed }
             className={`
               inline-flex items-center px-8 py-4 text-xl font-semibold text-white rounded-xl shadow-lg transition-all duration-300 transform hover:scale-105
-              ${disclaimerAgreed && termsAgreed
-                ? 'bg-secondary hover:bg-secondary/80 cursor-pointer'
+              ${disclaimerAgreed && termsAgreed &&!admin
+                ? 'bg-secondary hover:bg-secondary cursor-pointer'
                 : 'bg-secondary cursor-not-allowed'
               }
             `}

@@ -51,9 +51,8 @@ const CustomInput = forwardRef<
       }
     };
 
-    const baseInputClassName = `w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-primary ${
-      error ? "border-red-500" : "border-gray-200"
-    }`;
+    const baseInputClassName = `w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-primary ${error ? "border-red-500" : "border-gray-200"
+      }`;
 
     const finalInputClassName = inputClassName
       ? `${baseInputClassName} ${inputClassName}`
@@ -67,12 +66,12 @@ const CustomInput = forwardRef<
             <select
               ref={ref as React.RefObject<HTMLSelectElement>}
               id={id}
-              defaultValue={"defaultValue"}
-            value={(props as any).value || ""}
+
+              // value={(props as any).value || ""}
               className={finalInputClassName}
               {...(props as React.SelectHTMLAttributes<HTMLSelectElement>)}
             >
-              <option  value="defaultValue" key={"defaultValue"}  >
+              <option value="" disabled>
                 Please select an option
               </option>
               {options.map((option) => (
