@@ -67,6 +67,7 @@ export default function   SignUpPage() {
     register,
     handleSubmit,
     formState: { errors },
+    watch
   } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -76,9 +77,11 @@ export default function   SignUpPage() {
       password: "",
       confirmPassword: "",
       dateOfBirth: "",
-      gender: "Select Option",
+      gender: "male",
     },
   });
+
+  const gender = watch("gender");
 
   const onSubmit = async (data: FormValues) => {
     localStorage.setItem("email", data.email);
@@ -157,7 +160,7 @@ export default function   SignUpPage() {
          
             inputType="select"
             label="Select Gender"
-            placeholder="Select Gender"
+            placeholder="Select Gender"     
             options={[
               { value: "male", label: "Male" },
               { value: "female", label: "Female" },
