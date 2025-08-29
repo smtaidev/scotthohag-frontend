@@ -110,7 +110,7 @@ const BlogList: React.FC = () => {
 
                   {/* Learn More Button */}
                   <Link href={`/blog-lists/${post.id}`}>
-                    <button className="bg-secondary text-white cursor-pointer px-8 py-3 rounded-lg font-medium hover:bg-secondary/90 transition-all duration-300 transform hover:scale-103">
+                    <button className="hover:bg-secondary text-white cursor-pointer px-8 py-3 rounded-lg font-medium bg-primary transition-all duration-300 transform ">
                       Learn More
                     </button>
                   </Link>

@@ -43,7 +43,7 @@ const LatestNews: React.FC = () => {
             </h2>
           </div>
           <Link href="/blog-lists">
-            <button className="bg-secondary text-white px-12 py-3 rounded-lg font-medium hover:bg-secondary/90 self-start sm:self-auto transition-all duration-300 transform cursor-pointer">
+            <button className="hover:bg-secondary text-white px-12 py-3 rounded-lg font-medium bg-primary self-start sm:self-auto transition-all duration-300 transform cursor-pointer">
               View all
             </button>
           </Link>
