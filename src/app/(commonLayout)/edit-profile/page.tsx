@@ -3,6 +3,7 @@
 import EditProfile from '@/components/userProfile/EditProfile';
 import { useUpdateProfileMutation } from '@/redux/api/getMe/getMeApi';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { toast } from 'sonner';
 
 interface ProfileData {
@@ -17,10 +18,12 @@ interface ProfileData {
 
 const EditProfilePage = () => {
     const router = useRouter();
+    const [loading,setLoading]=useState(false)
 
     const [updateProfile]=useUpdateProfileMutation()
 
 const handleSave = async (data: ProfileData) => {
+  setLoading(true);
   try {
     // Build only fields that are not null/undefined/empty
     const filteredData: Record<string, string> = {};
@@ -33,11 +36,14 @@ const handleSave = async (data: ProfileData) => {
 
     if (res.data) {
       toast.success("Profile Updated Successfully!");
-      router.push("/health-report")
+    setLoading(false)
     }
+    
   } catch (error) {
     toast.error("Profile Update Failed!");
+    setLoading(false)
   }
+  setLoading(false)
 };
 
 
@@ -49,6 +55,7 @@ const handleSave = async (data: ProfileData) => {
         <EditProfile 
             onSave={handleSave}
             onCancel={handleCancel}
+            loading={loading}
         />
     );
 };

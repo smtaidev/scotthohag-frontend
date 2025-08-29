@@ -76,21 +76,21 @@ export default function Navbar() {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    const handleItemClick =async (link: string) => {
+    const handleItemClick = async (link: string) => {
         setActiveItem(link);
         setProfileOpen(false);
 
         if (link === "/") {
-           const res=await logout({});
-           Cookies.remove("accessToken",{ path: "/" });
+            const res = await logout({});
+            Cookies.remove("accessToken", { path: "/" });
             console.log(res)
 
-         
+
             window.location.reload();
-            setTimeout(()=>{
+            setTimeout(() => {
 
                 window.location.href = "/";
-            },1000)
+            }, 1000)
 
         } else {
             router.push(link);
@@ -99,17 +99,17 @@ export default function Navbar() {
         console.log("My link here", link);
     };
 
-    const handleLogout=async()=>{
-        const res=await logout({});
-           Cookies.remove("accessToken",{ path: "/" });
-            console.log(res)
+    const handleLogout = async () => {
+        const res = await logout({});
+        Cookies.remove("accessToken", { path: "/" });
+        console.log(res)
 
-         
-            window.location.reload();
-            setTimeout(()=>{
 
-                window.location.href = "/";
-            },1000)
+        window.location.reload();
+        setTimeout(() => {
+
+            window.location.href = "/";
+        }, 1000)
     }
 
     return (
@@ -141,34 +141,60 @@ export default function Navbar() {
                     {!userInfo?.data ?
                         <Link href={"/signIn"} className="bg-secondary hover:bg-green-600 text-white px-4 py-2 rounded-md text-xs md:text-lg font-semibold transition-colors cursor-pointer">
                             Sign In
-                        </Link> :
-                        <div ref={prof} className='relative'>
-                            <div onClick={() => setProfileOpen(!profileOpen)} ref={prof} className='cursor-pointer hover:bg-gray-200/20 p-2 transition rounded-full flex items-center gap-2'>
-                                <FaUser className='size-6 ' /> <p>{userInfo?.data.name}</p>
-                            </div>
-                            <div
-                                className={`absolute right-0 top-12 min-w-[160px] bg-white/50 backdrop-blur-2xl text-black shadow-lg rounded-md transition-all duration-300 transform z-50 ${profileOpen ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"
-                                    }`}
-                            >
-                                <div className="flex flex-col p-3 divide-y">
-                                    {profile?.map((item) => (
-                                        <Link
-                                            key={item.name}
-                                            href={item.link}
+                        </Link> : userInfo?.data.role === "ADMIN" ? <>
+                            <div ref={prof} className='relative'>
+                                <div onClick={() => setProfileOpen(!profileOpen)} ref={prof} className='cursor-pointer hover:bg-gray-200/20 p-2 transition rounded-full flex items-center gap-2'>
+                                     <p>Hi, {userInfo?.data.name}</p>
+                                </div>
+                                <div
+                                    className={`absolute right-0 top-12 min-w-[160px] bg-white/50 backdrop-blur-2xl text-black shadow-lg rounded-md transition-all duration-300 transform z-50 ${profileOpen ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"
+                                        }`}
+                                >
+                                    <div className="flex flex-col p-1 divide-y">
+
+                                        <button
+
                                             onClick={() => {
-                                                handleItemClick(item.link);
+                                                handleItemClick("/");
                                                 // setDropdownOpen(false); // Close dropdown on link click
                                             }}
-                                            className={`transition-all duration-200 py-2 px-3  hover:bg-gray-100/20  ${activeItem === item.link ? "text-secondary font-semibold" : ""
+                                            className={`transition-all duration-200 py-2 px-3  hover:bg-gray-100/20  cursor-pointer
                                                 }`}
                                         >
-                                            {item.name}
-                                        </Link>
-                                    ))}
-                                    
+                                            Log Out
+                                        </button>
+
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </> :
+                            <div ref={prof} className='relative'>
+                                <div onClick={() => setProfileOpen(!profileOpen)} ref={prof} className='cursor-pointer hover:bg-gray-200/20 p-2 transition rounded-full flex items-center gap-2'>
+                                    <FaUser className='size-6 ' /> <p>{userInfo?.data.name}</p>
+                                </div>
+                                <div
+                                    className={`absolute right-0 top-12 min-w-[160px] bg-white/50 backdrop-blur-2xl text-black shadow-lg rounded-md transition-all duration-300 transform z-50 ${profileOpen ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"
+                                        }`}
+                                >
+                                    <div className="flex flex-col p-3 divide-y">
+                                        {profile?.map((item) => (
+                                            <Link
+                                                key={item.name}
+                                                href={item.link}
+                                                onClick={() => {
+                                                    handleItemClick(item.link);
+                                                    // setDropdownOpen(false); // Close dropdown on link click
+                                                }}
+                                                className={`transition-all duration-200 py-2 px-3  hover:bg-gray-100/20  ${activeItem === item.link ? "text-secondary font-semibold" : ""
+                                                    }`}
+                                            >
+                                                {item.name}
+                                            </Link>
+                                        ))}
+
+                                    </div>
+                                </div>
+                            </div>
                     }
                     <button
                         onClick={() => setMenuOpen(!menuOpen)}

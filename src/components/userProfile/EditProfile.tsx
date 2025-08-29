@@ -11,6 +11,7 @@ interface EditProfileProps {
     onBack?: () => void;
     onSave?: (data: ProfileData) => void;
     onCancel?: () => void;
+    loading?:boolean
 }
 
 interface ProfileData {
@@ -26,7 +27,8 @@ interface ProfileData {
 const EditProfile: React.FC<EditProfileProps> = ({
     onBack,
     onSave,
-    onCancel
+    onCancel,
+    loading
 }) => {
 
     const { data: user } = useGetMeQuery({});
@@ -113,7 +115,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
 
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file: any = event.target.files?.[0];
-        if (file.fileType !== "image") {
+        if (file.type === "application/pdf" || file.type === "application/x-zip-compressed" ) {
             return toast.error("Only image can be uploaded!");
 
         }
@@ -204,9 +206,9 @@ const EditProfile: React.FC<EditProfileProps> = ({
                 <div className=" rounded-xl ">
                     {/* Profile Picture Section */}
                     <div className="px-6 py-8 text-center">
-                        <div className="relative inline-block">
+                        <div className="relative inline-block ">
                             {/* Profile Picture */}
-                            <div className="relative w-32 h-32 mx-auto mb-4 mt-10">
+                            <div className="relative w-32 h-32 mx-auto mb-4 mt-10 cursor-pointer">
                                 <img
                                     src={user?.data.avatar}
                                     alt="Profile"
@@ -332,9 +334,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
                                                 <option value="female">Female</option>
                                                 <option value="other">Other</option>
                                             </select>
-                                            <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                                                <LuLock size={20} className="text-gray-400" />
-                                            </div>
+                                          
                                         </div>
                                     </div>
                                 </div>
@@ -385,7 +385,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
                                     onClick={handleSave}
                                     className="px-6 py-3 bg-primary cursor-pointer text-white rounded-lg hover:bg-primary/90 transition-colors duration-200 font-medium "
                                 >
-                                    {isLoading ? "Loading.." : " Save Change"}
+                                    {loading ? "Loading.." : " Save Change"}
                                 </button>
                             </div>
                         </form>
