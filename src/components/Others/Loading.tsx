@@ -38,10 +38,10 @@ const Loading: React.FC<LoadingSpinnerProps> = ({
         ></div>
       </div>
 
-      <div className="mt-6 text-center">
+      {/* <div className="mt-6 text-center">
         <h3 className="text-lg font-semibold text-gray-900 mb-2">{title}</h3>
         {message && <p className="text-sm text-gray-500 max-w-sm">{message}</p>}
-      </div>
+      </div> */}
 
       {/* Progress dots */}
       {showProgressDots && (
