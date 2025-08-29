@@ -456,7 +456,7 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
             <button
               type="submit"
               disabled={isLoading}
-              className={`w-full px-6 py-3 bg-primary text-white rounded-lg font-medium transition-all duration-300 transform hover:scale-101 ${isLoading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-primary/90 cursor-pointer'
+              className={`w-full px-6 py-3 bg-primary text-white rounded-lg font-medium transition-all duration-300 transform  ${isLoading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-secondary cursor-pointer'
                 }`}
             >
               {isLoading ? "Loading..." : "Submit Report"}

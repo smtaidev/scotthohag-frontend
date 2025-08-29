@@ -115,7 +115,7 @@ const ContactUs: React.FC = () => {
               {/* Submit Button */}
               <button
                 type="submit"
-                className="w-full bg-secondary text-white py-3 px-6 rounded-lg font-medium hover:bg-secondary/90 transition-all duration-300 transform cursor-pointer"
+                className="w-full hover:bg-secondary text-white py-3 px-6 rounded-lg font-medium bg-primary transition-all duration-300 transform cursor-pointer"
               >
                 Send Message
               </button>
