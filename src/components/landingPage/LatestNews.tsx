@@ -43,7 +43,7 @@ const LatestNews: React.FC = () => {
             </h2>
           </div>
           <Link href="/blog-lists">
-            <button className="bg-secondary text-white px-12 py-3 rounded-lg font-medium hover:bg-secondary/90 self-start sm:self-auto transition-all duration-300 transform hover:scale-105">
+            <button className="bg-secondary text-white px-12 py-3 rounded-lg font-medium hover:bg-secondary/90 self-start sm:self-auto transition-all duration-300 transform cursor-pointer">
               View all
             </button>
           </Link>
@@ -54,7 +54,7 @@ const LatestNews: React.FC = () => {
           {articles.map((article, index) => (
             <div key={index} className="bg-card rounded-xl  overflow-hidden  transition-shadow duration-300">
               {/* Article Image */}
-              <div className="w-full h-48 overflow-hidden p-6 ">
+              <div className="w-full h-48 xl:h-72 overflow-hidden p-6 ">
                 <img
                   src={article.image}
                   alt={article.alt}
@@ -83,7 +83,7 @@ const LatestNews: React.FC = () => {
                 </h3>
 
                 {/* Learn More Button */}
-                <Link href={`/blog-lists/${index}`}>
+                <Link href={`/blog-lists/${index+1}`}>
                   <button className="bg-primary hover:bg-secondary text-white px-6 py-2 rounded-lg font-medium transition-colors duration-300 w-full sm:w-auto cursor-pointer">
                     Learn More
                   </button>

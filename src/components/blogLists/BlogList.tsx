@@ -63,7 +63,7 @@ const BlogList: React.FC = () => {
 
         {/* Blog Posts */}
         <div className="space-y-16">
-          {blogPosts.map((post) => (
+          {blogPosts?.map((post) => (
             <article key={post.id} className="bg-white overflow-hidden duration-300">
               <div className="flex flex-col lg:flex-row items-center gap-8">
                 {/* Blog Post Image - Left Column */}

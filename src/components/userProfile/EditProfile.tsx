@@ -31,6 +31,11 @@ const EditProfile: React.FC<EditProfileProps> = ({
     loading
 }) => {
 
+     const [showCancelModal, setShowCancelModal] = useState(false);
+  const [isCancelling, setIsCancelling] = useState(false);
+  const [cancel]=useCancelSubscriptionMutation()
+
+  
     const { data: user } = useGetMeQuery({});
     console.log(user)
 
@@ -171,9 +176,6 @@ const EditProfile: React.FC<EditProfileProps> = ({
         })
     }, [user?.data])
 
-     const [showCancelModal, setShowCancelModal] = useState(false);
-  const [isCancelling, setIsCancelling] = useState(false);
-  const [cancel]=useCancelSubscriptionMutation()
 
   const handleCancelSubscription = async () => {
     try {

@@ -79,6 +79,7 @@ export default function Navbar() {
     const handleItemClick = async (link: string) => {
         setActiveItem(link);
         setProfileOpen(false);
+        setMenuOpen(false)
 
         if (link === "/") {
             const res = await logout({});

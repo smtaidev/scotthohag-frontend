@@ -84,35 +84,35 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
   ];
 
   // Validate if file is PDF
-  const isPDFFile = (file: File): boolean => {
-    return file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
-  };
+  // const isPDFFile = (file: File): boolean => {
+  //   return file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+  // };
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || []);
-    
+    setUploadedFiles(prev => [...prev, ...files]);
     // Filter only PDF files
-    const pdfFiles = files.filter(file => isPDFFile(file));
-    const nonPdfFiles = files.filter(file => !isPDFFile(file));
-    
+    // const pdfFiles = files.filter(file => isPDFFile(file));
+    // const nonPdfFiles = files.filter(file => !isPDFFile(file));
+
     // Show error if non-PDF files were selected
-    if (nonPdfFiles.length > 0) {
-      setValidationErrors(prev => ({
-        ...prev,
-        files: `Only PDF files are allowed. Rejected: ${nonPdfFiles.map(f => f.name).join(', ')}`
-      }));
-    } else {
-      // Clear file validation error if only PDFs
-      setValidationErrors(prev => {
-        const newErrors = { ...prev };
-        delete newErrors.files;
-        return newErrors;
-      });
-    }
-    
-    if (pdfFiles.length > 0) {
-      setUploadedFiles(prev => [...prev, ...pdfFiles]);
-    }
+    // if (nonPdfFiles.length > 0) {
+    //   setValidationErrors(prev => ({
+    //     ...prev,
+    //     files: `Only PDF files are allowed. Rejected: ${nonPdfFiles.map(f => f.name).join(', ')}`
+    //   }));
+    // } else {
+    //   // Clear file validation error if only PDFs
+    //   setValidationErrors(prev => {
+    //     const newErrors = { ...prev };
+    //     delete newErrors.files;
+    //     return newErrors;
+    //   });
+    // }
+
+    // if (pdfFiles.length > 0) {
+    //   setUploadedFiles(prev => [...prev, ...pdfFiles]);
+    // }
   };
 
   const handleDragOver = (event: React.DragEvent) => {
@@ -122,34 +122,36 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
   const handleDrop = (event: React.DragEvent) => {
     event.preventDefault();
     const files = Array.from(event.dataTransfer.files);
-    
-    // Filter only PDF files
-    const pdfFiles = files.filter(file => isPDFFile(file));
-    const nonPdfFiles = files.filter(file => !isPDFFile(file));
-    
-    // Show error if non-PDF files were dropped
-    if (nonPdfFiles.length > 0) {
-      setValidationErrors(prev => ({
-        ...prev,
-        files: `Only PDF files are allowed. Rejected: ${nonPdfFiles.map(f => f.name).join(', ')}`
-      }));
-    } else {
-      // Clear file validation error if only PDFs
-      setValidationErrors(prev => {
-        const newErrors = { ...prev };
-        delete newErrors.files;
-        return newErrors;
-      });
-    }
-    
-    if (pdfFiles.length > 0) {
-      setUploadedFiles(prev => [...prev, ...pdfFiles]);
-    }
+
+    setUploadedFiles(prev => [...prev, ...files]);
+
+    // // Filter only PDF files
+    // const pdfFiles = files.filter(file => isPDFFile(file));
+    // const nonPdfFiles = files.filter(file => !isPDFFile(file));
+
+    // // Show error if non-PDF files were dropped
+    // if (nonPdfFiles.length > 0) {
+    //   setValidationErrors(prev => ({
+    //     ...prev,
+    //     files: `Only PDF files are allowed. Rejected: ${nonPdfFiles.map(f => f.name).join(', ')}`
+    //   }));
+    // } else {
+    //   // Clear file validation error if only PDFs
+    //   setValidationErrors(prev => {
+    //     const newErrors = { ...prev };
+    //     delete newErrors.files;
+    //     return newErrors;
+    //   });
+    // }
+
+    // if (pdfFiles.length > 0) {
+    //   setUploadedFiles(prev => [...prev, ...pdfFiles]);
+    // }
   };
 
   const removeFile = (index: number) => {
     setUploadedFiles(prev => prev.filter((_, i) => i !== index));
-    
+
     // Clear file validation error if no files remain
     if (uploadedFiles.length === 1) {
       setValidationErrors(prev => {
@@ -170,7 +172,7 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
   };
 
   const token = Cookies.get("accessToken");
-
+  const dateInputRef = useRef<HTMLInputElement>(null);
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
@@ -184,7 +186,7 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
 
     // Validate using Zod schema
     const validation = reportFormSchema.safeParse(formData);
-    
+
     if (!validation.success) {
       // Extract and set validation errors
       const errors: ValidationErrors = {};
@@ -312,9 +314,8 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
                   setSelectedReportType(e.target.value);
                   clearFieldError('type');
                 }}
-                className={`w-full px-3 py-2 bg-gray-50 rounded-md focus:outline-none focus:ring-1 focus:ring-primary ${
-                  validationErrors.type ? 'border border-red-500' : ''
-                }`}
+                className={`w-full px-3 py-2 bg-gray-50 rounded-md focus:outline-none focus:ring-1 focus:ring-primary ${validationErrors.type ? 'border border-red-500' : ''
+                  }`}
               >
                 <option value="" className="text-gray-400">Select report type</option>
                 {reportTypes.map((type) => (
@@ -342,9 +343,8 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
                   setSelectedReportTitle(e.target.value);
                   clearFieldError('title');
                 }}
-                className={`w-full px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-primary bg-gray-50 placeholder-gray-400 ${
-                  validationErrors.title ? 'border border-red-500' : ''
-                }`}
+                className={`w-full px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-primary bg-gray-50 placeholder-gray-400 ${validationErrors.title ? 'border border-red-500' : ''
+                  }`}
                 placeholder="Write your report title here"
               />
             </div>
@@ -360,19 +360,23 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
             </label>
             <div className="relative">
               <input
+                ref={(el) => { dateInputRef.current = el; }} // Add this ref
                 type="date"
                 value={reportDate}
                 onChange={(e) => {
                   setReportDate(e.target.value);
                   clearFieldError('date');
                 }}
-                max={new Date().toISOString().split('T')[0]} // Prevent future dates
-                className={`w-full px-3 py-2 rounded-md placeholder:text-gray-400 text-black focus:outline-none focus:ring-1 focus:ring-primary bg-gray-50 ${
-                  validationErrors.date ? 'border border-red-500' : ''
-                }`}
+                max={new Date().toISOString().split('T')[0]}
+                className={`w-full px-3 py-2 rounded-md placeholder:text-gray-400 text-black focus:outline-none focus:ring-1 focus:ring-primary bg-gray-50 
+        [&::-webkit-calendar-picker-indicator]:hidden
+        ${validationErrors.date ? 'border border-red-500' : ''}`}
                 placeholder="yyyy / mm / dd"
               />
-              <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+              <div
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
+                onClick={() => dateInputRef.current?.showPicker?.()}
+              >
                 <LuCalendar size={16} className="text-gray-400" />
               </div>
             </div>
@@ -380,7 +384,6 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
               <p className="text-red-500 text-sm mt-1">{validationErrors.date}</p>
             )}
           </div>
-
           {/* File Upload */}
           <div className="space-y-2">
             <label className="text-sm font-medium text-gray-700 block">
@@ -390,9 +393,8 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
               onDragOver={handleDragOver}
               onDrop={handleDrop}
               onClick={() => fileInputRef.current?.click()}
-              className={`border-2 border-gray-300 bg-gray-50 rounded-lg p-8 text-center cursor-pointer hover:border-primary transition-colors duration-200 ${
-                validationErrors.files ? 'border-red-500' : ''
-              }`}
+              className={`border-2 border-gray-300 bg-gray-50 rounded-lg p-8 text-center cursor-pointer hover:border-primary transition-colors duration-200 ${validationErrors.files ? 'border-red-500' : ''
+                }`}
             >
               <div className="space-y-4">
                 <div className="flex justify-center">
@@ -416,7 +418,7 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
                 ref={fileInputRef}
                 type="file"
                 multiple
-                accept=".pdf,application/pdf"
+
                 onChange={handleFileUpload}
                 className="hidden"
               />
@@ -454,9 +456,8 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
             <button
               type="submit"
               disabled={isLoading}
-              className={`w-full px-6 py-3 bg-primary text-white rounded-lg font-medium transition-all duration-300 transform hover:scale-101 ${
-                isLoading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-primary/90 cursor-pointer'
-              }`}
+              className={`w-full px-6 py-3 bg-primary text-white rounded-lg font-medium transition-all duration-300 transform hover:scale-101 ${isLoading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-primary/90 cursor-pointer'
+                }`}
             >
               {isLoading ? "Loading..." : "Submit Report"}
             </button>
