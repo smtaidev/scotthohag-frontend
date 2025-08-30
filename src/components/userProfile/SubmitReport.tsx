@@ -1,30 +1,32 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
-import { LuFileText, LuFiles, LuCalendar, LuUpload, LuChevronDown, LuX } from 'react-icons/lu';
+import React, { useState, useRef, ReactNode } from 'react';
+import { LuFileText, LuFiles, LuCalendar, LuUpload, LuChevronDown, LuX, LuLoader } from 'react-icons/lu';
 import CustomInput from '@/ui/CustomeInput';
 import { MdCloudUpload } from 'react-icons/md';
 import Link from 'next/link';
 import Cookies from 'js-cookie';
 import { z } from 'zod';
 
+import { Dispatch, SetStateAction } from 'react';
+
 // Zod validation schema
 const reportFormSchema = z.object({
-  type: z.string().min(1, 'Report type is required'),
+  // type: z.string().min(1, 'Report type is required'),
   title: z.string().min(1, 'Report title is required').min(3, 'Report title must be at least 3 characters'),
-  date: z.string().min(1, 'Report date is required').refine((date) => {
-    const selectedDate = new Date(date);
-    const today = new Date();
-    today.setHours(23, 59, 59, 999); // Set to end of today
-    return selectedDate <= today;
-  }, 'Report date cannot be in the future'),
+  // date: z.string().min(1, 'Report date is required').refine((date) => {
+  //   const selectedDate = new Date(date);
+  //   const today = new Date();
+  //   today.setHours(23, 59, 59, 999); // Set to end of today
+  //   return selectedDate <= today;
+  // }, 'Report date cannot be in the future'),
   files: z.array(z.any()).min(1, 'At least one PDF file is required')
 });
 
 interface ReportFormData {
   type: string;
   title: string;
-  date: string;
+  // date: string;
   reportUrls: string[];
 }
 
@@ -35,16 +37,19 @@ interface ValidationErrors {
   files?: string;
 }
 
+
 interface SubmitReportProps {
   onReportSubmit?: (data: ReportFormData, onSuccess?: () => void) => void;
   onViewHistory?: () => void;
   isLoading: boolean;
+  setIsLoading?: Dispatch<SetStateAction<boolean>> |undefined;
 }
 
 const SubmitReport: React.FC<SubmitReportProps> = ({
   onReportSubmit,
   onViewHistory,
-  isLoading
+  isLoading,
+  setIsLoading
 }) => {
   const [showReportTypeModal, setShowReportTypeModal] = useState(false);
   const [selectedReportType, setSelectedReportType] = useState('');
@@ -175,7 +180,7 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
   const dateInputRef = useRef<HTMLInputElement>(null);
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-
+ if (setIsLoading) setIsLoading(true);
     // Prepare data for validation
     const formData = {
       type: selectedReportType,
@@ -197,7 +202,8 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
         }
       });
       setValidationErrors(errors);
-      return; // Stop form submission
+       if (setIsLoading) setIsLoading(false );
+      return ; // Stop form submission
     }
 
     // Clear validation errors if validation passes
@@ -215,6 +221,7 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
         }
       );
       if (!response.ok) {
+         if (setIsLoading) setIsLoading(false);
         throw new Error('Failed to get signed URL');
       }
 
@@ -242,12 +249,14 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
             });
 
             if (!uploadResponse.ok) {
+               if (setIsLoading) setIsLoading(false);
               throw new Error(`Upload failed for ${file.name}`);
             }
 
             const fileUrl = signedUrl.split('?')[0];
             resultUrls.push(fileUrl);
           } catch (error) {
+             if (setIsLoading) setIsLoading(false);
             console.error('Error uploading', file.name, error);
           }
         })
@@ -266,7 +275,7 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
     const submissionData = {
       type: selectedReportType,
       title: selectedReportTitle,
-      date: reportDate,
+      // date: reportDate,
       reportUrls: resultUrls
     };
     onReportSubmit?.(submissionData, resetForm);
@@ -303,32 +312,7 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Report Type */}
-          <div className="space-y-2">
-            <label className="text-base font-medium text-gray-700 block">
-              Report Type <span className="text-red-500">*</span>
-            </label>
-            <div className="relative">
-              <select
-                value={selectedReportType}
-                onChange={(e) => {
-                  setSelectedReportType(e.target.value);
-                  clearFieldError('type');
-                }}
-                className={`w-full px-3 py-2 bg-gray-50 rounded-md focus:outline-none focus:ring-1 focus:ring-primary ${validationErrors.type ? 'border border-red-500' : ''
-                  }`}
-              >
-                <option value="" className="text-gray-400">Select report type</option>
-                {reportTypes.map((type) => (
-                  <option key={type} value={type}>
-                    {type}
-                  </option>
-                ))}
-              </select>
-            </div>
-            {validationErrors.type && (
-              <p className="text-red-500 text-sm mt-1">{validationErrors.type}</p>
-            )}
-          </div>
+
 
           {/* Report Title */}
           <div className="space-y-2">
@@ -353,8 +337,44 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
             )}
           </div>
 
-          {/* Report Date */}
           <div className="space-y-2">
+            <label className="text-base font-medium text-gray-700 block">
+              Description <span className="text-red-500">*</span>
+            </label>
+            <textarea
+              value={selectedReportType}
+              onChange={(e) => {
+                setSelectedReportType(e.target.value);
+                clearFieldError('type');
+              }}
+              placeholder="List any recommended supplements (optional)..."
+              className="w-full p-4 border border-gray-300 rounded-lg focus:ring-2  h-32 bg-white"
+            />
+            {/* <div className="relative">
+              <select
+                value={selectedReportType}
+                onChange={(e) => {
+                  setSelectedReportType(e.target.value);
+                  clearFieldError('type');
+                }}
+                className={`w-full px-3 py-2 bg-gray-50 rounded-md focus:outline-none focus:ring-1 focus:ring-primary ${validationErrors.type ? 'border border-red-500' : ''
+                  }`}
+              >
+                <option value="" className="text-gray-400">Select report type</option>
+                {reportTypes.map((type) => (
+                  <option key={type} value={type}>
+                    {type}
+                  </option>
+                ))}
+              </select>
+            </div> */}
+            {validationErrors.type && (
+              <p className="text-red-500 text-sm mt-1">{validationErrors.type}</p>
+            )}
+          </div>
+
+          {/* Report Date */}
+          {/* <div className="space-y-2">
             <label className="text-sm font-medium text-gray-700 block">
               Report Date <span className="text-red-500">*</span>
             </label>
@@ -383,7 +403,7 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
             {validationErrors.date && (
               <p className="text-red-500 text-sm mt-1">{validationErrors.date}</p>
             )}
-          </div>
+          </div> */}
           {/* File Upload */}
           <div className="space-y-2">
             <label className="text-sm font-medium text-gray-700 block">
@@ -459,7 +479,19 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
               className={`w-full px-6 py-3 bg-primary text-white rounded-lg font-medium transition-all duration-300 transform  ${isLoading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-secondary cursor-pointer'
                 }`}
             >
-              {isLoading ? "Loading..." : "Submit Report"}
+              {isLoading ? <>
+               <button
+                    className="px-3 py-2 w-full text-center rounded-lg bg-primary transition-all duration-300 text-white hover:bg-primary shadow cursor-pointer"
+                  >
+                    <div className={`flex items-center justify-center gap-2`}>
+                      <LuLoader
+                        className={` "opacity-100" : "opacity-0"
+                         animate-spin text-center absolute`}
+                      />
+                     
+                    </div>
+                  </button>
+              </> : "Submit Report"}
             </button>
           </div>
         </form>

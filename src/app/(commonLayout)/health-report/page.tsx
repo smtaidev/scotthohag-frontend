@@ -69,7 +69,8 @@ const HealthReportPage: React.FC = () => {
       <SubmitReport
         onReportSubmit={handleReportSubmit}
         onViewHistory={handleViewHistory}
-        isLoading={isLoading}    
+        isLoading={isLoading} 
+        setIsLoading={setIsLoading}   
           />
     </div>
   );

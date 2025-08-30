@@ -229,10 +229,10 @@ const ReportHistory: React.FC<ReportHistoryProps> = ({
                                 {currentReports.map((report: any) => (
                                     <tr key={report.id} className="hover:bg-gray-50 transition-colors duration-150">
                                         <td className="px-6 py-4 text-sm text-gray-900 text-center">
-                                            {report.type}
+                                            {report.title}
                                         </td>
                                         <td className="px-6 py-4 text-sm text-gray-900 text-center">
-                                            {new Date(report.date).toLocaleDateString('en-GB', {
+                                            {new Date(report.createdAt).toLocaleDateString('en-GB', {
                                                 day: 'numeric',
                                                 month: 'long',
                                                 year: 'numeric'

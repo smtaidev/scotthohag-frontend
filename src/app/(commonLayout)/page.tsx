@@ -7,6 +7,7 @@ import AreasOfSpecialty from '@/components/landingPage/AreasOfSpecialty';
 import AboutScott from '@/components/landingPage/AboutScott';
 import LatestNews from '@/components/landingPage/LatestNews';
 import ContactUs from '@/components/landingPage/ContactUs';
+import Newsletter from '@/components/landingPage/Newslatter';
 
 const page = () => {
   return (
@@ -19,7 +20,7 @@ const page = () => {
       <AboutScott />
       <LatestNews />
       <ContactUs />
-    
+    <Newsletter/>
     </div>
   );
 };
