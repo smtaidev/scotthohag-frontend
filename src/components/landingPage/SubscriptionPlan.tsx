@@ -4,7 +4,7 @@ import { useGetMeQuery } from '@/redux/api/getMe/getMeApi';
 import { useCreateSubscriptionMutation, useGetMyPlanQuery } from '@/redux/api/plan/planSlice';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaCheck } from 'react-icons/fa';
 import { toast } from 'sonner';
 
@@ -73,7 +73,7 @@ const SubscriptionPlan: React.FC = () => {
   const [termsAgreed, setTermsAgreed] = useState(false);
   const router = useRouter()
 
-  const { data: planInfo } = useGetMyPlanQuery({});
+  const { data: planInfo,refetch } = useGetMyPlanQuery({});
   const {data:user}=useGetMeQuery({})
   console.log(planInfo)
   const [createSubs] = useCreateSubscriptionMutation()
@@ -81,7 +81,10 @@ const SubscriptionPlan: React.FC = () => {
   console.log(admin,"Here is admin")
 
   const handlePayment = async () => {
-
+    
+     if(!user?.data){
+       return toast.warning("Please login first!")
+    }
     if(user?.data.isPremium){
        return toast.warning("You have already subscribed!")
     }
@@ -107,7 +110,15 @@ const SubscriptionPlan: React.FC = () => {
 
     // Handle PayPal payment logic here
     console.log('Processing payment...');
-  };
+  }
+
+    
+
+    const handleRefetch=()=>{
+        refetch();
+        
+    }
+
 
   return (
     <div id='service' className="min-h-screen bg-gradient-to-br from-[#F0FDF4] to-[#EFF6FF] py-16 ">
@@ -212,6 +223,7 @@ const SubscriptionPlan: React.FC = () => {
         <div className="text-center">
           <button
             onClick={handlePayment}
+            onMouseEnter={()=>handleRefetch()}
             disabled={ admin|| !disclaimerAgreed || !termsAgreed }
             className={`
               inline-flex items-center px-8 py-4 text-xl font-semibold text-white rounded-xl shadow-lg transition-all duration-300 transform hover:scale-105

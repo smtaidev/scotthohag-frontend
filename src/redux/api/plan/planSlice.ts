@@ -5,10 +5,10 @@ export const allPlans = baseApi.injectEndpoints({
     // need to add types
     getMyPlan: builder.query({
       query: () => "/subscriptions/plan",
-     providesTags:['Plan']
+      providesTags: ['Plan']
     }),
 
-  updatePlan: builder.mutation({
+    updatePlan: builder.mutation({
       query: (body) => ({
         url: "/subscriptions/plan",
         method: "POST",
@@ -16,7 +16,7 @@ export const allPlans = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Plan"],
     }),
-  createSubscription: builder.mutation({
+    createSubscription: builder.mutation({
       query: (body) => ({
         url: "/subscriptions",
         method: "POST",
@@ -25,22 +25,30 @@ export const allPlans = baseApi.injectEndpoints({
       invalidatesTags: ["Plan"],
     }),
 
-  cancelSubscription: builder.mutation({
+    cancelSubscription: builder.mutation({
       query: () => ({
         url: "/subscriptions",
         method: "DELETE",
       }),
       invalidatesTags: ["Plan"],
     }),
+  createNewslatter: builder.mutation({
+      query: (body) => ({
+        url: "/newsletter",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Plan"],
+    }),
 
 
-   
   }),
 });
 
-export const { 
+export const {
   useGetMyPlanQuery,
- useUpdatePlanMutation,
- useCreateSubscriptionMutation,
- useCancelSubscriptionMutation
- } = allPlans;
+  useUpdatePlanMutation,
+  useCreateSubscriptionMutation,
+  useCancelSubscriptionMutation,
+  useCreateNewslatterMutation
+} = allPlans;
