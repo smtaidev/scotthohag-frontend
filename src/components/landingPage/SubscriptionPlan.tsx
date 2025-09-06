@@ -73,20 +73,20 @@ const SubscriptionPlan: React.FC = () => {
   const [termsAgreed, setTermsAgreed] = useState(false);
   const router = useRouter()
 
-  const { data: planInfo,refetch } = useGetMyPlanQuery({});
-  const {data:user}=useGetMeQuery({})
+  const { data: planInfo, refetch } = useGetMyPlanQuery({});
+  const { data: user } = useGetMeQuery({})
   console.log(planInfo)
   const [createSubs] = useCreateSubscriptionMutation()
-  const admin= user?.data.role ==="ADMIN"
-  console.log(admin,"Here is admin")
+  const admin = user?.data.role === "ADMIN"
+  console.log(admin, "Here is admin")
 
   const handlePayment = async () => {
-    
-     if(!user?.data){
-       return toast.warning("Please login first!")
+
+    if (!user?.data) {
+      return toast.warning("Please login first!")
     }
-    if(user?.data.isPremium){
-       return toast.warning("You have already subscribed!")
+    if (user?.data.isPremium) {
+      return toast.warning("You have already subscribed!")
     }
 
     if (!disclaimerAgreed || !termsAgreed) {
@@ -101,7 +101,7 @@ const SubscriptionPlan: React.FC = () => {
       })
       if (res?.data) {
         console.log('Redirecting to:', res.data.data.approveUrl);
-           window.open(res.data.data.approveUrl, '_blank'); 
+        window.open(res.data.data.approveUrl, '_blank');
       }
     } catch (error) {
 
@@ -112,12 +112,12 @@ const SubscriptionPlan: React.FC = () => {
     console.log('Processing payment...');
   }
 
-    
 
-    const handleRefetch=()=>{
-        refetch();
-        
-    }
+
+  const handleRefetch = () => {
+    refetch();
+
+  }
 
 
   return (
@@ -194,7 +194,7 @@ const SubscriptionPlan: React.FC = () => {
                 I agree to the{' '}
                 <span className="underline font-medium">
                   <Link href="/release-and-waiver">
-                  disclaimer
+                    disclaimer
                   </Link>
                 </span>
               </label>
@@ -211,7 +211,7 @@ const SubscriptionPlan: React.FC = () => {
                 I agree to the{' '}
                 <span className="underline font-medium">
                   <Link href={"/terms-and-conditions"}>
-                  Terms and Conditions
+                    Terms and Conditions
                   </Link>
                 </span>
               </label>
@@ -223,11 +223,11 @@ const SubscriptionPlan: React.FC = () => {
         <div className="text-center">
           <button
             onClick={handlePayment}
-            onMouseEnter={()=>handleRefetch()}
-            disabled={ admin|| !disclaimerAgreed || !termsAgreed }
+            onMouseEnter={() => handleRefetch()}
+            disabled={admin || !disclaimerAgreed || !termsAgreed}
             className={`
               inline-flex items-center px-8 py-4 text-xl font-semibold text-white rounded-xl shadow-lg transition-all duration-300 transform hover:scale-105
-              ${disclaimerAgreed && termsAgreed &&!admin
+              ${disclaimerAgreed && termsAgreed && !admin
                 ? 'bg-secondary hover:bg-secondary cursor-pointer'
                 : 'bg-secondary cursor-not-allowed'
               }
