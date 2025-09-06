@@ -9,6 +9,8 @@ import { div } from 'framer-motion/client';
 import Cookies from 'js-cookie';
 import { useLogoutMutation } from '@/redux/api/auth/authApi';
 import { useRouter } from 'next/navigation';
+import { useCreateSubscriptionMutation, useGetMyPlanQuery } from '@/redux/api/plan/planSlice';
+import { toast } from 'sonner';
 
 const navItems = [
     { name: 'Home', link: '/#' },
@@ -36,7 +38,10 @@ export default function Navbar() {
 
     const { data: userInfo } = useGetMeQuery({});
     const [logout] = useLogoutMutation()
-
+    const { data: planInfo, refetch } = useGetMyPlanQuery({});
+    const { data: user } = useGetMeQuery({})
+    console.log(planInfo)
+    const [createSubs] = useCreateSubscriptionMutation()
     // Set active item based on current path
     useEffect(() => {
         const currentPath = window.location.pathname;
@@ -112,6 +117,40 @@ export default function Navbar() {
             window.location.href = "/";
         }, 1000)
     }
+    const handlePayment = async () => {
+
+        if (!user?.data) {
+            return toast.warning("Please login first!")
+        }
+        if (user?.data.isPremium) {
+            return toast.warning("You have already subscribed!")
+        }
+        try {
+            const res = await createSubs({
+                successCallbackUrl: "https://scoothag.code-commando.com/payment-success",
+                cancelCallbackUrl: "https://scoothag.code-commando.com/payment-cancel"
+            })
+            if (res?.data) {
+                console.log('Redirecting to:', res.data.data.approveUrl);
+                window.open(res.data.data.approveUrl, '_blank');
+            }
+        } catch (error) {
+
+        }
+
+
+        // Handle PayPal payment logic here
+        console.log('Processing payment...');
+    }
+
+
+
+    const handleRefetch = () => {
+        refetch();
+
+    }
+
+    console.log(userInfo?.data)
 
     return (
         <div ref={main} className={`bg-primary py-3 sticky top-0 z-50 transition-all duration-300 ${isScrolled ? 'shadow-md' : ''}`}>
@@ -139,13 +178,81 @@ export default function Navbar() {
 
                 {/* Right Side Buttons */}
                 <div className="flex items-center gap-4">
-                    {!userInfo?.data ?
-                        <Link href={"/signIn"} className="bg-secondary hover:bg-green-600 text-white px-4 py-2 rounded-md text-xs md:text-lg font-semibold transition-colors cursor-pointer">
-                            Sign In
-                        </Link> : userInfo?.data.role === "ADMIN" ? <>
+                    {!userInfo?.data || !userInfo?.data.isPremium ?
+                        <div className='flex items-center justify-center gap-2'>
+                            {
+                                (!userInfo?.data || !userInfo?.data.isPremium) && <button
+                                    onClick={handlePayment}
+                                    onMouseEnter={() => handleRefetch()}
+                                    className="bg-secondary hover:bg-green-600 text-white px-4 py-2 rounded-md text-xs md:text-lg font-semibold transition-colors cursor-pointer"
+                                >
+                                    Subscribe
+                                </button>
+                            }
+                            {
+                                !userInfo?.data ?
+                                    <Link href={"/signIn"} className="bg-secondary hover:bg-green-600 text-white px-4 py-2 rounded-md text-xs md:text-lg font-semibold transition-colors cursor-pointer">
+                                        Sign In
+                                    </Link> : userInfo?.data.role === "ADMIN" ? <>
+                                        <div ref={prof} className='relative'>
+                                            <div onClick={() => setProfileOpen(!profileOpen)} ref={prof} className='cursor-pointer hover:bg-gray-200/20 p-2 transition rounded-full flex items-center gap-2'>
+                                                <p>Hi, {userInfo?.data.name}</p>
+                                            </div>
+                                            <div
+                                                className={`absolute right-0 top-12 min-w-[160px] bg-white/50 backdrop-blur-2xl text-black shadow-lg rounded-md transition-all duration-300 transform z-50 ${profileOpen ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"
+                                                    }`}
+                                            >
+                                                <div className="flex flex-col p-1 divide-y">
+
+                                                    <button
+
+                                                        onClick={() => {
+                                                            handleItemClick("/");
+                                                            // setDropdownOpen(false); // Close dropdown on link click
+                                                        }}
+                                                        className={`transition-all duration-200 py-2 px-3  hover:bg-gray-100/20  cursor-pointer
+                                                }`}
+                                                    >
+                                                        Log Out
+                                                    </button>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </> :
+                                        <div ref={prof} className='relative'>
+                                            <div onClick={() => setProfileOpen(!profileOpen)} ref={prof} className='cursor-pointer hover:bg-gray-200/20 p-2 transition rounded-full flex items-center gap-2'>
+                                                <FaUser className='size-6 ' /> <p>{userInfo?.data.name}</p>
+                                            </div>
+                                            <div
+                                                className={`absolute right-0 top-12 min-w-[160px] bg-white/50 backdrop-blur-2xl text-black shadow-lg rounded-md transition-all duration-300 transform z-50 ${profileOpen ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"
+                                                    }`}
+                                            >
+                                                <div className="flex flex-col p-3 divide-y">
+                                                    {profile?.map((item) => (
+                                                        <Link
+                                                            key={item.name}
+                                                            href={item.link}
+                                                            onClick={() => {
+                                                                handleItemClick(item.link);
+                                                                // setDropdownOpen(false); // Close dropdown on link click
+                                                            }}
+                                                            className={`transition-all duration-200 py-2 px-3  hover:bg-gray-100/20  ${activeItem === item.link ? "text-secondary font-semibold" : ""
+                                                                }`}
+                                                        >
+                                                            {item.name}
+                                                        </Link>
+                                                    ))}
+
+                                                </div>
+                                            </div>
+                                        </div>
+                            }
+
+                        </div> : userInfo?.data.role === "ADMIN" ? <>
                             <div ref={prof} className='relative'>
                                 <div onClick={() => setProfileOpen(!profileOpen)} ref={prof} className='cursor-pointer hover:bg-gray-200/20 p-2 transition rounded-full flex items-center gap-2'>
-                                     <p>Hi, {userInfo?.data.name}</p>
+                                    <p>Hi, {userInfo?.data.name}</p>
                                 </div>
                                 <div
                                     className={`absolute right-0 top-12 min-w-[160px] bg-white/50 backdrop-blur-2xl text-black shadow-lg rounded-md transition-all duration-300 transform z-50 ${profileOpen ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"
