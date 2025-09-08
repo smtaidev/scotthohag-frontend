@@ -120,7 +120,7 @@ export default function Navbar() {
     const handlePayment = async () => {
 
         if (!user?.data) {
-            return toast.warning("Please login first!")
+            return toast.warning("Create login to subscribe")
         }
         if (user?.data.isPremium) {
             return toast.warning("You have already subscribed!")
