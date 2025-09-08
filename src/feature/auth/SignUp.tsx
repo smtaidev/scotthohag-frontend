@@ -98,7 +98,7 @@ export default function   SignUpPage() {
 
     try {
       const response = await signUp({
-        name: payload.firstName + payload.lastName,
+        name: payload.firstName ,
         email: payload.email,
         dateOfBirth: payload.dateOfBirth,
         gender: payload.gender,
@@ -127,20 +127,20 @@ export default function   SignUpPage() {
           {/* First Name Input */}
           <CustomInput
             id="firstName"
-            label="First Name"
-            placeholder="John"
+            label="Full Name"
+            placeholder="John Doe"
             error={errors.firstName?.message}
             {...register("firstName")}
           />
 
           {/* Last Name Input */}
-          <CustomInput
+          {/* <CustomInput
             id="lastName"
             label="Last Name"
             placeholder="Doe"
             error={errors.lastName?.message}
             {...register("lastName")}
-          />
+          /> */}
         </div>
 
         {/* Company Email Input */}
