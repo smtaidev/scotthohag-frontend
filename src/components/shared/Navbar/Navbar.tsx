@@ -154,7 +154,7 @@ export default function Navbar() {
 
     return (
         <div ref={main} className={`bg-primary py-3 sticky top-0 z-50 transition-all duration-300 ${isScrolled ? 'shadow-md' : ''}`}>
-            <nav className="text-white flex items-center justify-between max-w-10/12 mx-auto px-4">
+            <nav className="text-white flex items-center justify-between xl:max-w-10/12 mx-auto px-4">
                 {/* Logo Section */}
                 <div className="flex items-center gap-3">
                     <Logo className='h-[74px] w-[89px]' />

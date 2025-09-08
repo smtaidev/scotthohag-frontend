@@ -11,6 +11,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { BsEye } from "react-icons/bs";
 import { FaRegEyeSlash } from "react-icons/fa";
+import { LuLoader } from "react-icons/lu";
 import { toast } from "sonner";
 import * as z from "zod";
 
@@ -19,8 +20,7 @@ const passwordRegex =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s]).{6,}$/;
 const formSchema = z
   .object({
-    firstName: z.string().min(1, { message: "First name is required" }),
-    lastName: z.string().min(1, { message: "Last name is required" }),
+    name: z.string().min(1, { message: "Name is required" }),
     email: z
       .email({ message: "Please enter a valid email address" })
       .min(1, { message: "Email is required" }),
@@ -56,7 +56,7 @@ const formSchema = z
 
 type FormValues = z.infer<typeof formSchema>;
 
-export default function   SignUpPage() {
+export default function SignUpPage() {
   const [signUp, { isLoading }] = useSignUpMutation();
   const router = useRouter();
   const [view, setView] = useState(false);
@@ -71,8 +71,7 @@ export default function   SignUpPage() {
   } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      firstName: "",
-      lastName: "",
+      name: "",
       email: "",
       password: "",
       confirmPassword: "",
@@ -92,19 +91,18 @@ export default function   SignUpPage() {
 
     // Add role to the payload
     const payload = {
-      ...rest,
+      name: data.name,
+      email: data.email,
+      password: data.password,
+      dateOfBirth: data.dateOfBirth,
+      gender: data.gender,
       role: "INDIVIDUAL",
     };
 
-    try {
-      const response = await signUp({
-        name: payload.firstName ,
-        email: payload.email,
-        dateOfBirth: payload.dateOfBirth,
-        gender: payload.gender,
-        password: payload.password,
 
-      }).unwrap();
+    try {
+      const response = await signUp(payload).unwrap();
+
       if (response?.success) {
         router.push("/otp");
       }
@@ -126,11 +124,11 @@ export default function   SignUpPage() {
         <div className="flex items-center gap-4">
           {/* First Name Input */}
           <CustomInput
-            id="firstName"
+            id="name"
             label="Full Name"
             placeholder="John Doe"
-            error={errors.firstName?.message}
-            {...register("firstName")}
+            error={errors.name?.message}
+            {...register("name")}
           />
 
           {/* Last Name Input */}
@@ -157,10 +155,10 @@ export default function   SignUpPage() {
         <div className="flex items-center gap-4">
           {/* First Name Input */}
           <CustomInput
-         
+
             inputType="select"
             label="Select Gender"
-            placeholder="Select Gender"     
+            placeholder="Select Gender"
             options={[
               { value: "male", label: "Male" },
               { value: "female", label: "Female" },
@@ -214,7 +212,23 @@ export default function   SignUpPage() {
           </button>
         </div>
         {/* Sign Up Button */}
-        <PrimaryButton type="submit" loading={isLoading} text="Sign Up" />
+        <button
+          type={"submit"}
+          disabled={isLoading}
+          // onClick={onClick}
+          className="px-3 py-2 w-full text-center rounded-lg bg-primary transition-all duration-300 text-white hover:bg-primary shadow cursor-pointer"
+        >
+          <div className={`flex items-center justify-center gap-2`}>
+            <LuLoader
+              className={`${isLoading ? "opacity-100" : "opacity-0"
+                } animate-spin text-center absolute`}
+            />
+            <span className={`${isLoading ? "opacity-0" : "opacity-100"}`}>
+              Sign Up
+            </span>
+          </div>
+        </button>
+        {/* <PrimaryButton type="submit" loading={isLoading} text="Sign Up" /> */}
       </form>
 
       {/* Login Link */}
