@@ -346,7 +346,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
                                     {/* Phone Number */}
                                     <div>
                                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                                            Phone Number (Optional)
+                                            Phone Number
                                         </label>
                                         <input
                                             type="tel"

@@ -9,6 +9,8 @@ import Cookies from 'js-cookie';
 import { z } from 'zod';
 
 import { Dispatch, SetStateAction } from 'react';
+import { useGetMeQuery } from '@/redux/api/getMe/getMeApi';
+import { toast } from 'sonner';
 
 // Zod validation schema
 const reportFormSchema = z.object({
@@ -58,6 +60,7 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [validationErrors, setValidationErrors] = useState<ValidationErrors>({});
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const {data:me}=useGetMeQuery({})
 
   const reportTypes = [
     'Complete Blood Count',
@@ -210,6 +213,7 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
     setValidationErrors({});
 
     const getSignedUrl = async (fileType: any, mimeType: any) => {
+          if(!me?.data.isPremium) return toast.error("Create subscription first")
       const response: any = await fetch(
         `${process.env.NEXT_PUBLIC_URL}/uploads?fileType=${encodeURIComponent(fileType)}&mimeType=${encodeURIComponent(mimeType)}`,
         {

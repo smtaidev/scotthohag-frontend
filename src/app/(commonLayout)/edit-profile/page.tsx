@@ -42,7 +42,16 @@ const EditProfilePage = () => {
         return toast.error("Location cannot be null.")
       }
       if (data.dateOfBirth) filteredData.dateOfBirth = data.dateOfBirth;
-      filteredData.phone = data.phoneNumber;
+
+        if (data.phoneNumber) {
+
+        filteredData.phone = data.phoneNumber;
+      } else {
+        setLoading(false)
+        return toast.error("Phone cannot be null.")
+      }
+
+      
 
       if (data.gender) {
 
