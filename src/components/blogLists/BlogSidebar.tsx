@@ -25,9 +25,9 @@ const BlogSidebar: React.FC = () => {
         <p className="info mb-4 lg:mb-6 leading-relaxed">
         True wellness is a balance of mindful eating, regular exercise, rest, mental calmness, and positive thinking. Each day offers a chance to nurture both body and mind, leading to lasting vitality. Health is not just the absence of illness but a state of energy, joy, and enthusiasm for life. By maintaining harmony, we lay the foundation for a fulfilling future.
         </p>
-        <button className="w-full bg-secondary hover:bg-secondary/90 cursor-pointer text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105">
+        {/* <button className="w-full bg-secondary hover:bg-secondary/90 cursor-pointer text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105">
           $250 Pay with PayPal
-        </button>
+        </button> */}
       </div>
 
       {/* Areas of Specialty */}
