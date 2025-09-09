@@ -183,6 +183,8 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
   const dateInputRef = useRef<HTMLInputElement>(null);
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+              if(!me?.data.isPremium) return toast.error("Create subscription first")
+
  if (setIsLoading) setIsLoading(true);
     // Prepare data for validation
     const formData = {
@@ -213,7 +215,6 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
     setValidationErrors({});
 
     const getSignedUrl = async (fileType: any, mimeType: any) => {
-          if(!me?.data.isPremium) return toast.error("Create subscription first")
       const response: any = await fetch(
         `${process.env.NEXT_PUBLIC_URL}/uploads?fileType=${encodeURIComponent(fileType)}&mimeType=${encodeURIComponent(mimeType)}`,
         {
