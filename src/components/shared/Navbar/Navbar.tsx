@@ -127,8 +127,8 @@ export default function Navbar() {
         }
         try {
             const res = await createSubs({
-                successCallbackUrl: "https://scoothag.code-commando.com/payment-success",
-                cancelCallbackUrl: "https://scoothag.code-commando.com/payment-cancel"
+                successCallbackUrl: "https://peakwellnessbyscott.com/payment-success",
+                cancelCallbackUrl: "https://peakwellnessbyscott.com"
             })
             if (res?.data) {
                 console.log('Redirecting to:', res.data.data.approveUrl);

@@ -83,8 +83,10 @@ const SubscriptionPlan: React.FC = () => {
   const handlePayment = async () => {
 
     if (!user?.data) {
-      return toast.warning("Please login first!")
+      return toast.warning("Create login to subscribe")
     }
+       
+
     if (user?.data.isPremium) {
       return toast.warning("You have already subscribed!")
     }
@@ -223,13 +225,12 @@ const SubscriptionPlan: React.FC = () => {
         <div className="text-center">
           <button
             onClick={handlePayment}
-            onMouseEnter={() => handleRefetch()}
-            disabled={admin || !disclaimerAgreed || !termsAgreed}
+            onMouseEnter={() => handleRefetch()}           
             className={`
               inline-flex items-center px-8 py-4 text-xl font-semibold text-white rounded-xl shadow-lg transition-all duration-300 transform hover:scale-105
               ${disclaimerAgreed && termsAgreed && !admin
                 ? 'bg-secondary hover:bg-secondary cursor-pointer'
-                : 'bg-secondary cursor-not-allowed'
+                : 'bg-secondary cursor-pointer'
               }
             `}
           >
