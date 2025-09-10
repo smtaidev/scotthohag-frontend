@@ -96,18 +96,25 @@ const SubscriptionPlan: React.FC = () => {
       return;
     }
 
-    try {
-      const res = await createSubs({
-        successCallbackUrl: "https://peakwellnessbyscott.com/payment-success",
-        cancelCallbackUrl: "https://peakwellnessbyscott.com"
-      })
-      if (res?.data) {
-        console.log('Redirecting to:', res.data.data.approveUrl);
-        window.open(res.data.data.approveUrl, '_blank');
-      }
-    } catch (error) {
+    const newTab = window.open('', '_blank');
+   try {
+    const res = await createSubs({
+      successCallbackUrl: "https://peakwellnessbyscott.com/payment-success",
+      cancelCallbackUrl: "https://peakwellnessbyscott.com"
+    });
 
+    if (res?.data && newTab) {
+      console.log('Redirecting to:', res.data.data.approveUrl);
+      // ✅ Step 2: Set the location of the already opened tab
+      newTab.location.href = res.data.data.approveUrl;
+    } else if (newTab) {
+      // If the response fails, optionally close the opened tab
+      newTab.close();
     }
+  } catch (error) {
+    console.error("Error creating subscription:", error);
+    if (newTab) newTab.close(); // cleanup tab on error
+  }
 
 
     // Handle PayPal payment logic here
