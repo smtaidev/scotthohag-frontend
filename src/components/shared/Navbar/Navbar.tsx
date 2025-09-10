@@ -117,8 +117,17 @@ export default function Navbar() {
             window.location.href = "/";
         }, 1000)
     }
-    const handlePayment = async () => {
 
+    const agreement= localStorage.getItem("agree");
+
+
+    const handlePayment = async () => {
+         
+        if(!agreement) {
+             toast.warning("Please agree to both the disclaimer and terms & conditions")
+            return router.push("/#subscription")
+        }
+     
         if (!user?.data) {
             return toast.warning("Create login to subscribe")
         }
@@ -181,7 +190,7 @@ export default function Navbar() {
                     {!userInfo?.data || !userInfo?.data.isPremium ?
                         <div className='flex items-center justify-center gap-2'>
                             {
-                                (!userInfo?.data || !userInfo?.data.isPremium) && <button
+                                !userInfo?.data.isPremium && <button
                                     onClick={handlePayment}
                                     onMouseEnter={() => handleRefetch()}
                                     className="bg-secondary hover:bg-green-600 text-white px-4 py-2 rounded-md text-xs md:text-lg font-semibold transition-colors cursor-pointer"
@@ -220,10 +229,17 @@ export default function Navbar() {
                                             </div>
                                         </div>
                                     </> :
-                                        <div ref={prof} className='relative'>
+                                        <div ref={prof} className='relative flex'>
                                             <div onClick={() => setProfileOpen(!profileOpen)} ref={prof} className='cursor-pointer hover:bg-gray-200/20 p-2 transition rounded-full flex items-center gap-2'>
                                                 <FaUser className='size-6 ' /> <p>{userInfo?.data.name}</p>
                                             </div>
+
+                               {  userInfo?.data.isPremium && <Link href={"/health-report"}
+                                    className="bg-secondary hover:bg-green-600 text-white px-4 py-2 rounded-md text-xs md:text-lg font-semibold transition-colors cursor-pointer"
+                                >
+                                    Message
+                                </Link>}
+                           
                                             <div
                                                 className={`absolute right-0 top-12 min-w-[160px] bg-white/50 backdrop-blur-2xl text-black shadow-lg rounded-md transition-all duration-300 transform z-50 ${profileOpen ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"
                                                     }`}
@@ -276,10 +292,15 @@ export default function Navbar() {
                                 </div>
                             </div>
                         </> :
-                            <div ref={prof} className='relative'>
+                            <div ref={prof} className='relative flex flex-row-reverse gap-3'>
                                 <div onClick={() => setProfileOpen(!profileOpen)} ref={prof} className='cursor-pointer hover:bg-gray-200/20 p-2 transition rounded-full flex items-center gap-2'>
                                     <FaUser className='size-6 ' /> <p>{userInfo?.data.name}</p>
                                 </div>
+                                {  userInfo?.data.isPremium && <Link href={"/health-report"}
+                                    className="bg-secondary hover:bg-green-600 text-white px-4 py-2 rounded-md text-xs md:text-lg font-semibold transition-colors cursor-pointer"
+                                >
+                                    Message
+                                </Link>}
                                 <div
                                     className={`absolute right-0 top-12 min-w-[160px] bg-white/50 backdrop-blur-2xl text-black shadow-lg rounded-md transition-all duration-300 transform z-50 ${profileOpen ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"
                                         }`}
@@ -302,6 +323,7 @@ export default function Navbar() {
 
                                     </div>
                                 </div>
+    
                             </div>
                     }
                     <button

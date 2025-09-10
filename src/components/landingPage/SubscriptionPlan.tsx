@@ -121,6 +121,14 @@ const SubscriptionPlan: React.FC = () => {
 
   }
 
+    useEffect(() => {
+    if (disclaimerAgreed && termsAgreed) {
+      localStorage.setItem("agree", "true");
+    } else {
+      localStorage.removeItem("agree"); // cleaner than setting empty string
+    }
+  }, [disclaimerAgreed, termsAgreed]);
+
 
   return (
     <div id='service' className="min-h-screen bg-gradient-to-br from-[#F0FDF4] to-[#EFF6FF] py-16 ">

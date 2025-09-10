@@ -14,15 +14,8 @@ import { toast } from 'sonner';
 
 // Zod validation schema
 const reportFormSchema = z.object({
-  // type: z.string().min(1, 'Report type is required'),
   title: z.string().min(1, 'Report title is required').min(3, 'Report title must be at least 3 characters'),
-  // date: z.string().min(1, 'Report date is required').refine((date) => {
-  //   const selectedDate = new Date(date);
-  //   const today = new Date();
-  //   today.setHours(23, 59, 59, 999); // Set to end of today
-  //   return selectedDate <= today;
-  // }, 'Report date cannot be in the future'),
-  files: z.array(z.any()).min(1, 'At least one PDF file is required')
+
 });
 
 interface ReportFormData {
@@ -429,10 +422,10 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
                 </div>
                 <div className="space-y-2">
                   <p className="text-black text-lg font-medium">
-                    Drag & drop PDF files or click to browse
+                    Drag & drop files or click to browse
                   </p>
                   <p className="text-sm text-gray-500">
-                    Supported format: PDF only
+                    Supported format: PDF, Image
                   </p>
                   <p className="text-sm text-gray-500">
                     Maximum size per file: 10MB
@@ -448,9 +441,7 @@ const SubmitReport: React.FC<SubmitReportProps> = ({
                 className="hidden"
               />
             </div>
-            {validationErrors.files && (
-              <p className="text-red-500 text-sm mt-1">{validationErrors.files}</p>
-            )}
+          
           </div>
 
           {/* Uploaded Files */}
