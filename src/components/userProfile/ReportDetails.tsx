@@ -222,7 +222,7 @@ const ReportDetails: React.FC<ReportDetailsProps> = ({
                     </div>
 
                     {/* Supplement Recommendations Section */}
-                    <div className="px-6 py-6 bg-white rounded-xl mt-8">
+                    {/* <div className="px-6 py-6 bg-white rounded-xl mt-8">
                         <div className='bg-gray-50 rounded-xl p-6 mt-4'>
                             <h4 className="text-base font-medium text-primary-text mb-4">
                                 {reportData.recommendationsTitle}
@@ -231,7 +231,7 @@ const ReportDetails: React.FC<ReportDetailsProps> = ({
                                 {report?.recomendation || 'No recommendations available'}
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
 
