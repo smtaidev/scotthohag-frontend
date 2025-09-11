@@ -6,6 +6,7 @@ import { useParams } from 'next/navigation';
 import React, { useState, useEffect } from 'react';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import { LuArrowLeft, LuClock, LuCalendar, LuDownload } from 'react-icons/lu';
+import ReplySection from './ReplySection';
 
 interface ReportDetailsProps {
     onBack?: () => void;
@@ -28,6 +29,7 @@ const ReportDetails: React.FC<ReportDetailsProps> = ({
 
     const { id } = useParams();
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [show,setShow]=useState(false)
 
     const { data: reports } = useReportDetailsQuery(id);
     const report = reports?.data;
@@ -92,9 +94,9 @@ const ReportDetails: React.FC<ReportDetailsProps> = ({
 
                 <div className="">
                     {/* Report Information Section */}
-                    <div className="px-6 pt-6 pb-16 bg-white rounded-xl">
+                    <div className="md:px-6 pt-6 pb-16 bg-white rounded-xl">
                         <div className='flex justify-between items-start mb-6 flex-col md:flex-row gap-4'>
-                            <div className="flex-1">
+                            <div className="flex-1 flex  justify-between flex-col md:flex-row">
                                 <h2 className="text-xl font-bold text-primary-text mb-4">
                                     {report?.title}
                                 </h2>
@@ -118,23 +120,29 @@ const ReportDetails: React.FC<ReportDetailsProps> = ({
                                 </div>
                             </div>
 
-                            {/* Single Download Button */}
+                        </div>
+
+                        <div className='flex gap-3 justify-center md:justify-end items-center'> 
+                    
+                         
+                          
                             {currentFileUrl && (
                                 <a
                                     href={currentFileUrl}
                                     download
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors duration-200 font-medium"
+                                    className="inline-flex items-center my-3 justify-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors duration-200 font-medium"
                                 >
                                     <LuDownload size={16} />
                                     Download Current File
                                 </a>
                             )}
-                        </div>
+                             <button className='cursor-pointer bg-gray-200 py-2 px-4 rounded h-full '  onClick={()=>setShow(!show)}>Show File</button>
+                                </div>
 
                         {/* File Display Section */}
-                        <div className="space-y-4 max-w-[1114px] mx-auto">
+                       {show && <div className="space-y-4 max-w-[1114px] mx-auto">
                             {totalFiles > 0 ? (
                                 <div className="relative">
                                     {/* Navigation Arrows - Always visible, but disabled if only 1 file */}
@@ -203,11 +211,11 @@ const ReportDetails: React.FC<ReportDetailsProps> = ({
                                     <p className="text-gray-500">No files available to display</p>
                                 </div>
                             )}
-                        </div>
+                        </div>}
                     </div>
 
                     {/* Report Preview Section */}
-                    <div className="px-6 py-6 bg-white rounded-xl mt-8">
+                    {/* <div className="px-6 py-6 bg-white rounded-xl mt-8">
                         <h3 className="text-xl font-bold text-primary-text">
                             Report Preview
                         </h3>
@@ -219,7 +227,7 @@ const ReportDetails: React.FC<ReportDetailsProps> = ({
                                 {report?.result || 'No result available'}
                             </div>
                         </div>
-                    </div>
+                    </div> */}
 
                     {/* Supplement Recommendations Section */}
                     {/* <div className="px-6 py-6 bg-white rounded-xl mt-8">
@@ -232,6 +240,7 @@ const ReportDetails: React.FC<ReportDetailsProps> = ({
                             </div>
                         </div>
                     </div> */}
+            <ReplySection/>
                 </div>
             </div>
 
