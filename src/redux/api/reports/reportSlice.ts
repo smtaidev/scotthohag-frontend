@@ -30,11 +30,32 @@ export const getMe = baseApi.injectEndpoints({
       invalidatesTags: ["User","Reports"],
     }),
 
+    getReportReplies: builder.query({
+  query: ({ id, sort = "desc", take = 5, skip = 0, count = true }) =>
+    `/reports/reply/${id}?sort=${sort}&take=${take}&skip=${skip}&count=${count}`,
+  providesTags: ["Reports"],
+}),
+
+   sendReportReply: builder.mutation({
+      query: (body) => ({
+        url: "/reports/reply",
+        method: "POST",
+        body,
+      }),
+   
+    }),
+
+
+
     reportDetails: builder.query({
       query: (id) => ({
         url: `/reports/${id}`,
         method: "GET",
       }),
+
+   
+      
+
       
     }),
   }),
@@ -43,5 +64,7 @@ export const getMe = baseApi.injectEndpoints({
 export const {
   useReportSubmitMutation,
   useGetAllReportsQuery,
-  useReportDetailsQuery
+  useReportDetailsQuery,
+  useGetReportRepliesQuery,
+  useSendReportReplyMutation
 } = getMe;

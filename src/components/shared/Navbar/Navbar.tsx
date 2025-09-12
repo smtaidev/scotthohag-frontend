@@ -42,7 +42,7 @@ export default function Navbar() {
   const [logout] = useLogoutMutation();
   const { data: planInfo, refetch } = useGetMyPlanQuery({});
   const { data: user } = useGetMeQuery({});
-  console.log(planInfo);
+
   const [createSubs] = useCreateSubscriptionMutation();
   // Set active item based on current path
   useEffect(() => {
@@ -100,13 +100,12 @@ export default function Navbar() {
       router.push(link);
     }
 
-    console.log("My link here", link);
   };
 
   const handleLogout = async () => {
     const res = await logout({});
     Cookies.remove("accessToken", { path: "/" });
-    console.log(res);
+
 
     window.location.reload();
     setTimeout(() => {
@@ -160,7 +159,6 @@ export default function Navbar() {
     refetch();
   };
 
-  console.log(userInfo?.data);
 
   return (
     <div
