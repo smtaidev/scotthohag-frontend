@@ -71,7 +71,7 @@ export const {
   useSignUpMutation,
   useLogoutMutation,
   useVerifyEmailMutation,
-  useResendCodeMutation,
+   useResendCodeMutation,
   useForgetPasswordQuery,
   useLazyForgetPasswordQuery,
   useResetPasswordMutation,

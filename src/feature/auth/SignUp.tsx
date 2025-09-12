@@ -104,7 +104,7 @@ export default function SignUpPage() {
       const response = await signUp(payload).unwrap();
 
       if (response?.success) {
-        router.push("/otp");
+        router.push("/signIn");
       }
     } catch (error: any) {
       console.error("Error during sign up:", error);

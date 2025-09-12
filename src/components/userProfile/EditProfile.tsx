@@ -1,5 +1,6 @@
 'use client';
 
+import { useResendCodeMutation } from '@/redux/api/auth/authApi';
 import { useGetMeQuery, useGetSignedUrlQuery, useUpdateProfileMutation } from '@/redux/api/getMe/getMeApi';
 import { useCancelSubscriptionMutation } from '@/redux/api/plan/planSlice';
 import Link from 'next/link';
@@ -39,7 +40,8 @@ const EditProfile: React.FC<EditProfileProps> = ({
     const { data: user } = useGetMeQuery({});
     console.log(user)
 
-    const [update, { isLoading }] = useUpdateProfileMutation()
+    const [update, { isLoading }] = useUpdateProfileMutation();
+    const [verify]=useResendCodeMutation()
 
     const [formData, setFormData] = useState<ProfileData>({
         fullName: user?.data.name,
@@ -195,6 +197,10 @@ const EditProfile: React.FC<EditProfileProps> = ({
     }
   };
 
+  const handleVerify=()=>{
+    
+  }
+
     return (
         <div className="min-h-screen bg-gray-50">
             {/* Header Bar */}
@@ -246,6 +252,10 @@ const EditProfile: React.FC<EditProfileProps> = ({
                                 Upload a new photo (max 5MB)
                             </p>
                         </div>
+
+                        
+                        <button onClick={()=>handleVerify()} className='my-3 bg-primary/70 px-4 py-2 rounded-full h-full inline-block cursor-pointer text-white'>Verify Account</button>
+                   
 
 
                     </div>
