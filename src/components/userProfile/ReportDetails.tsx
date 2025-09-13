@@ -87,9 +87,9 @@ const ReportDetails: React.FC<ReportDetailsProps> = ({ onBack, reportId }) => {
           <div className="w-10"></div>
         </div>
 
-        <div className="">
+        <div className="mt-5">
           {/* Report Information Section */}
-          <div className="md:px-6 pt-6 pb-16 bg-white rounded-xl">
+          <div className="md:px-6 pt-6  bg-white rounded-xl px-3">
             <div className="flex justify-between items-start mb-6 flex-col md:flex-row gap-4">
               <div className="flex-1 flex  justify-between flex-col md:flex-row">
                 <h2 className="text-xl font-bold text-primary-text mb-4">
@@ -97,7 +97,7 @@ const ReportDetails: React.FC<ReportDetailsProps> = ({ onBack, reportId }) => {
                 </h2>
 
                 {/* Report Type */}
-                <div className="flex items-start gap-3 mb-4">
+                {/* <div className="flex items-start gap-3 mb-4">
                   <LuClock size={20} className="text-gray-600 mt-1" />
                   <div>
                     <p className="text-sm text-[#4B4B4B] font-medium">
@@ -107,7 +107,7 @@ const ReportDetails: React.FC<ReportDetailsProps> = ({ onBack, reportId }) => {
                       {report?.type}
                     </p>
                   </div>
-                </div>
+                </div> */}
 
                 {/* Date Submitted */}
                 <div className="flex items-start gap-3">
@@ -137,12 +137,12 @@ const ReportDetails: React.FC<ReportDetailsProps> = ({ onBack, reportId }) => {
                   Download Current File
                 </a>
               )}
-              <button
+              {/* <button
                 className="cursor-pointer bg-gray-200 py-2 px-4 rounded h-full "
                 onClick={() => setShow(!show)}
               >
                 Show File
-              </button>
+              </button> */}
             </div>
 
             {/* File Display Section */}

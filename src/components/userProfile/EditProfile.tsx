@@ -1,9 +1,10 @@
 'use client';
 
-import { useResendCodeMutation } from '@/redux/api/auth/authApi';
+import { useAccountVerifyMutation, useResendCodeMutation } from '@/redux/api/auth/authApi';
 import { useGetMeQuery, useGetSignedUrlQuery, useUpdateProfileMutation } from '@/redux/api/getMe/getMeApi';
 import { useCancelSubscriptionMutation } from '@/redux/api/plan/planSlice';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import React, { useState, useRef, useEffect } from 'react';
 import { LuArrowLeft, LuCamera, LuLock } from 'react-icons/lu';
 import { toast } from 'sonner';
@@ -34,7 +35,9 @@ const EditProfile: React.FC<EditProfileProps> = ({
 
      const [showCancelModal, setShowCancelModal] = useState(false);
   const [isCancelling, setIsCancelling] = useState(false);
-  const [cancel]=useCancelSubscriptionMutation()
+  const [cancel]=useCancelSubscriptionMutation();
+  const [verifyAccount]=useAccountVerifyMutation();
+  const router=useRouter()
 
   
     const { data: user } = useGetMeQuery({});
@@ -197,8 +200,15 @@ const EditProfile: React.FC<EditProfileProps> = ({
     }
   };
 
-  const handleVerify=()=>{
-    
+  const handleVerify=async()=>{
+    const res =await verifyAccount({
+          email: user?.data.email,
+    password: "Ashik@123"
+    })
+    if(res?.error){
+     router.push("/otp")
+    }
+    console.log(res)
   }
 
     return (
@@ -253,8 +263,10 @@ const EditProfile: React.FC<EditProfileProps> = ({
                             </p>
                         </div>
 
+             {!user?.data.isVerified? <button onClick={()=>handleVerify()} className='my-3 bg-primary/70 px-4 py-2 rounded-full h-full inline-block cursor-pointer text-white'>Verify Account</button>:
+             <></>
+ }
                         
-                        <button onClick={()=>handleVerify()} className='my-3 bg-primary/70 px-4 py-2 rounded-full h-full inline-block cursor-pointer text-white'>Verify Account</button>
                    
 
 

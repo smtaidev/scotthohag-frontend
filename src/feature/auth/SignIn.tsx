@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Logo from "@/components/shared/Logo";
 import PrimaryButton from "@/components/shared/primaryButton/PrimaryButton";
 import Container from "@/lib/Container";
@@ -10,7 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { BsEye } from "react-icons/bs";
 import { FaRegEyeSlash } from "react-icons/fa";
@@ -18,10 +18,9 @@ import { useDispatch } from "react-redux";
 import { toast } from "sonner";
 import * as z from "zod";
 
-// Define Zod schema for validation
+// ✅ Validation Schema
 const formSchema = z.object({
   email: z
-    .string()
     .email({ message: "Please enter a valid email address" })
     .min(1, { message: "Email is required" }),
   password: z
@@ -34,10 +33,16 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 export default function SignInPage() {
-  // Use React Hook Form with Zod resolver
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const [signIn, { isLoading }] = useSignInMutation();
+  const [view, setView] = useState(false);
+
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -48,11 +53,42 @@ export default function SignInPage() {
     },
   });
 
-  const [signIn, { isLoading }] = useSignInMutation();
-  const [view, setView] = useState(false);
+  const rememberMe = watch("rememberMe");
+  const email = watch("email");
+  const password = watch("password");
 
-  const router = useRouter();
-  const dispatch = useDispatch();
+  // ✅ Load from localStorage on mount
+  useEffect(() => {
+    const storedRemember = localStorage.getItem("rememberMe") === "true";
+    const storedEmail = localStorage.getItem("rememberedEmail") || "";
+    const storedPasswordEncoded = localStorage.getItem("rememberedPassword");
+
+    setValue("rememberMe", storedRemember);
+    if (storedRemember && storedEmail) {
+      setValue("email", storedEmail);
+    }
+    if (storedRemember && storedPasswordEncoded) {
+      try {
+        const decodedPassword = atob(storedPasswordEncoded);
+        setValue("password", decodedPassword);
+      } catch (error) {
+        console.error("Failed to decode password:", error);
+      }
+    }
+  }, [setValue]);
+
+  // ✅ Save to localStorage on change
+  useEffect(() => {
+    if (rememberMe) {
+      localStorage.setItem("rememberMe", "true");
+      localStorage.setItem("rememberedEmail", email);
+      localStorage.setItem("rememberedPassword", btoa(password)); // base64 encode
+    } else {
+      localStorage.removeItem("rememberMe");
+      localStorage.removeItem("rememberedEmail");
+      localStorage.removeItem("rememberedPassword");
+    }
+  }, [rememberMe, email, password]);
 
   const onSubmit = async (data: FormValues) => {
     try {
@@ -60,11 +96,7 @@ export default function SignInPage() {
       if (response?.success) {
         if (response.data) {
           Cookies.set("accessToken", response.data.tokens.access);
-          dispatch(
-            setUser({
-              token: response.data.tokens.access,
-            })
-          );
+          dispatch(setUser({ token: response.data.tokens.access }));
           toast.success("Login successful");
           router.push("/");
         } else {
@@ -72,21 +104,23 @@ export default function SignInPage() {
         }
       } else {
         router.push("/otp");
-        console.log("Otp is here")
       }
     } catch (error: any) {
-      console.log("Error during sign-in:", error);
-      if (error?.data?.error.message[0] == "User with id: cmetimovh000k0ahseedvaf7d is not verified. Please verify.") {
-        localStorage.setItem('email', data.email)
-        router.push("/otp")
-      };
-      return toast.warning(error?.data?.error.message[0] || "Login failed");
+      console.error("Error during sign-in:", error);
+      if (
+        error?.data?.error.message[0] ===
+        "User with id: cmetimovh000k0ahseedvaf7d is not verified. Please verify."
+      ) {
+        localStorage.setItem("email", data.email);
+        router.push("/otp");
+      }
+      toast.warning(error?.data?.error.message[0] || "Login failed");
     }
   };
 
   return (
     <Container>
-      <div className="w-full lg:min-w-[500px] ">
+      <div className="w-full lg:min-w-[500px]">
         <div className="flex flex-col items-center mb-8">
           <Logo />
           <h1 className="text-2xl font-bold mb-2 mt-2">Hi, Welcome Back! 👋</h1>
@@ -94,8 +128,9 @@ export default function SignInPage() {
             Please Enter Your Email And Password Below!
           </p>
         </div>
+
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 w-full">
-          {/* Email Input */}
+          {/* Email */}
           <CustomInput
             id="email"
             type="email"
@@ -105,35 +140,37 @@ export default function SignInPage() {
             error={errors.email?.message}
           />
 
-          {/* Password Input */}
+          {/* Password */}
           <div className="relative">
-
             <CustomInput
               id="password"
               type={view ? "text" : "password"}
-               label="Password"
+              label="Password"
               placeholder="••••••••••"
-              error={errors.password?.message}
               {...register("password")}
+              error={errors.password?.message}
             />
-            <button type="button" className="absolute top-11 right-5 cursor-pointer" onClick={() => setView(!view)}>
+            <button
+              type="button"
+              className="absolute top-11 right-5 cursor-pointer"
+              onClick={() => setView(!view)}
+            >
               {view ? <BsEye /> : <FaRegEyeSlash />}
             </button>
-
           </div>
 
-          {/* Remember Me and Forgot Password */}
+          {/* Remember Me */}
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <input
                 id="rememberMe"
-                className="accent-primary"
                 type="checkbox"
+                className="accent-primary"
                 {...register("rememberMe")}
               />
               <label
                 htmlFor="rememberMe"
-                className="ml-2 text-sm text-gray-600 "
+                className="ml-2 text-sm text-gray-600"
               >
                 Remember Me
               </label>
@@ -145,9 +182,11 @@ export default function SignInPage() {
               Forgot Password?
             </Link>
           </div>
-          {/* Login Button */}
+
+          {/* Submit */}
           <PrimaryButton type="submit" loading={isLoading} text="Sign In" />
         </form>
+
         <div className="text-center mb-3 mt-3 text-sm text-gray-600">
           Don’t have an account?{" "}
           <Link href="/signUp" className="text-primary hover:underline">

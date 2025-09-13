@@ -19,6 +19,15 @@ export const authApi = baseApi.injectEndpoints({
       invalidatesTags: ["User"],
     }),
 
+      accountVerify: builder.mutation({
+      query: (body) => ({
+        url: `/auth/signin?sendVerification=${true}`,
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["User"],
+    }),
+
     verifyEmail: builder.mutation({
       query: (body) => ({
         url: "/auth/verify",
@@ -75,5 +84,6 @@ export const {
   useForgetPasswordQuery,
   useLazyForgetPasswordQuery,
   useResetPasswordMutation,
-  useResetVerifyMutation
+  useResetVerifyMutation,
+  useAccountVerifyMutation
 } = authApi;

@@ -85,7 +85,7 @@ export default function OtpVerification() {
       if (response?.success) {
         toast.success("Verification successful!");
         localStorage.removeItem("otpTimer"); // Clear timer on success
-        router.push("/signIn");
+        router.push("/health-report");
       }
     } catch (error: any) {
       toast.error(

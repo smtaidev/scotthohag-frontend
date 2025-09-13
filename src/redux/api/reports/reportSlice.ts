@@ -31,8 +31,8 @@ export const getMe = baseApi.injectEndpoints({
     }),
 
     getReportReplies: builder.query({
-  query: ({ id, sort = "desc", take = 5, skip = 0, count = true }) =>
-    `/reports/reply/${id}?sort=${sort}&take=${take}&skip=${skip}&count=${count}`,
+  query: ({ id, sort = "asc"}) =>
+    `/reports/reply/${id}?sort=${sort}`,
   providesTags: ["Reports"],
 }),
 
